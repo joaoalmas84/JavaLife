@@ -17,3 +17,4 @@ public interface IGameEngine {
 
     void waitForTheEnd(); // wait until the engine stops
 }
+

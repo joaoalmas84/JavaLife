@@ -8,12 +8,14 @@ public final class GameEngine implements IGameEngine {
     private GameEngineState state;
     private GameEngineThread controlThread;
     private final Set<IGameEngineEvolve> clients;
+
     System.Logger logger;
 
     private void setState(GameEngineState state) {
         this.state = state;
         logger.log(System.Logger.Level.INFO,state.toString());
     }
+
     public GameEngine() {
         logger = System.getLogger("GameEngine");
         clients = new HashSet<>();
@@ -32,7 +34,8 @@ public final class GameEngine implements IGameEngine {
 
     @Override
     public boolean start(long interval) {
-        if (state != GameEngineState.READY) { return false; }
+        if (state != GameEngineState.READY)
+            return false;
         controlThread = new GameEngineThread(interval);
         setState(GameEngineState.RUNNING);
         controlThread.start();
@@ -41,36 +44,42 @@ public final class GameEngine implements IGameEngine {
 
     @Override
     public boolean stop() {
-        if (state == GameEngineState.READY) { return false; }
+        if (state == GameEngineState.READY)
+            return false;
         setState(GameEngineState.READY);
         return true;
     }
 
     @Override
     public boolean pause() {
-        if (state != GameEngineState.RUNNING) { return false; }
+        if (state != GameEngineState.RUNNING)
+            return false;
         setState(GameEngineState.PAUSED);
         return true;
     }
 
     @Override
     public boolean resume() {
-        if (state != GameEngineState.PAUSED) { return false; }
+        if (state != GameEngineState.PAUSED)
+            return false;
         setState(GameEngineState.RUNNING);
         return true;
     }
 
     @Override
-    public GameEngineState getCurrentState() { return state; }
+    public GameEngineState getCurrentState() {
+        return state;
+    }
 
     @Override
-    public long getInterval() { return controlThread.interval; }
+    public long getInterval() {
+        return controlThread.interval;
+    }
 
     @Override
     public void setInterval(long newInterval) {
-        if (controlThread != null) {
+        if (controlThread != null)
             controlThread.interval = newInterval;
-        }
     }
 
     @Override
