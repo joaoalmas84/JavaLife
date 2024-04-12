@@ -5,11 +5,16 @@ import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 import pt.isec.pa.javalife.model.gameengine.IGameEngineEvolve;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Ecossistema
         implements Serializable, IGameEngineEvolve {
     private Set<IElemento> elementos;
+
+    public Ecossistema() {
+        elementos = new HashSet<>();
+    }
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
