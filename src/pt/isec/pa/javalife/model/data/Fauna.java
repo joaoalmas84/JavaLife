@@ -4,9 +4,7 @@ import pt.isec.pa.javalife.model.Area;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
 
-public final class Fauna
-        extends ElementoBase
-        implements IElementoComForca {
+public final class Fauna extends ElementoBase implements IElementoComForca, Cloneable{
 
     private static int nextId = 0;
     private int id;
@@ -47,12 +45,32 @@ public final class Fauna
     }
 
     public boolean eat() {
-        // TODO
         return false;
     }
 
     public boolean multiply() {
         // TODO
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Fauna{");
+        sb.append("id=").append(id);
+        sb.append(", forca=").append(forca);
+        sb.append(", isDead=").append(isDead);
+        sb.append(", matingCounter=").append(matingCounter);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public Fauna clone() {
+        try {
+            return (Fauna) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

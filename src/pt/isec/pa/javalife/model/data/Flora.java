@@ -2,9 +2,7 @@ package pt.isec.pa.javalife.model.data;
 
 import pt.isec.pa.javalife.model.Area;
 
-public final class Flora
-        extends ElementoBase
-        implements IElementoComForca, IElementoComImagem {
+public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem, Cloneable{
 
     @Override
     public double getForca() {
@@ -35,5 +33,25 @@ public final class Flora
     @Override
     public Area getArea() {
         return null;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Flora{");
+        sb.append("id=").append(getId());
+        sb.append(", forca=").append(getForca());
+        sb.append(", imagem=").append(getImagem());
+        sb.append(", area=").append(getArea());
+        sb.append('}');
+        return sb.toString();
+    }
+    @Override
+    public Flora clone() {
+        try {
+            return (Flora) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

@@ -4,9 +4,7 @@ import pt.isec.pa.javalife.model.Area;
 
 import java.io.Serializable;
 
-public sealed interface IElemento
-        extends Serializable
-        permits ElementoBase {
+public sealed interface IElemento extends Serializable permits ElementoBase {
 
     int getId(); // retorna o identificador
     Elemento getType(); // retorna o tipo
