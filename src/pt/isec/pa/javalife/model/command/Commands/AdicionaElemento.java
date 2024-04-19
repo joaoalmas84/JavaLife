@@ -5,13 +5,11 @@ import pt.isec.pa.javalife.model.data.IElemento;
 
 public class AdicionaElemento extends AbstractCommand{
 
-    private Ecossistema reciever;
-
     private IElemento elem;
 
-    public AdicionaElemento(Ecossistema reciever, IElemento elem){
-        this.reciever=reciever;
-        this.elem=elem;
+    public AdicionaElemento(Simulacao reciever, IElemento elem_){
+        super(reciever);
+        elem=elem_;
         success=false;
     }
 
@@ -22,6 +20,7 @@ public class AdicionaElemento extends AbstractCommand{
     }
 
     public boolean undo(){
+        //...
         //return reciever.removeElemento(elem);
     }
 
