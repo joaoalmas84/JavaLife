@@ -1,16 +1,19 @@
 package pt.isec.pa.javalife.model.command.Commands;
 
-import pt.isec.pa.javalife.model.Ecossistema;
 import pt.isec.pa.javalife.model.data.IElemento;
 
-public class AdicionaElemento extends AbstractCommand{
-
+public class RemoveElemento extends AbstractCommand{
     private IElemento elem;
 
-    public AdicionaElemento(Simulacao reciever, IElemento elem_){
+    int id;
+
+    String tipo;
+
+    public RemoveElemento(Simulacao reciever, int id_, String tipo_){
         super(reciever);
-        elem=elem_;
         success=false;
+        id=id_;
+        tipo=tipo_;
     }
 
     @Override
@@ -19,13 +22,14 @@ public class AdicionaElemento extends AbstractCommand{
     }
 
     public boolean execute() {
-        success = reciever.adicionaElemento(elem);
+        success=receiver.removeElemento(id, tipo);
         return true;
     }
 
     public boolean undo(){
-        return reciever.removeElemento(elem);
+        return receiver.adicionaElemento(elem);
     }
 
 
+    @Override
 }

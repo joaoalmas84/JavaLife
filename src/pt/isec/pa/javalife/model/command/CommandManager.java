@@ -53,12 +53,12 @@ public class CommandManager{
         return false;
     }
 
-    //pode servir para mudar a cor do icon de undo
+    //pode servir para mudar a cor do icon de undo se existir
     public boolean hasUndo() {
         return !undos.isEmpty();
     }
 
-    //pode servir para mudar a cor do icon de redo
+    //pode servir para mudar a cor do icon de redo se existir
     public boolean hasRedo() {
         return !redos.isEmpty();
     }
