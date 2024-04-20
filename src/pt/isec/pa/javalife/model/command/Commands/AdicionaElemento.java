@@ -1,14 +1,14 @@
 package pt.isec.pa.javalife.model.command.Commands;
 
-import pt.isec.pa.javalife.model.Ecossistema;
 import pt.isec.pa.javalife.model.data.IElemento;
+import pt.isec.pa.javalife.model.data.Simulacao;
 
 public class AdicionaElemento extends AbstractCommand{
 
     private IElemento elem;
 
-    public AdicionaElemento(Simulacao reciever, IElemento elem_){
-        super(reciever);
+    public AdicionaElemento(Simulacao receiver, IElemento elem_){
+        super(receiver);
         elem=elem_;
         success=false;
     }
@@ -19,12 +19,12 @@ public class AdicionaElemento extends AbstractCommand{
     }
 
     public boolean execute() {
-        success = reciever.adicionaElemento(elem);
+        success = receiver.addElemento(elem);
         return true;
     }
 
     public boolean undo(){
-        return reciever.removeElemento(elem);
+        return receiver.removeElemento(elem) != null;
     }
 
 

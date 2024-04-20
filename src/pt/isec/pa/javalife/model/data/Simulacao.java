@@ -13,16 +13,8 @@ public class Simulacao {
         return ecossistema.addElemento(fauna);
     }
 
-    public IElemento removeFauna(int id) {
-        return ecossistema.removeFauna(id);
-    }
-
-    public IElemento removeInanimado(int id) {
-        return ecossistema.removeInanimado(id);
-    }
-
-    public IElemento removeFlora(int id) {
-        return ecossistema.removeFlora(id);
+    public IElemento removeElemento(int id, String tipo){
+        return ecossistema.removeElemento(id,tipo);
     }
 
     @Override

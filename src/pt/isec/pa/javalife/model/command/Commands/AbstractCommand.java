@@ -1,5 +1,7 @@
 package pt.isec.pa.javalife.model.command.Commands;
 
+import pt.isec.pa.javalife.model.data.Simulacao;
+
 abstract public class AbstractCommand implements ICommand{
 
     protected boolean success;

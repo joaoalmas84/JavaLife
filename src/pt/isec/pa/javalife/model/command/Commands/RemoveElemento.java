@@ -1,6 +1,7 @@
 package pt.isec.pa.javalife.model.command.Commands;
 
 import pt.isec.pa.javalife.model.data.IElemento;
+import pt.isec.pa.javalife.model.data.Simulacao;
 
 public class RemoveElemento extends AbstractCommand{
     private IElemento elem;
@@ -9,8 +10,8 @@ public class RemoveElemento extends AbstractCommand{
 
     String tipo;
 
-    public RemoveElemento(Simulacao reciever, int id_, String tipo_){
-        super(reciever);
+    public RemoveElemento(Simulacao receiver, int id_, String tipo_){
+        super(receiver);
         success=false;
         id=id_;
         tipo=tipo_;
@@ -22,14 +23,13 @@ public class RemoveElemento extends AbstractCommand{
     }
 
     public boolean execute() {
-        success=receiver.removeElemento(id, tipo);
+        elem=receiver.removeElemento(id, tipo);
+        success= (elem != null);
         return true;
     }
 
     public boolean undo(){
-        return receiver.adicionaElemento(elem);
+        return receiver.addElemento(elem);
     }
 
-
-    @Override
 }
