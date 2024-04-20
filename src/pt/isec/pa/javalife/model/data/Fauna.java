@@ -38,10 +38,20 @@ public final class Fauna extends ElementoBase implements IElementoComForca, Clon
     @Override
     public void setForca(double forca) { this.forca = forca; }
 
-    public boolean move(double velocidade, double direcao) {
-        // TODO
+    public void move(double velocidade, double direcao) {
         forca -= 0.5;
-        return false;
+
+        double variacaoX=velocidade*Math.cos(Math.toRadians(direcao));
+        double variacaoY=velocidade*Math.sin(Math.toRadians(direcao));
+
+        double cima = area.cima()-variacaoY;
+        double esquerda = area.esquerda()+variacaoX;
+        double baixo = area.baixo()+variacaoY;
+        double direita = area.direita()-variacaoX;
+        area=new Area(cima,esquerda,baixo,direita);
+        if(forca<=0){
+            isDead=true;
+        }
     }
 
     public boolean eat() {

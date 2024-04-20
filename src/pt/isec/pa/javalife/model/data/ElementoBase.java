@@ -4,7 +4,7 @@ import pt.isec.pa.javalife.model.Area;
 
 public abstract sealed class ElementoBase implements IElemento permits Inanimado, Flora, Fauna {
 
-    private Area area;
+    protected Area area;
 
     public void Elemento() {
         //area = new Area();
@@ -12,4 +12,5 @@ public abstract sealed class ElementoBase implements IElemento permits Inanimado
 
     @Override
     public Area getArea() { return area;}
+
 }
