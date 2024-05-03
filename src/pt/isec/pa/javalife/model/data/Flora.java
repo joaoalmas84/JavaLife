@@ -1,16 +1,47 @@
 package pt.isec.pa.javalife.model.data;
 
-import pt.isec.pa.javalife.model.Area;
+import java.util.ArrayList;
 
 public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem, Cloneable{
+    private ArrayList<IEvento> eventos;
+    private static int nextId = 0;
+    private int id;
+    private int NumReproducoes;
+    private double forca;
+    private boolean isDead;
+    private Area area;
 
-    @Override
-    public double getForca() {
-        return 0;
+
+    public Flora() {
+        super();
+        id = nextId++;
+        NumReproducoes = 0;
+        forca = 50;
+        isDead = false;
+        //area = new Area();
+    }
+
+    public void setIsDead(boolean isDead) {
+        this.isDead = isDead;
+    }
+
+    public void addEevnto(IEvento evento) {
+        eventos.add(evento);
     }
 
     @Override
-    public void setForca(double forca) {}
+    public double getForca() {return forca;}
+
+    @Override
+    public void setForca(double forca) {
+        if(forca + this.forca < 0){
+            this.forca = 0;
+        }else if(forca + this.forca > 100){
+            this.forca = 100;
+        }else{
+            this.forca += forca;
+        }
+    }
 
     @Override
     public String getImagem() {
@@ -22,30 +53,29 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
     public Elemento getType() {
-        return null;
+        return Elemento.FLORA;
     }
 
     @Override
     public Area getArea() {
-        return null;
+        return area;
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-
         sb.append("Flora{");
-        sb.append("id=").append(getId());
-        sb.append(", forca=").append(getForca());
-        sb.append(", imagem=").append(getImagem());
-        sb.append(", area=").append(getArea());
+        sb.append("id=").append(id);
+        sb.append(", forca=").append(forca);
+        sb.append(", Area=").append("Area hahahahaha");
         sb.append('}');
         return sb.toString();
     }
+
     @Override
     public Flora clone() {
         try {

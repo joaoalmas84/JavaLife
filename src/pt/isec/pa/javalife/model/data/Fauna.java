@@ -1,9 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-import pt.isec.pa.javalife.model.Area;
-import pt.isec.pa.javalife.model.fsm.FaunaState;
-import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
-
 public final class Fauna extends ElementoBase implements IElementoComForca, Cloneable{
 
     private static int nextId = 0;
