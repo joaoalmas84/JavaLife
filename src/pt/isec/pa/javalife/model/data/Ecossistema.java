@@ -1,7 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 import pt.isec.pa.javalife.model.gameengine.IGameEngineEvolve;
 
@@ -22,6 +20,22 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public boolean addElemento(IElemento elemento) {
         return elementos.add(elemento);
+    }
+
+    public boolean addEventoHerbicida(int[] array) {
+        for(IElemento f : elementos){
+            if(f instanceof Flora && ArrayContains(array, f.getId())){
+                ((Flora)f).addEevnto(new EventoHerbicida(f));
+            }
+        }
+        return true;
+    }
+
+    private boolean ArrayContains(int[] array, int id) {
+        for (int i : array) {
+            if(i == id) return true;
+        }
+        return false;
     }
 
     public IElemento removeFauna(int id){
@@ -54,7 +68,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         return null;
     }
 
-
     public IElemento removeElemento(int id, String tipo) {
         if(tipo == null) return null;
         return switch (tipo) {
@@ -65,12 +78,41 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         };
     }
 
+    public IElemento removeElemento(IElemento elemento) {
+        if(elemento instanceof Fauna){
+            return removeFauna(elemento.getId());
+        }else if(elemento instanceof Flora){
+            return removeFlora(elemento.getId());
+        }else if(elemento instanceof Inanimado){
+            return removeInanimado(elemento.getId());
+        }
+        return null;
+    }
+
+    public boolean existemArvores(){
+        for(IElemento f : elementos){
+            if(f instanceof Flora){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existemAnimais(){
+        for(IElemento f : elementos){
+            if(f instanceof Fauna){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Ecossistema: \n" + altura + "x" + largura + "\nElementos: \n");
         for(IElemento f : elementos)
             sb.append("\t---> ").append(f).append("\n");
-    return sb.toString();
+        return sb.toString();
     }
 
     @Override
@@ -92,6 +134,4 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         this.altura = altura;
     }
 
-
-    //TODO
 }

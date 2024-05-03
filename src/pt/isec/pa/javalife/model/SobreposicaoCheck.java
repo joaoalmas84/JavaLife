@@ -1,9 +1,11 @@
 package pt.isec.pa.javalife.model;
 
 
+import pt.isec.pa.javalife.model.data.Area;
+
 //PARA VERIFICAR SE DUAS AREAS ESTÃO SOBREPOSTAS, WIP
 public class SobreposicaoCheck{
-    public boolean check(Area o1, Area o2,double altura,double largura) {
+    public boolean check(Area o1, Area o2, double altura, double largura) {
         Ponto[] po1=new Ponto[4];
         Ponto[] po2=new Ponto[4];
         altura--; //assumindo que a zona seja tipo um array e comece em 0
