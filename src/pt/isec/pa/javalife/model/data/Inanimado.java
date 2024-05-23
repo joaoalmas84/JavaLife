@@ -5,8 +5,8 @@ public final class Inanimado extends ElementoBase {
     private int id;
     private Area area;
 
-    Inanimado(double cima, double esquerda, double baixo, double direita) {
-        area = new Area(cima, esquerda, baixo, direita);
+    Inanimado(double xi, double yi, double xf, double yf) {
+        area = new Area(xi, yi, xf, yf);
         id = nextId++;
     }
 
@@ -22,8 +22,7 @@ public final class Inanimado extends ElementoBase {
 
     @Override
     public Area getArea() {
-        //return area.clone();
-        return null;
+        return area;
     }
 
     @Override

@@ -1,0 +1,53 @@
+#mainMenuButton {
+    -fx-background-color: yellow;
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+
+    -fx-min-width: 210;
+    -fx-padding: 20px 8px;
+}
+#mainMenuButton:hover {
+    -fx-background-color: #FFDF40;
+    -fx-cursor: pointer;
+}
+
+#gameButton {
+    -fx-background-color: yellow;
+    -fx-background-radius: 50;
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 50;
+    -fx-border-width: 1;
+    -fx-text-fill: black;
+
+    -fx-min-width: 150;
+    -fx-padding: 10px 0;
+}
+#gameButton:hover {
+    -fx-background-color: #FFDF40;
+    -fx-border-color: #FFDF40;
+}
+
+#mainMenuTitle{
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: yellow;
+}
+#fullscreenButton{
+    -fx-font-size: 20px;
+}
+
+#top5{
+    -fx-font-weight: bold;
+    -fx-text-fill: yellow;
+}
+#credits{
+    -fx-font-weight: bold;
+    -fx-text-fill: yellow;
+}
+
+#gameWonText{
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}

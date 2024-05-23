@@ -11,7 +11,7 @@ public class CommandManager{
     private Stack<ICommand> undos;
     private Stack<ICommand> redos;
 
-    CommandManager(){
+    public CommandManager(){
         undos=new Stack<>();
         redos=new Stack<>();
     }
@@ -61,5 +61,10 @@ public class CommandManager{
     //pode servir para mudar a cor do icon de redo se existir
     public boolean hasRedo() {
         return !redos.isEmpty();
+    }
+
+    public void clear(){
+        undos.clear();
+        redos.clear();
     }
 }
