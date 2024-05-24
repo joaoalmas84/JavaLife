@@ -112,7 +112,7 @@ public class Simulacao {
     }
 
     public boolean adicionaInanimado(double xi, double yi, double xf, double yf){
-        return ecossistema.addElemento(new Inanimado(xi, yi, xf, yf));
+        return ecossistema.addElemento(new Inanimado(xi, yi, xf, yf, true));
     }
 
     public boolean removeFauna(int id){

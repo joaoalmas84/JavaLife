@@ -31,10 +31,10 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public void criarCerca(){
         double larguraDaBarraira = 15;
         for (int i = 0; i < 10; i++) {
-            addElemento(new Inanimado(i * largura / 10, 0, (i + 1) * largura / 10, larguraDaBarraira));
-            addElemento(new Inanimado(i * largura / 10, altura - larguraDaBarraira, (i + 1) * largura / 10, altura));
-            addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
-            addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
+            addElemento(new Inanimado(i * largura / 10, 0, (i + 1) * largura / 10, larguraDaBarraira, false));
+            addElemento(new Inanimado(i * largura / 10, altura - larguraDaBarraira, (i + 1) * largura / 10, altura, false));
+            addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
+            addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
         }
 
     }
@@ -44,15 +44,18 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean addElemento(IElemento elemento) {
+        System.out.println(" olhaahhah ");
         Area area = elemento.getArea();
+        System.out.println(" olhaahhah 2222 " + elemento.getArea() + elemento);
+
 
         for (IElemento elem :  elementos){
             if(elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)){
                 return false;
             }
         }
-
-        if(elemento instanceof Flora){
+        System.out.println(" olhaahhah 3333 ");
+        if(elemento.getType() == Elemento.FLORA){
             ((Flora)elemento).setEcossistema(this);
         }
 
@@ -76,20 +79,22 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public IElemento removeFauna(int id){
-        for(IElemento f : elementos){
-            if(f.getId() == id && f instanceof FaunaData){
-                elementos.remove(f);
-                return f;
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.FAUNA){
+                elementos.remove(elem);
+                return elem;
             }
         }
         return null;
     }
 
     public IElemento removeInanimado(int id) {
-        for(IElemento f : elementos){
-            if(f.getId() == id && f instanceof Inanimado){
-                elementos.remove(f);
-                return f;
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.INANIMADO){
+                if(!((Inanimado)elem).podeRemove()){ return null; }
+
+                elementos.remove(elem);
+                return elem;
             }
         }
         return null;
@@ -131,8 +136,14 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         System.out.println("Evolve");
         for(IElemento elem : copySet){
             if(elem.getType() == Elemento.FLORA){
-                ((Flora)elem).move(getElementos());
+                ((Flora)elem).move(copySet);
                 if( ((Flora)elem).isDead() ){
+                    elementos.remove(elem);
+                }
+            }
+            if(elem.getType() == Elemento.FAUNA){
+                ((FaunaContext)elem).move(copySet);
+                if( ((FaunaContext)elem).isDead()){
                     elementos.remove(elem);
                 }
             }
@@ -181,8 +192,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean existemAnimais(){
-        for(IElemento f : elementos){
-            if(f instanceof FaunaData){
+        for(IElemento elem : elementos){
+            if(elem.getType() == Elemento.FAUNA){
                 return true;
             }
         }

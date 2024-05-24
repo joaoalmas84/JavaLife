@@ -16,9 +16,9 @@ public class MenuAddElemento extends BorderPane {
     Button btnGoBack, btnAddElemento;
     ChoiceBox<String> cb;
     TextField tfXI, tfYI, tfXF, tfYF;
+    Label lblTitle, label_xI, label_yI, label_xF, label_yF;
     String tipo;
     Double xI, yI, xF, yF;
-    Label lblTitle, label_xI, label_yI, label_xF, label_yF;
 
     public MenuAddElemento(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -60,7 +60,7 @@ public class MenuAddElemento extends BorderPane {
                 case "Fauna" -> simulacaoManager.adicionarFauna(xI, yI, xF, yF);
                 case "Inanimado" -> simulacaoManager.adicionarInanimado(xI, yI, xF, yF);
             }
-
+            System.out.println("vou crae merda");
             simulacaoManager.resume();
             simulacaoManager.setState(SimulacaoState.NULL);
 

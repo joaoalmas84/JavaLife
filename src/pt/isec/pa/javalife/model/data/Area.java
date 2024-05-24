@@ -46,4 +46,30 @@ public record Area(double xi, double yi, double xf, double yf){
         }
 
     }
+
+    public boolean isPointOverlapping(double x, double y) {
+        return x >= xi && x <= xf && y >= yi && y <= yf;
+    }
+
+    public double distanceTo(Area other) {
+        if (isOverlapping(other)) {
+            return 0.0;
+        }
+
+        double dx = Math.max(0, Math.max(other.xi - this.xf, this.xi - other.xf));
+        double dy = Math.max(0, Math.max(other.yi - this.yf, this.yi - other.yf));
+
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    @Override
+    public String toString() {
+        return "Area{" +
+                "xi=" + xi +
+                ", yi=" + yi +
+                ", xf=" + xf +
+                ", yf=" + yf +
+                '}';
+    }
+
 }

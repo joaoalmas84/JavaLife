@@ -7,14 +7,23 @@ import javafx.scene.paint.Color;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
+import java.awt.*;
+import java.util.Set;
+
 public class SimulacaoArea extends Canvas {
-    private SimulacaoManager simulacaoManager;
+    private final SimulacaoManager simulacaoManager;
+    private double x, y;
 
     public SimulacaoArea(SimulacaoManager simulacaoManager) {
         super(500,500);
         this.simulacaoManager = simulacaoManager;
+        createViews();
         registerHandlers();
         update();
+    }
+
+    private void createViews() {
+
     }
 
     private void registerHandlers() {
@@ -27,10 +36,29 @@ public class SimulacaoArea extends Canvas {
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) ->{
             Platform.runLater(this::update);
         });
-        this.setOnMousePressed(evt -> update());
-        //this.setOnMouseDragged(mouseEvent -> drawing.updateCurrentFigure(mouseEvent.getX(), mouseEvent.getY()));
-        //this.setOnMouseReleased(mouseEvent -> drawing.finishCurrentFigure(mouseEvent.getX(), mouseEvent.getY()));
+        //this.setOnMousePressed(evt -> update());
+        this.setOnMouseMoved(evt -> {
+            x = evt.getX();
+            y = evt.getY();
+            update();
+        });
     }
+
+    /*public void updateinfo(int x, int y){
+        Set<IElemento> elementos = simulacaoManager.getElementos();
+        for (IElemento elem : elementos) {
+            if(elem.getArea().isPointOverlapping(x,y)){
+                System.out.println("updateinfo simm");
+                lblInfo.setText(String.valueOf(elem.getId()));
+
+                lblInfo.setLocation(x, y);
+                lblInfo.setVisible(true);
+                return ;
+            }
+        }
+        System.out.println("updateinfo nao");
+        lblInfo.setVisible(false);
+    }*/
 
     private void update() {
         if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.READY){
@@ -44,6 +72,18 @@ public class SimulacaoArea extends Canvas {
         drawline(gc);
         gc.setLineWidth(2);
         simulacaoManager.getElementos().forEach( elemento -> drawElemento(gc,elemento));
+
+        Set<IElemento> elementos = simulacaoManager.getElementos();
+
+        for (IElemento elem : elementos) {
+            if(elem.getArea().isPointOverlapping(x,y)){
+                gc.setFill(Color.YELLOW);
+                gc.setLineWidth(5);
+                gc.fillText(String.valueOf(elem.getId()), x, y);
+                break;
+            }
+        }
+
         //drawing.getList().forEach( figure -> drawFigure(gc,figure));
         //drawFigure(gc,drawing.getCurrentFigure());
     }
@@ -55,7 +95,7 @@ public class SimulacaoArea extends Canvas {
 
     private void drawElemento(GraphicsContext gc, IElemento elemento) {
         if (elemento == null || elemento.getArea() == null || simulacaoManager == null) return;
-        
+
         double altura = getHeight() / simulacaoManager.getAlturaEcossistema();
         double largura = getWidth() / simulacaoManager.getLarguraEcossistema();
 
@@ -64,8 +104,8 @@ public class SimulacaoArea extends Canvas {
         double y = area.yi();
         double width = area.xf() - x;
         double height = area.yf() - y;
-        System.out.println(elemento.getType());
-        System.out.println(x + " " + y + " " + width + " " + height);
+        //System.out.println(elemento.getType());
+        //System.out.println(x + " " + y + " " + width + " " + height);
         switch (elemento.getType()) {
             case Elemento.FLORA -> {
                 Flora flora = (Flora) elemento;
@@ -98,8 +138,6 @@ public class SimulacaoArea extends Canvas {
             gc.strokeLine(0, i * getHeight() / valor, getWidth(), i * getHeight() / valor);
             gc.strokeLine(i * getWidth() / valor, 0, i  * getWidth() / valor, getHeight());
         }
-        //gc.strokeLine(0, 300, 0, 0);
-
     }
 
 }

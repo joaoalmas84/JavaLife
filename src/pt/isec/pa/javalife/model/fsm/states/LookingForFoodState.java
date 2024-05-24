@@ -1,13 +1,13 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
-import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
+import pt.isec.pa.javalife.model.data.FaunaContext;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
 public class LookingForFoodState extends FaunaStateAdapter {
 
-    public LookingForFoodState(Fauna context, FaunaData data) {
+    public LookingForFoodState(FaunaContext context, Fauna data) {
         super(context, data);
     }
 
