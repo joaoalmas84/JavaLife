@@ -1,4 +1,5 @@
 package pt.isec.pa.javalife.ui.gui;
+import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -42,7 +43,8 @@ public class MenuSimulacao extends MenuBar {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, evt -> Platform.runLater(this::update));
 
         mnAddElemento.setOnAction(e -> {
             simulacaoManager.setState(SimulacaoState.ADD);
@@ -56,6 +58,14 @@ public class MenuSimulacao extends MenuBar {
                 simulacaoManager.pause();
             }
         });
+
+        mnUndo.setOnAction(e -> {
+            simulacaoManager.undo();
+        });
+
+        mnRedo.setOnAction(e -> {
+            simulacaoManager.redo();
+        });
     }
 
     private void update() {
@@ -65,15 +75,21 @@ public class MenuSimulacao extends MenuBar {
                 mnPause.setVisible(true);
                 mnAddElemento.setVisible(true);
                 mnPause.setText("_Resume");
+                mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
+                mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;
             case GameEngineState.RUNNING:
                 mnPause.setVisible(true);
                 mnAddElemento.setVisible(true);
                 mnPause.setText("_Pause");
+                mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
+                mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;
             case  GameEngineState.READY:
                 mnPause.setVisible(false);
                 mnAddElemento.setVisible(false);
+                mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
+                mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;
         }
     }

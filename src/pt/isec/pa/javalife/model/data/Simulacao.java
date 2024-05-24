@@ -139,4 +139,11 @@ public class Simulacao {
         return state;
     }
 
+    public double getDano() {
+        return ecossistema.getDano();
+    }
+
+    public boolean setDano(double valorNovo) {
+        return ecossistema.setDano(valorNovo);
+    }
 }
