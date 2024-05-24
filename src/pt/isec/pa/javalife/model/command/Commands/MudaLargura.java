@@ -4,9 +4,9 @@ import pt.isec.pa.javalife.model.data.Simulacao;
 
 public class MudaLargura extends AbstractCommand{
 
-    int valor_novo, valor_velho;
+    double valor_novo, valor_velho;
 
-    MudaLargura(Simulacao receiver,int valor_novo_){
+    public MudaLargura(Simulacao receiver, double valor_novo_){
         super(receiver);
         valor_novo=valor_novo_;
     }

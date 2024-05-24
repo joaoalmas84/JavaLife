@@ -3,22 +3,53 @@ package pt.isec.pa.javalife.model.data;
 import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 import pt.isec.pa.javalife.model.gameengine.IGameEngineEvolve;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Ecossistema implements Serializable, IGameEngineEvolve {
     private Set<IElemento> elementos;
-    private int largura;
-    private int altura;
+    PropertyChangeSupport pcs;
 
-    public Ecossistema(int largura, int altura) {
+    private double largura;
+    private double altura;
+
+    public static final String PROP_UPDATE_MAP = "_update_map_";
+
+    public Ecossistema() {
         elementos = new HashSet<>();
-        this.largura = largura;
-        this.altura = altura;
+        pcs = new PropertyChangeSupport(this);
+        this.largura = 800;
+        this.altura = 450;
+        criarCerca();
+    }
+
+    public void criarCerca(){
+        double larguraDaBarraira = 15;
+        for (int i = 0; i < 10; i++) {
+            addElemento(new Inanimado(i * largura / 10, 0, (i + 1) * largura / 10, larguraDaBarraira));
+            addElemento(new Inanimado(i * largura / 10, altura - larguraDaBarraira, (i + 1) * largura / 10, altura));
+            addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
+            addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
+        }
+
+    }
+
+    public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
     }
 
     public boolean addElemento(IElemento elemento) {
+        Area area = elemento.getArea();
+
+        for (IElemento elem :  elementos){
+            if(elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)){
+                return false;
+            }
+        }
+
         return elementos.add(elemento);
     }
 
@@ -79,14 +110,54 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public IElemento removeElemento(IElemento elemento) {
-        if(elemento instanceof Fauna){
-            return removeFauna(elemento.getId());
-        }else if(elemento instanceof Flora){
-            return removeFlora(elemento.getId());
-        }else if(elemento instanceof Inanimado){
-            return removeInanimado(elemento.getId());
+        if(elemento == null) return null;
+        return switch (elemento.getType()) {
+            case Elemento.FAUNA -> removeFauna(elemento.getId());
+            case Elemento.FLORA -> removeFlora(elemento.getId());
+            case Elemento.INANIMADO -> removeInanimado(elemento.getId());
+            default -> null;
+        };
+    }
+
+    @Override
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        System.out.println("Evolve");
+        for(IElemento f : elementos){
+            if(f instanceof Flora){
+                //((Flora)f).move();
+            }
         }
-        return null;
+        pcs.firePropertyChange(PROP_UPDATE_MAP, null, null);
+    }
+
+    ////////////////////////////////////////////////////////////////////////// set
+    public boolean setLargura(double largura) {
+        this.largura = largura;
+        return true;
+    }
+
+    public boolean setAltura(double altura) {
+        this.altura = altura;
+        return true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////// get
+    public double getAltura() { return altura; }
+
+    public double getLargura() {
+        return largura;
+    }
+
+    public Set<IElemento> getElementos() {
+        return elementos;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Ecossistema: \n" + altura + "x" + largura + "\nElementos: \n");
+        for(IElemento f : elementos)
+            sb.append("\t---> ").append(f).append("\n");
+        return sb.toString();
     }
 
     public boolean existemArvores(){
@@ -106,32 +177,4 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         }
         return false;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Ecossistema: \n" + altura + "x" + largura + "\nElementos: \n");
-        for(IElemento f : elementos)
-            sb.append("\t---> ").append(f).append("\n");
-        return sb.toString();
-    }
-
-    @Override
-    public void evolve(IGameEngine gameEngine, long currentTime) {}
-
-    public int getAltura() {
-        return altura;
-    }
-
-    public int getLargura() {
-        return largura;
-    }
-
-    public void setLargura(int largura) {
-        this.largura = largura;
-    }
-
-    public void setAltura(int altura) {
-        this.altura = altura;
-    }
-
 }

@@ -40,11 +40,11 @@ public final class Fauna extends ElementoBase implements IElementoComForca, Clon
         double variacaoX=velocidade*Math.cos(Math.toRadians(direcao));
         double variacaoY=velocidade*Math.sin(Math.toRadians(direcao));
 
-        double cima = area.cima()-variacaoY;
-        double esquerda = area.esquerda()+variacaoX;
-        double baixo = area.baixo()+variacaoY;
-        double direita = area.direita()-variacaoX;
-        area=new Area(cima,esquerda,baixo,direita);
+        //double cima = area.cima()-variacaoY;
+        //double esquerda = area.esquerda()+variacaoX;
+        //double baixo = area.baixo()+variacaoY;
+        //double direita = area.direita()-variacaoX;
+        //area=new Area(cima,esquerda,baixo,direita);
         if(forca<=0){
             isDead=true;
         }
@@ -72,11 +72,7 @@ public final class Fauna extends ElementoBase implements IElementoComForca, Clon
     }
 
     @Override
-    public Fauna clone() {
-        try {
+    public Fauna clone() throws CloneNotSupportedException{
             return (Fauna) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
     }
 }

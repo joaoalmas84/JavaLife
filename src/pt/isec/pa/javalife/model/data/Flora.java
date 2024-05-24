@@ -12,13 +12,13 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     private Area area;
 
 
-    public Flora() {
+    public Flora(double xi, double yi, double xf, double yf) {
         super();
         id = nextId++;
         NumReproducoes = 0;
         forca = 50;
         isDead = false;
-        //area = new Area();
+        area = new Area(xi, yi, xf, yf);
     }
 
     public void setIsDead(boolean isDead) {
@@ -83,5 +83,10 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+
+
+    public void move(){
+        //area = new Area(area.cima() + 1, area.esquerda() + 1, area.baixo() + 1, area.cima() + 1);
     }
 }

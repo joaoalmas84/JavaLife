@@ -4,11 +4,11 @@ import pt.isec.pa.javalife.model.data.Simulacao;
 
 public class MudaAltura extends AbstractCommand{
 
-    int valor_novo, valor_velho;
+    double valor_novo, valor_velho;
 
-    MudaAltura(Simulacao receiver,int valor_novo_){
+    public MudaAltura(Simulacao receiver, double valor_novo_){
         super(receiver);
-        valor_novo=valor_novo_;
+        valor_novo = valor_novo_;
     }
 
     @Override

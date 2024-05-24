@@ -4,7 +4,7 @@ import pt.isec.pa.javalife.model.data.Fauna;
 import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
 import pt.isec.pa.javalife.model.fsm.states.MovingState;
 
-public class FaunaContext {
+public class FaunaContext{
     IFaunaState atual;
     Fauna data;
 
