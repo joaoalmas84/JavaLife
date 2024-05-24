@@ -77,7 +77,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public IElemento removeFauna(int id){
         for(IElemento f : elementos){
-            if(f.getId() == id && f instanceof Fauna){
+            if(f.getId() == id && f instanceof FaunaData){
                 elementos.remove(f);
                 return f;
             }
@@ -182,7 +182,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public boolean existemAnimais(){
         for(IElemento f : elementos){
-            if(f instanceof Fauna){
+            if(f instanceof FaunaData){
                 return true;
             }
         }

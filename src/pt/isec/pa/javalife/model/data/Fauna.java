@@ -1,78 +1,35 @@
 package pt.isec.pa.javalife.model.data;
 
-public final class Fauna extends ElementoBase implements IElementoComForca, Cloneable{
+import pt.isec.pa.javalife.model.fsm.FaunaState;
+import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
+import pt.isec.pa.javalife.model.fsm.states.MovingState;
 
-    private static int nextId = 0;
-    private int id;
-    private double forca;
-    private boolean isDead;
-    private int matingCounter;
+public non-sealed class Fauna extends FaunaData {
+    IFaunaState atual;
 
     public Fauna() {
         super();
-        id = nextId++;
-        forca = 50;
-        isDead = false;
-        matingCounter = 0;
+        atual = FaunaState.MOVING.getInstance(this, this);
     }
 
-    public boolean isDead() { return isDead; }
-
-    public int getMatingCounter() { return matingCounter; }
-
-    @Override
-    public int getId() { return id; }
-
-    @Override
-    public Elemento getType() {
-        return Elemento.FAUNA;
+    // dependency injection
+    public Fauna(FaunaData data) {
+        this.atual = new MovingState(this, data);
     }
 
-    @Override
-    public double getForca() { return forca; }
+    public void changeState(IFaunaState newState) { atual = newState; }
 
-    @Override
-    public void setForca(double forca) { this.forca = forca; }
+    // Transição de Estados
+    public boolean _move(double velocidade, double direcao) {
 
-    public void move(double velocidade, double direcao) {
-        forca -= 0.5;
-
-        double variacaoX=velocidade*Math.cos(Math.toRadians(direcao));
-        double variacaoY=velocidade*Math.sin(Math.toRadians(direcao));
-
-        //double cima = area.cima()-variacaoY;
-        //double esquerda = area.esquerda()+variacaoX;
-        //double baixo = area.baixo()+variacaoY;
-        //double direita = area.direita()-variacaoX;
-        //area=new Area(cima,esquerda,baixo,direita);
-        if(forca<=0){
-            isDead=true;
-        }
+        return atual.move(velocidade, direcao);
     }
 
-    public boolean eat() {
-        return false;
-    }
+    public boolean _eat() { return atual.eat(); }
 
-    public boolean multiply() {
-        // TODO
-        return false;
-    }
+    public boolean _multiply() { return atual.multiply(); }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Fauna{");
-        sb.append("id=").append(id);
-        sb.append(", forca=").append(forca);
-        sb.append(", isDead=").append(isDead);
-        sb.append(", matingCounter=").append(matingCounter);
-        sb.append('}');
-        return sb.toString();
-    }
+    // Getters
+    public FaunaState _getState() { return atual.getState(); }
 
-    @Override
-    public Fauna clone() throws CloneNotSupportedException{
-            return (Fauna) super.clone();
-    }
 }

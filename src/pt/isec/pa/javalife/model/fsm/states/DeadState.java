@@ -1,13 +1,13 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
+import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.fsm.FaunaContext;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
 public class DeadState extends FaunaStateAdapter {
 
-    public DeadState(FaunaContext context, Fauna data) {
+    public DeadState(Fauna context, FaunaData data) {
         super(context, data);
     }
 
