@@ -8,32 +8,41 @@ import pt.isec.pa.javalife.model.command.Commands.RemoveElemento;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Set;
 
 public class SimulacaoManager {
     protected CommandManager commandManager;
     protected Simulacao simulacao;
+    protected PropertyChangeSupport pcs;
+
+    public static final String PROP_UPDATE_COMMAND = "_update_COMMAND_";
 
     public SimulacaoManager() {
         simulacao = new Simulacao();
         this.commandManager = new CommandManager();
+        this.pcs = new PropertyChangeSupport(this);
         //this.pcs = new PropertyChangeSupport(this);
     }
 
-    //public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
-    //    pcs.addPropertyChangeListener(listener);
-    //}
+    public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(PROP_UPDATE_COMMAND, listener);
+    }
 
     /**
      *  ///////////////////////////////////////////////////////////// Command
      */
 
     public boolean undo(){
-        return commandManager.undo();
+        boolean res = commandManager.undo();
+        pcs.firePropertyChange(PROP_UPDATE_COMMAND, null, null);
+        return res;
     }
 
     public boolean redo(){
-        return commandManager.redo();
+        boolean res = commandManager.redo();
+        pcs.firePropertyChange(PROP_UPDATE_COMMAND, null, null);
+        return res;
     }
 
     public boolean hasUndo(){

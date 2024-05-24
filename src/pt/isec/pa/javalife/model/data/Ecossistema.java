@@ -15,14 +15,16 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     private double largura;
     private double altura;
+    private double dano;
 
     public static final String PROP_UPDATE_MAP = "_update_map_";
 
     public Ecossistema() {
         elementos = new HashSet<>();
         pcs = new PropertyChangeSupport(this);
-        this.largura = 800;
-        this.altura = 450;
+        this.largura = 800.0;
+        this.altura = 450.0;
+        dano = 1.0;
         criarCerca();
     }
 
@@ -48,6 +50,10 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             if(elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)){
                 return false;
             }
+        }
+
+        if(elemento instanceof Flora){
+            ((Flora)elemento).setEcossistema(this);
         }
 
         return elementos.add(elemento);
@@ -121,11 +127,16 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+        Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
-        for(IElemento f : elementos){
-            if(f instanceof Flora){
-                //((Flora)f).move();
+        for(IElemento elem : copySet){
+            if(elem.getType() == Elemento.FLORA){
+                ((Flora)elem).move(getElementos());
+                if( ((Flora)elem).isDead() ){
+                    elementos.remove(elem);
+                }
             }
+
         }
         pcs.firePropertyChange(PROP_UPDATE_MAP, null, null);
     }
@@ -176,5 +187,19 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             }
         }
         return false;
+    }
+
+    public double getDano() {
+        return dano;
+    }
+
+    public boolean setDano(double valorNovo) {
+        dano = valorNovo;
+        for(IElemento elem : elementos){
+            if(elem instanceof Flora){
+                ((Flora)elem).setDano(dano);
+            }
+        }
+        return true;
     }
 }

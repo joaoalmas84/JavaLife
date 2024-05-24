@@ -18,7 +18,7 @@ public class MenuAddElemento extends BorderPane {
     TextField tfXI, tfYI, tfXF, tfYF;
     String tipo;
     Double xI, yI, xF, yF;
-    Label lblTitle;
+    Label lblTitle, label_xI, label_yI, label_xF, label_yF;
 
     public MenuAddElemento(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -109,10 +109,15 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void createViews() {
-        this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        this.setBackground(new Background(new BackgroundFill(Color.rgb(255,255,244), null, null)));
         lblTitle = new Label("add elementos");
 
         cb = new ChoiceBox<>(FXCollections.observableArrayList("Flora", "Fauna", "Inanimado"));
+
+        label_xI = new Label("xI :");
+        label_yI = new Label("yI :");
+        label_xF = new Label("xF :");
+        label_yF = new Label("yF :");
 
         tfXI = new TextField();
         tfYI = new TextField();
@@ -133,9 +138,9 @@ public class MenuAddElemento extends BorderPane {
         tfXF.setTextFormatter(textFormatterXF);
         tfYF.setTextFormatter(textFormatterYF);
 
-        HBox HBox1 = new HBox(tfXI, tfYI, tfXF, tfYF);
+        HBox HBox1 = new HBox(label_xI, tfXI, label_yI, tfYI, label_xF, tfXF, label_yF, tfYF);
         HBox1.setAlignment(Pos.CENTER);
-        HBox1.setSpacing(25);
+        HBox1.setSpacing(5);
         btnGoBack = new Button("Go Back");
         btnAddElemento = new Button("Add Elemento");
         HBox HBox2 = new HBox(btnAddElemento, btnGoBack);
@@ -144,7 +149,7 @@ public class MenuAddElemento extends BorderPane {
 
         VBox vBox = new VBox(cb, HBox1, HBox2);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(25);
+        vBox.setSpacing(50);
         setCenter(vBox);
     }
 

@@ -18,6 +18,7 @@ public class MainJFX extends Application {
     @Override
     public void start(Stage stage) {
         createOneStage(stage);
+        createOneStage(new Stage());
     }
 
     private void createOneStage(Stage stage) {

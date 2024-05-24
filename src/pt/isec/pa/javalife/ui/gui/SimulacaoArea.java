@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -17,8 +18,15 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
-        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , evt -> update());
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) ->{
+            Platform.runLater(this::update);
+        });
+        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) ->{
+            Platform.runLater(this::update);
+        });
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) ->{
+            Platform.runLater(this::update);
+        });
         this.setOnMousePressed(evt -> update());
         //this.setOnMouseDragged(mouseEvent -> drawing.updateCurrentFigure(mouseEvent.getX(), mouseEvent.getY()));
         //this.setOnMouseReleased(mouseEvent -> drawing.finishCurrentFigure(mouseEvent.getX(), mouseEvent.getY()));
@@ -59,7 +67,11 @@ public class SimulacaoArea extends Canvas {
         System.out.println(elemento.getType());
         System.out.println(x + " " + y + " " + width + " " + height);
         switch (elemento.getType()) {
-            case Elemento.FLORA -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.GREEN);
+            case Elemento.FLORA -> {
+                Flora flora = (Flora) elemento;
+                Color transparentColor = new Color(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue(), ((Flora) elemento).getForca() / 100);
+                drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, transparentColor);
+            }
             case Elemento.INANIMADO -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.GRAY);
             case Elemento.FAUNA -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.RED);
         }
