@@ -16,6 +16,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     private double largura;
     private double altura;
     private double dano;
+    private int tempo;
 
     public static final String PROP_UPDATE_MAP = "_update_map_";
 
@@ -25,6 +26,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         this.largura = 800.0;
         this.altura = 450.0;
         dano = 1.0;
+        tempo = 0;
         criarCerca();
     }
 
@@ -44,19 +46,20 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean addElemento(IElemento elemento) {
-        System.out.println(" olhaahhah ");
         Area area = elemento.getArea();
-        System.out.println(" olhaahhah 2222 " + elemento.getArea() + elemento);
-
 
         for (IElemento elem :  elementos){
             if(elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)){
                 return false;
             }
         }
-        System.out.println(" olhaahhah 3333 ");
+
         if(elemento.getType() == Elemento.FLORA){
             ((Flora)elemento).setEcossistema(this);
+        }
+        if(elemento.getType() == Elemento.FAUNA){
+            assert elemento instanceof FaunaContext;
+            ((FaunaContext)elemento).setEcossistema(this);
         }
 
         return elementos.add(elemento);
@@ -132,6 +135,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+        tempo++;
         Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
         for(IElemento elem : copySet){
@@ -142,7 +146,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
                 }
             }
             if(elem.getType() == Elemento.FAUNA){
-                ((FaunaContext)elem).move(copySet);
+                assert elem instanceof FaunaContext;
+                ((FaunaContext)elem)._move(copySet);
                 if( ((FaunaContext)elem).isDead()){
                     elementos.remove(elem);
                 }
@@ -183,8 +188,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean existemArvores(){
-        for(IElemento f : elementos){
-            if(f instanceof Flora){
+        for(IElemento elem : elementos){
+            if(elem.getType() == Elemento.FLORA){
                 return true;
             }
         }
@@ -212,5 +217,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             }
         }
         return true;
+    }
+
+    public int getTempo() {
+        return tempo;
     }
 }

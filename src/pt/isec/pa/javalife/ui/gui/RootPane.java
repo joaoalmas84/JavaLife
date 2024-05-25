@@ -3,7 +3,6 @@ package pt.isec.pa.javalife.ui.gui;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.ui.gui.res.CSSManager;
 
@@ -31,7 +30,8 @@ public class RootPane extends BorderPane {
                 areaPane,
                 new MainMenuUI(simulacaoManager),
                 new MenuAddElemento(simulacaoManager),
-                new MenuRemoveElem(simulacaoManager)
+                new MenuRemoveElem(simulacaoManager),
+                new MenuIntervalo(simulacaoManager)
         );
 
         setCenter(stackPane);

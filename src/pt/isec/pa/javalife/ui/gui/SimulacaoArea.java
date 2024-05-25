@@ -7,13 +7,12 @@ import javafx.scene.paint.Color;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
-import java.awt.*;
 import java.util.Set;
 
 public class SimulacaoArea extends Canvas {
     private final SimulacaoManager simulacaoManager;
     private double x, y;
-
+    double altura, largura;
     public SimulacaoArea(SimulacaoManager simulacaoManager) {
         super(500,500);
         this.simulacaoManager = simulacaoManager;
@@ -27,38 +26,27 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) ->{
-            Platform.runLater(this::update);
-        });
-        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) ->{
-            Platform.runLater(this::update);
-        });
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) ->{
-            Platform.runLater(this::update);
-        });
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
         //this.setOnMousePressed(evt -> update());
         this.setOnMouseMoved(evt -> {
             x = evt.getX();
             y = evt.getY();
             update();
         });
-    }
 
-    /*public void updateinfo(int x, int y){
-        Set<IElemento> elementos = simulacaoManager.getElementos();
-        for (IElemento elem : elementos) {
-            if(elem.getArea().isPointOverlapping(x,y)){
-                System.out.println("updateinfo simm");
-                lblInfo.setText(String.valueOf(elem.getId()));
-
-                lblInfo.setLocation(x, y);
-                lblInfo.setVisible(true);
-                return ;
+        this.setOnMouseClicked(evt -> {
+            x = evt.getX();
+            y = evt.getY();
+            for (IElemento elem : simulacaoManager.getElementos()) {
+                if(elem.getArea().isPointOverlapping(x,y)){
+                    System.out.println(elem);
+                    return ;
+                }
             }
-        }
-        System.out.println("updateinfo nao");
-        lblInfo.setVisible(false);
-    }*/
+        });
+    }
 
     private void update() {
         if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.READY){
@@ -66,6 +54,9 @@ public class SimulacaoArea extends Canvas {
             return;
         }
         setVisible(true);
+
+        altura = getHeight() / simulacaoManager.getAlturaEcossistema();
+        largura = getWidth() / simulacaoManager.getLarguraEcossistema();
         GraphicsContext gc = this.getGraphicsContext2D();
 
         clearScreen(gc);
@@ -76,16 +67,17 @@ public class SimulacaoArea extends Canvas {
         Set<IElemento> elementos = simulacaoManager.getElementos();
 
         for (IElemento elem : elementos) {
-            if(elem.getArea().isPointOverlapping(x,y)){
+            if(elem.getArea().isPointOverlapping(x / largura,y / altura)){
                 gc.setFill(Color.YELLOW);
-                gc.setLineWidth(5);
+                gc.setStroke(Color.YELLOW.darker());
+                gc.setLineWidth(1);
                 gc.fillText(String.valueOf(elem.getId()), x, y);
+                Area area = elem.getArea();
+                gc.strokeRect(area.xi() * largura, area.yi() * altura,
+                        (area.xf() - area.xi()) * largura, (area.yf() - area.yi())* altura);
                 break;
             }
         }
-
-        //drawing.getList().forEach( figure -> drawFigure(gc,figure));
-        //drawFigure(gc,drawing.getCurrentFigure());
     }
 
     private void clearScreen(GraphicsContext gc) {
@@ -96,25 +88,34 @@ public class SimulacaoArea extends Canvas {
     private void drawElemento(GraphicsContext gc, IElemento elemento) {
         if (elemento == null || elemento.getArea() == null || simulacaoManager == null) return;
 
-        double altura = getHeight() / simulacaoManager.getAlturaEcossistema();
-        double largura = getWidth() / simulacaoManager.getLarguraEcossistema();
+        altura = getHeight() / simulacaoManager.getAlturaEcossistema();
+        largura = getWidth() / simulacaoManager.getLarguraEcossistema();
 
         Area area = elemento.getArea();
         double x = area.xi();
         double y = area.yi();
         double width = area.xf() - x;
         double height = area.yf() - y;
-        //System.out.println(elemento.getType());
-        //System.out.println(x + " " + y + " " + width + " " + height);
         switch (elemento.getType()) {
             case Elemento.FLORA -> {
-                Flora flora = (Flora) elemento;
                 Color transparentColor = new Color(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue(), ((Flora) elemento).getForca() / 100);
                 drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, transparentColor);
             }
             case Elemento.INANIMADO -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.GRAY);
-            case Elemento.FAUNA -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.RED);
+            case Elemento.FAUNA -> {
+                Fauna fauna = (Fauna) elemento;
+                drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.RED);
+                drawRectanglelive(gc,x * largura , (y - 7) * altura, width * largura, 7 * altura, fauna.getForca());
+            }
         }
+    }
+
+    private void drawRectanglelive(GraphicsContext gc, double x, double y, double width, double height, double forca) {
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.GREEN.darker());
+        gc.setLineWidth(1);
+        gc.fillRect(x, y, width * (forca / 100), height);
+        gc.strokeRect(x, y, width , height);
     }
 
     private void drawRectangle(GraphicsContext gc, double x, double y, double width, double height, Color color) {

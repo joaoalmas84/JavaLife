@@ -15,6 +15,7 @@ public class ImageManager {
         Image image = images.get(filename);
         if (image == null)
             try (InputStream is = ImageManager.class.getResourceAsStream("images/"+filename)) {
+                if(is == null){return null;}
                 image = new Image(is);
                 images.put(filename,image);
             } catch (Exception e) {

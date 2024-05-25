@@ -244,5 +244,10 @@ public class SimulacaoManager {
     public SimulacaoState getState(){
         return simulacao.getState();
     }
-
+    public String getTempo() {
+        return String.valueOf(simulacao.getTempo());
+    }
+    public void setTempo(int tempo) {
+        simulacao.setTempo(tempo);
+    }
 }

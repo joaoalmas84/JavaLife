@@ -7,9 +7,7 @@ import pt.isec.pa.javalife.model.fsm.states.*;
 public enum FaunaState  {
     MOVING, LOOKING_FOR_FOOD, EATING, DEAD, HUNTING, CHASING_PARTNER;
 
-    public static IFaunaState getInstance(
-            FaunaState type, FaunaContext context, Fauna data
-    ) {
+    public static IFaunaState getInstance(FaunaState type, FaunaContext context, Fauna data) {
         return switch(type) {
             case MOVING -> new MovingState(context, data);
             case LOOKING_FOR_FOOD -> new LookingForFoodState(context, data);
@@ -30,4 +28,5 @@ public enum FaunaState  {
             case CHASING_PARTNER -> new ChasingPartnerState(context, data);
         };
     }
+
 }

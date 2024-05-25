@@ -33,25 +33,19 @@ public class MenuRemoveElem extends BorderPane {
             System.out.println(tipo);
         });
 
-        btnGoBack.setOnAction(e -> {
-            simulacaoManager.resume();
-            simulacaoManager.setState(SimulacaoState.NULL);
-        });
+        btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnRemoveElemento.setOnAction(e -> {
             if (tipo == null || tipo.isEmpty() || id < -1) {
-                System.out.println("vou remover merda");
                 return;
             }
 
-            System.out.println("vou remover");
             switch (tipo) {
                 case "Flora" -> simulacaoManager.removerElemento(id, "Flora");
                 case "Fauna" -> simulacaoManager.removerElemento(id, "Fauna");
                 case "Inanimado" -> simulacaoManager.removerElemento(id, "Inanimado");
             }
 
-            simulacaoManager.resume();
             simulacaoManager.setState(SimulacaoState.NULL);
 
         });
@@ -84,6 +78,7 @@ public class MenuRemoveElem extends BorderPane {
         HBox1.setSpacing(5);
         btnGoBack = new Button("Go Back");
         btnRemoveElemento = new Button("Remover Elemento");
+
         HBox HBox2 = new HBox(btnRemoveElemento, btnGoBack);
         HBox2.setAlignment(Pos.CENTER);
         HBox2.setSpacing(25);

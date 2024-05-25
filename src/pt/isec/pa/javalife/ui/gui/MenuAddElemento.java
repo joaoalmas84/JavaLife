@@ -9,7 +9,6 @@ import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.model.data.SimulacaoState;
-import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 public class MenuAddElemento extends BorderPane {
     SimulacaoManager simulacaoManager;
@@ -44,24 +43,20 @@ public class MenuAddElemento extends BorderPane {
 
         cb.setOnAction(e -> tipo = cb.getValue());
 
-        btnGoBack.setOnAction(e -> {
-            simulacaoManager.resume();
-            simulacaoManager.setState(SimulacaoState.NULL);
-        });
+        btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnAddElemento.setOnAction(e -> {
             if (tipo == null || tipo.isEmpty() || new Area(xI, yI, xF, yF).isInvalid()) {
                 return;
             }
 
-            System.out.println("vou crae");
+
             switch (tipo) {
                 case "Flora" -> simulacaoManager.adicionarFlora(xI, yI, xF, yF);
                 case "Fauna" -> simulacaoManager.adicionarFauna(xI, yI, xF, yF);
                 case "Inanimado" -> simulacaoManager.adicionarInanimado(xI, yI, xF, yF);
             }
-            System.out.println("vou crae merda");
-            simulacaoManager.resume();
+
             simulacaoManager.setState(SimulacaoState.NULL);
 
         });

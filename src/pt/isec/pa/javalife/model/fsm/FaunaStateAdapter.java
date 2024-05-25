@@ -2,7 +2,10 @@ package pt.isec.pa.javalife.model.fsm;
 
 import pt.isec.pa.javalife.model.data.FaunaContext;
 import pt.isec.pa.javalife.model.data.Fauna;
+import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
+
+import java.util.Set;
 
 abstract public class FaunaStateAdapter implements IFaunaState {
     protected FaunaContext context;
@@ -13,12 +16,12 @@ abstract public class FaunaStateAdapter implements IFaunaState {
         this.data = data;
     }
 
-    public void changeState(IFaunaState newState) {
-        context.changeState(newState);
+    public void changeState(FaunaState newState) {
+        context.changeState(newState.getInstance(context, data));
     }
 
     @Override
-    public boolean move(double velocidade, double direcao) {
+    public boolean move(Set<IElemento> elementos) {
         return false;
     }
 

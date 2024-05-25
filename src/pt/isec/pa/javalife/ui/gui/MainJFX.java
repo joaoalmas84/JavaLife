@@ -3,7 +3,6 @@ package pt.isec.pa.javalife.ui.gui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
 public class MainJFX extends Application {
@@ -19,6 +18,7 @@ public class MainJFX extends Application {
     public void start(Stage stage) {
         createOneStage(stage);
         createOneStage(new Stage());
+        createOneStageRelogio(new Stage());
     }
 
     private void createOneStage(Stage stage) {
@@ -29,7 +29,17 @@ public class MainJFX extends Application {
         stage.show();
     }
 
+    private void createOneStageRelogio(Stage stage) {
+        Relogio root = new Relogio(simulacaoManager);
+        Scene scene = new Scene(root,200,100);
+        stage.setScene(scene);
+        stage.setTitle("Tempo");
+        stage.show();
+    }
+
     @Override
     public void stop() throws Exception {
+        super.stop();
+        simulacaoManager.stop();
     }
 }

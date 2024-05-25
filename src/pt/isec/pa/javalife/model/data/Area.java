@@ -62,6 +62,21 @@ public record Area(double xi, double yi, double xf, double yf){
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    public double angleTo(Area other) {
+        // Calcula o centro de ambas as áreas
+        double centerX1 = (xi + xf) / 2.0;
+        double centerY1 = (yi + yf) / 2.0;
+        double centerX2 = (other.xi + other.xf) / 2.0;
+        double centerY2 = (other.yi + other.yf) / 2.0;
+
+        // Calcula a diferença entre as coordenadas dos centros
+        double deltaX = centerX2 - centerX1;
+        double deltaY = centerY2 - centerY1;
+
+        // Calcula o ângulo usando atan2
+        return Math.atan2(deltaY, deltaX);
+    }
+
     @Override
     public String toString() {
         return "Area{" +
@@ -72,4 +87,7 @@ public record Area(double xi, double yi, double xf, double yf){
                 '}';
     }
 
+    public double width() {
+        return xf - xi;
+    }
 }
