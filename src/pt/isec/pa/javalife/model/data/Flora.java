@@ -17,7 +17,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
 
     public Flora(double xi, double yi, double xf, double yf) {
-        super();
+        super(xi, yi, xf, yf);
         id = nextId++;
         NumReproducoes = 0;
         forca = 50;

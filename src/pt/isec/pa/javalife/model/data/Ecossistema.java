@@ -38,7 +38,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
             addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
         }
-
     }
 
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
@@ -58,8 +57,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             ((Flora)elemento).setEcossistema(this);
         }
         if(elemento.getType() == Elemento.FAUNA){
-            assert elemento instanceof FaunaContext;
-            ((FaunaContext)elemento).setEcossistema(this);
+            assert elemento instanceof Fauna;
+            ((FaunaData)elemento).setEcossistema(this);
         }
 
         return elementos.add(elemento);
@@ -146,9 +145,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
                 }
             }
             if(elem.getType() == Elemento.FAUNA){
-                assert elem instanceof FaunaContext;
-                ((FaunaContext)elem)._move(copySet);
-                if( ((FaunaContext)elem).isDead()){
+                assert elem instanceof Fauna;
+                ((Fauna)elem)._move(copySet);
+                if( ((Fauna)elem).isDead()){
                     elementos.remove(elem);
                 }
             }

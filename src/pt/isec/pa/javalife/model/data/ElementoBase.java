@@ -1,11 +1,13 @@
 package pt.isec.pa.javalife.model.data;
 
-public abstract sealed class ElementoBase implements IElemento permits Inanimado, Flora, Fauna {
+public abstract sealed class ElementoBase
+        implements IElemento
+        permits Inanimado, Flora, Fauna {
 
     protected Area area;
 
-    public void Elemento() {
-        //area = new Area();
+    public ElementoBase(double xi, double yi, double xf, double yf) {
+        area = new Area(xi, yi, xf, yf);
     }
 
     @Override

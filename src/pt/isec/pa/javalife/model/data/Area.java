@@ -2,7 +2,7 @@ package pt.isec.pa.javalife.model.data;
 
 import java.awt.*;
 
-public record Area(double xi, double yi, double xf, double yf){
+public record Area(double xi, double yi, double xf, double yf) {
 
     public Area clone() throws CloneNotSupportedException {
         return (Area) super.clone();

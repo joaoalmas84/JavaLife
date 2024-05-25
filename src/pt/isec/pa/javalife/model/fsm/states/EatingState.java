@@ -1,16 +1,18 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
+import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.FaunaContext;
 import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
 import java.util.Set;
 
-public class EatingState extends FaunaStateAdapter {
+public class EatingState
+        extends FaunaStateAdapter
+        implements IFaunaState {
 
-    public EatingState(FaunaContext context, Fauna data) {
+    public EatingState(Fauna context, FaunaData data) {
         super(context, data);
     }
 
@@ -19,16 +21,19 @@ public class EatingState extends FaunaStateAdapter {
         System.out.println("EatingState");
         boolean res = data.eat(elementos);
 
-        if(!res && data.getForca() < 80 && !data.existemArvores()){
+        if (!res && data.getForca() < 80 && !data.existemArvores()) {
             changeState(FaunaState.HUNTING);
         }
-        if(!res && data.getForca() < 80){
+
+        if (!res && data.getForca() < 80) {
             changeState(FaunaState.LOOKING_FOR_FOOD);
         }
-        if(!res && data.getForca() >= 80){
+
+        if (!res && data.getForca() >= 80) {
             changeState(FaunaState.MOVING);
         }
-        if(data.getForca() >= 100){
+
+        if (data.getForca() >= 100) {
             changeState(FaunaState.CHASING_PARTNER);
         }
 

@@ -7,6 +7,7 @@ public final class Inanimado extends ElementoBase {
     private final boolean podeRemove;
 
     Inanimado(double xi, double yi, double xf, double yf, boolean podeRemove) {
+        super(xi, yi, xf, yf);
         area = new Area(xi, yi, xf, yf);
         id = nextId++;
         this.podeRemove = podeRemove;

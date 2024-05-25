@@ -103,7 +103,7 @@ public class SimulacaoArea extends Canvas {
             }
             case Elemento.INANIMADO -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.GRAY);
             case Elemento.FAUNA -> {
-                Fauna fauna = (Fauna) elemento;
+                FaunaData fauna = (FaunaData) elemento;
                 drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.RED);
                 drawRectanglelive(gc,x * largura , (y - 7) * altura, width * largura, 7 * altura, fauna.getForca());
             }
