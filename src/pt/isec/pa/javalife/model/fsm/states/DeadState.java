@@ -1,18 +1,21 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
-import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
+import pt.isec.pa.javalife.model.data.FaunaContext;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
+
 public class DeadState extends FaunaStateAdapter {
 
-    public DeadState(Fauna context, FaunaData data) {
+    public DeadState(FaunaContext context, Fauna data) {
         super(context, data);
     }
 
+/*
     @Override
-    public boolean move(double velocidade, double direcao) {
+    public boolean move(Set<IElemento> elementos) {
+        System.out.println("DeadState");
         return false;
     }
 
@@ -25,7 +28,7 @@ public class DeadState extends FaunaStateAdapter {
     public boolean multiply() {
         return false;
     }
-
+*/
     @Override
     public FaunaState getState() { return FaunaState.DEAD; }
 }

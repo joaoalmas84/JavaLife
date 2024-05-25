@@ -5,13 +5,13 @@ import java.util.Random;
 import java.util.Set;
 
 public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem, Cloneable{
-    private ArrayList<IEvento> eventos;
     private static int nextId = 0;
-    private int id;
+    private ArrayList<IEvento> eventos;
+    private final int id;
     private int NumReproducoes;
     private double forca;
     private boolean isDead;
-    private Area area;
+    private final Area area;
     private Ecossistema ecossistema;
     private double dano;
 
@@ -42,6 +42,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     public void setForca(double forca) {
         if(forca + this.forca < 0){
             this.forca = 0;
+            isDead = true;
         }else if(forca + this.forca > 100){
             this.forca = 100;
         }else{
@@ -79,15 +80,19 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         return isDead;
     }
 
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Flora{");
-        sb.append("id=").append(id);
-        sb.append(", forca=").append(forca);
-        sb.append(", Area=").append("Area hahahahaha");
-        sb.append('}');
-        return sb.toString();
+        String sb = "Flora{" +
+                "id=" + id +
+                ", forca=" + forca +
+                ", Area=" + area +
+                ", isDead=" + isDead +
+                ", NumReproducoes=" + NumReproducoes +
+                ", dano=" + dano +
+                '}';
+        return sb;
     }
+
 
     @Override
     public Flora clone() {
@@ -101,9 +106,9 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     public void move(Set<IElemento> elementos){
         if(!isDead){
-        setForca(5);
+        setForca(0.5);
         reproduz(elementos);
-        serComida(elementos);
+        //serComida(elementos);
         semEnergia();
         }
     }

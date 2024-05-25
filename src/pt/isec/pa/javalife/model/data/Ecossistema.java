@@ -16,6 +16,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     private double largura;
     private double altura;
     private double dano;
+    private int tempo;
 
     public static final String PROP_UPDATE_MAP = "_update_map_";
 
@@ -25,16 +26,17 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         this.largura = 800.0;
         this.altura = 450.0;
         dano = 1.0;
+        tempo = 0;
         criarCerca();
     }
 
     public void criarCerca(){
         double larguraDaBarraira = 15;
         for (int i = 0; i < 10; i++) {
-            addElemento(new Inanimado(i * largura / 10, 0, (i + 1) * largura / 10, larguraDaBarraira));
-            addElemento(new Inanimado(i * largura / 10, altura - larguraDaBarraira, (i + 1) * largura / 10, altura));
-            addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
-            addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10));
+            addElemento(new Inanimado(i * largura / 10, 0, (i + 1) * largura / 10, larguraDaBarraira, false));
+            addElemento(new Inanimado(i * largura / 10, altura - larguraDaBarraira, (i + 1) * largura / 10, altura, false));
+            addElemento(new Inanimado(0, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, larguraDaBarraira, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
+            addElemento(new Inanimado(largura - larguraDaBarraira, larguraDaBarraira + i * (altura - larguraDaBarraira * 2)  / 10, largura, larguraDaBarraira + (i + 1) * (altura - larguraDaBarraira * 2) / 10, false));
         }
 
     }
@@ -52,8 +54,12 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             }
         }
 
-        if(elemento instanceof Flora){
+        if(elemento.getType() == Elemento.FLORA){
             ((Flora)elemento).setEcossistema(this);
+        }
+        if(elemento.getType() == Elemento.FAUNA){
+            assert elemento instanceof FaunaContext;
+            ((FaunaContext)elemento).setEcossistema(this);
         }
 
         return elementos.add(elemento);
@@ -76,20 +82,22 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public IElemento removeFauna(int id){
-        for(IElemento f : elementos){
-            if(f.getId() == id && f instanceof FaunaData){
-                elementos.remove(f);
-                return f;
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.FAUNA){
+                elementos.remove(elem);
+                return elem;
             }
         }
         return null;
     }
 
     public IElemento removeInanimado(int id) {
-        for(IElemento f : elementos){
-            if(f.getId() == id && f instanceof Inanimado){
-                elementos.remove(f);
-                return f;
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.INANIMADO){
+                if(!((Inanimado)elem).podeRemove()){ return null; }
+
+                elementos.remove(elem);
+                return elem;
             }
         }
         return null;
@@ -127,12 +135,20 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+        tempo++;
         Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
         for(IElemento elem : copySet){
             if(elem.getType() == Elemento.FLORA){
-                ((Flora)elem).move(getElementos());
+                ((Flora)elem).move(copySet);
                 if( ((Flora)elem).isDead() ){
+                    elementos.remove(elem);
+                }
+            }
+            if(elem.getType() == Elemento.FAUNA){
+                assert elem instanceof FaunaContext;
+                ((FaunaContext)elem)._move(copySet);
+                if( ((FaunaContext)elem).isDead()){
                     elementos.remove(elem);
                 }
             }
@@ -172,8 +188,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean existemArvores(){
-        for(IElemento f : elementos){
-            if(f instanceof Flora){
+        for(IElemento elem : elementos){
+            if(elem.getType() == Elemento.FLORA){
                 return true;
             }
         }
@@ -181,8 +197,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public boolean existemAnimais(){
-        for(IElemento f : elementos){
-            if(f instanceof FaunaData){
+        for(IElemento elem : elementos){
+            if(elem.getType() == Elemento.FAUNA){
                 return true;
             }
         }
@@ -201,5 +217,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             }
         }
         return true;
+    }
+
+    public int getTempo() {
+        return tempo;
     }
 }

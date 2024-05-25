@@ -22,7 +22,7 @@ public class EventoSol implements IEvento{
                     iniciado = true;
                     return true;
                 } else if (elemento.getType() == Elemento.FAUNA) {
-                    FaunaData f = (FaunaData) elemento;
+                    Fauna f = (Fauna) elemento;
                     //f.setVelucidade(f.getVelucidade() / 2);
                     iniciado = true;
                     return true;
@@ -35,7 +35,7 @@ public class EventoSol implements IEvento{
                     f.setForca(f.getForca() / 2);
                     return false;
                 } else if (elemento.getType() == Elemento.FAUNA) {
-                    FaunaData f = (FaunaData) elemento;
+                    Fauna f = (Fauna) elemento;
                     //f.setVelucidade(f.getVelucidade() * 2);
                     return false;
                 }

@@ -21,10 +21,6 @@ public class MainMenuUI extends BorderPane {
 
     public MainMenuUI(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
-
-        //titleFont = FontManager.loadFont("PAC-FONT.TTF",69);
-        //buttonsFont = FontManager.loadFont("PressStart2P-Regular.ttf",12);
-
         createViews();
         registerHandlers();
         update();
@@ -72,7 +68,7 @@ public class MainMenuUI extends BorderPane {
 
         HBox hBox = new HBox(btnFullScreen);
         hBox.setAlignment(Pos.CENTER_RIGHT);
-        hBox.setMargin(btnFullScreen, new Insets(20, 35, 0, 0)); // Set top margin for the button
+        HBox.setMargin(btnFullScreen, new Insets(20, 35, 0, 0)); // Set top margin for the button
 
         this.setCenter(vBox);
         this.setTop(hBox);
@@ -114,56 +110,7 @@ public class MainMenuUI extends BorderPane {
             }
         });
 
-        /*
-        btnStart.setOnAction( event -> {
-            if(simulacao.checkSavedGame()){
-                Alert alert = new Alert(
-                        Alert.AlertType.WARNING,
-                        null,
-                        ButtonType.YES, ButtonType.NO
-                );
-
-                alert.setTitle("Jogo guardado");
-                alert.setHeaderText("Foi detetado um jogo previamente guardado.\nPertence continuar [YES] ou começar um novo [NO]?");
-
-                ImageView exitIcon = new ImageView(ImageManager.getImage("pacman-gif.gif"));
-                exitIcon.setFitHeight(100);
-                exitIcon.setFitWidth(100);
-                alert.getDialogPane().setGraphic(exitIcon);
-
-                alert.showAndWait().ifPresent(response -> {
-                    switch (response.getButtonData()){
-                        case YES -> {
-                            tinyPacmanManager.load();
-                        }
-                        case NO -> {
-                            tinyPacmanManager.delete();
-                            tinyPacmanManager.start();
-                        }
-                    }
-                });
-            }
-            else{
-                tinyPacmanManager.start();
-            }
-
-
-        });
-
-        btnTop5.setOnAction( event -> {
-            tinyPacmanManager.setShowTopFive(true);
-        });
-
-        btnCredits.setOnAction( event -> {
-            tinyPacmanManager.setShowCredits(true);
-        });
- */
-
-        //ExitAlertUI.exitAlert(btnExit);
-
-        btnStart.setOnAction(event -> {
-            simulacaoManager.start();
-        });
+        btnStart.setOnAction(event -> simulacaoManager.start());
 
     }
 

@@ -20,17 +20,24 @@ public class Simulacao {
 
 
     public Simulacao() {
-        tempoDeInstante = 500;
+        tempoDeInstante = 50;
         this.ecossistema = new Ecossistema();
         this.gameEngine = new GameEngine();
         gameEngine.registerClient(ecossistema);
         this.pcs = new PropertyChangeSupport(this);
         state = SimulacaoState.NULL;
+        ecossistema.addElemento(new FaunaContext(130, 130, 160, 160));
+        ecossistema.addElemento(new Flora(15, 15, 30, 30));
+        ecossistema.addElemento(new Flora(15, 200, 30, 230));
+        ecossistema.addElemento(new Flora(15, 115, 30, 130));
+        ecossistema.addElemento(new Flora(215, 15, 230, 30));
+        ecossistema.addElemento(new Flora(215, 215, 230, 230));
+
     }
 
 
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(listener);
+        pcs.addPropertyChangeListener(property, listener);
     }
     public void addPropertyChangeListenerEcossitema(String property, PropertyChangeListener listener) {
         ecossistema.addPropertyChangeListener(property, listener);
@@ -101,7 +108,7 @@ public class Simulacao {
         }
         return false;
     }
-
+/*
     public boolean adicionaFauna(double xi, double yi, double xf, double yf){
         //return commandManager.invokeCommand(new AdicionaElemento(ecossistema ,new Fauna(xi, yi, xf, yf)));
         return false;
@@ -112,7 +119,7 @@ public class Simulacao {
     }
 
     public boolean adicionaInanimado(double xi, double yi, double xf, double yf){
-        return ecossistema.addElemento(new Inanimado(xi, yi, xf, yf));
+        return ecossistema.addElemento(new Inanimado(xi, yi, xf, yf, true));
     }
 
     public boolean removeFauna(int id){
@@ -127,7 +134,7 @@ public class Simulacao {
         return removeInanimado(id);
     }
 
-
+*/
     public GameEngineState getCurrentState_Of_GameEngine() { return gameEngine.getCurrentState(); }
 
     public void setState(SimulacaoState state) {
@@ -145,5 +152,17 @@ public class Simulacao {
 
     public boolean setDano(double valorNovo) {
         return ecossistema.setDano(valorNovo);
+    }
+
+    public int getTempo() {
+        return ecossistema.getTempo();
+    }
+
+    public boolean setTempo(long tempo) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY){
+            return false ;
+        }
+        gameEngine.setInterval(tempo);
+        return true;
     }
 }
