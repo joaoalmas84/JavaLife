@@ -86,7 +86,7 @@ public class SimulacaoManager {
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
      */
     public boolean adicionarFauna(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(simulacao, new Fauna(XI, YI, XF, YF)));
+        return commandManager.invokeCommand(new AdicionaElemento(simulacao, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
     }
     /**
      * Adiciona um elemento de flora na simulação.

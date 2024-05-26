@@ -6,9 +6,9 @@ import pt.isec.pa.javalife.model.fsm.FaunaState;
 import java.util.Set;
 
 public interface IFaunaState {
-    boolean move(Set<IElemento> elementos);
-    boolean eat();
-    boolean multiply();
+    void move();
+    void eat();
+    void multiply();
 
     FaunaState getState();
 }

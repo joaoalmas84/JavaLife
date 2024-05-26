@@ -30,6 +30,52 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         criarCerca();
     }
 
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters +------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
+    public Fauna getMaisForte(int id){
+        Fauna fauna = null;
+        double forcaMaisForte = -100;
+        for(IElemento elem : elementos){
+            if (elem.getType() == Elemento.FAUNA && elem.getId() != id) {
+                if(((Fauna)elem).getForca() > forcaMaisForte){
+                    forcaMaisForte = ((Fauna)elem).getForca();
+                    fauna = (Fauna) elem;
+                }
+            }
+        }
+        return  fauna;
+    }
+
+    public Fauna getMaisFraco(int id) {
+        Fauna fauna = null;
+        double forcaMaisFraco = Double.MAX_VALUE;
+        for (IElemento elem : elementos) {
+            if (elem.getType() == Elemento.FAUNA && elem.getId() != id) {
+                if(((Fauna)elem).getForca() < forcaMaisFraco){
+                    forcaMaisFraco = ((Fauna)elem).getForca();
+                    fauna = (Fauna) elem;
+                }
+            }
+        }
+        return  fauna;
+    }
+
+    public Flora getFloraMaisProxima(Area area){
+        Flora floraMaisProxima = null;
+        double distancia = Double.MAX_VALUE;
+        for (IElemento elem : elementos) {
+            if (elem.getType() == Elemento.FLORA) {
+                if(elem.getArea().distanceTo(area) < distancia){
+                    distancia = elem.getArea().distanceTo(area);
+                    floraMaisProxima = (Flora)elem;
+                }
+            }
+        }
+        return floraMaisProxima;
+    }
+
     public void criarCerca(){
         double larguraDaBarraira = 15;
         for (int i = 0; i < 10; i++) {
@@ -48,18 +94,15 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         Area area = elemento.getArea();
 
         for (IElemento elem :  elementos){
-            if(elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)){
+            if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)) {
                 return false;
             }
         }
 
-        if(elemento.getType() == Elemento.FLORA){
+        if (elemento.getType() == Elemento.FLORA) {
             ((Flora)elemento).setEcossistema(this);
         }
-        if(elemento.getType() == Elemento.FAUNA){
-            assert elemento instanceof Fauna;
-            ((FaunaData)elemento).setEcossistema(this);
-        }
+
 
         return elementos.add(elemento);
     }
@@ -135,8 +178,12 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
         tempo++;
+        if (tempo == 40) {
+            while(true);
+        }
         Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
+
         for(IElemento elem : copySet){
             if(elem.getType() == Elemento.FLORA){
                 ((Flora)elem).move(copySet);
@@ -144,10 +191,11 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
                     elementos.remove(elem);
                 }
             }
-            if(elem.getType() == Elemento.FAUNA){
+
+            if (elem.getType() == Elemento.FAUNA) {
                 assert elem instanceof Fauna;
-                ((Fauna)elem)._move(copySet);
-                if( ((Fauna)elem).isDead()){
+                ((Fauna)elem).move_context();
+                if (((Fauna)elem).isDead()) {
                     elementos.remove(elem);
                 }
             }
@@ -221,4 +269,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public int getTempo() {
         return tempo;
     }
+
+
+
 }

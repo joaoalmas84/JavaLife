@@ -4,27 +4,39 @@ import java.util.Set;
 
 public class FaunaData {
     private static int nextId = 0;
+    private static double dano = 1;
+    private static double danoPorMoviemnto = 0.5;
+
     private int id;
     private double forca;
+
     private boolean isDead;
+
     private int matingCounter;
-    private double velocidade = 10;
+
+    private double velocidade;
     private double direcao;
-    private double dano = 1;
+
+    private String image;
     private Ecossistema ecossistema;
 
     // +----------------------------------------------------------------------------------------------------------------
-    // +----------------------------------------------+ Private +-------------------------------------------------------
+    // +----------------------------------------------+ Public +--------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
     // Construtor
     public FaunaData(Ecossistema e) {
         super();
-        direcao = Math.random() * 360;
+
         id = nextId++;
         forca = 50;
         isDead = false;
+
         matingCounter = 0;
+
+        velocidade = 10;
+        direcao = Math.random() * 360;
+
         ecossistema = e;
     }
 
@@ -46,19 +58,9 @@ public class FaunaData {
 
     public double getDirecao() { return direcao; }
 
-    private Fauna getMaisForte(Set<IElemento> elementos){
-        Fauna fauna = null;
-        double forcaMaisForte = -100;
-        for(IElemento elem : elementos){
-            if(elem.getType() == Elemento.FAUNA && elem.getId() != id){
-                if(((Fauna)elem).getForca() > forcaMaisForte){
-                    forcaMaisForte = ((Fauna)elem).getForca();
-                    fauna = (Fauna) elem;
-                }
-            }
-        }
-        return  fauna;
-    }
+    public double getDano() { return dano; }
+
+    public String getImage() { return image; }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Setters +------------------------------------------------------------------------------------------------------
@@ -69,10 +71,10 @@ public class FaunaData {
     }
 
     public void setForca(double forca) {
-        if(this.forca + forca < 0) {
+        if ((this.forca + forca) < 0) {
             this.forca = 0;
             isDead = true;
-        }else if(this.forca + forca > 100) {
+        } else if ((this.forca + forca) > 100) {
             this.forca = 100;
         } else {
             this.forca += forca;
@@ -81,134 +83,179 @@ public class FaunaData {
 
     public void setDirecao(double direcao) { this.direcao = direcao; }
 
+    public void setMatingCounter(int val) { this.matingCounter = val; }
+
     // +----------------------------------------------------------------------------------------------------------------
-    // + Outras +-------------------------------------------------------------------------------------------------------
+    // + Acoes +--------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public void danoPorMovimento() {
-        forca -= 0.5;
-        if (forca <= 0) {isDead = true;}
+    public Area move(Area area) {
+        Area novaArea;
+        double newDirecao;
+
+        double variacaoX = velocidade * Math.cos(velocidade);
+        double variacaoY = velocidade * Math.sin(velocidade);
+
+        novaArea = new Area(
+                area.xi() + variacaoX,
+                area.yi() + variacaoY,
+                area.xf() + variacaoX,
+                area.yf() + variacaoY);
+
+        for (IElemento elem : ecossistema.getElementos()) {
+            if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(novaArea)) {
+                newDirecao = (direcao + 90) % 360;
+                direcao = newDirecao;
+
+                return new Area(-1, -1, -1, -1);
+            }
+        }
+
+        danoPorMovimento();
+
+        return novaArea;
     }
+
+    // Success -> encontrou flora
+    public Area move_lookingForFood(Area area, Boolean[] success) {
+        Flora floraMaisProxima;
+        Area novaArea;
+
+        for (IElemento elem : ecossistema.getElementos()) {
+            if (elem.getType() == Elemento.FLORA && elem.getArea().isOverlapping(area)) {
+                success[0] = true;
+                return area;
+            }
+        }
+
+        floraMaisProxima = ecossistema.getFloraMaisProxima(area);
+        if (floraMaisProxima == null) {
+            success[0] = false;
+            return new Area(-1, -1, -1, -1);
+        }
+
+        direcao = area.angleTo(floraMaisProxima.getArea());
+
+        novaArea = move( area);
+
+        if (novaArea.isInvalid()) {
+            direcao = Math.random() * 360;
+            novaArea = move(area);
+        }
+
+        success[0] = false;
+        return novaArea;
+    }
+
+    public Area move_hunting(Area area) {
+        Fauna fauna;
+        Area novaArea;
+
+        fauna = ecossistema.getMaisFraco(id);
+        if (fauna == null) {
+            return new Area(-1,-1,-1,-1);
+        }
+
+        if (fauna.getType() == Elemento.FAUNA && fauna.getArea().isOverlapping(area)) {
+            if (fauna.getForca() < forca) {
+                setForca(-10);
+                fauna.setForca(-999);
+                if (isDead) {
+                    return new Area(-1,-1,-1,-1);
+                } else {
+                    setForca(fauna.getForca());
+                    return area;
+                }
+            } else {
+                setForca(-999);
+                return new Area(-1,-1,-1,-1);
+            }
+        } else {
+            direcao = area.angleTo(fauna.getArea());
+
+            novaArea = move(area);
+
+            for(int i = 0; i < 7 && move(area).isInvalid(); i++) {
+                direcao = Math.random() * 360;
+            }
+
+            return new Area(-1,-1,-1,-1);
+        }
+    }
+
+    public Area move_chasingPartner(Area area) {
+        Fauna fauna;
+        Area newArea = area;
+
+        fauna = ecossistema.getMaisForte(id);
+        if (fauna == null) {
+            return new Area(-1,-1,-1,-1);
+        }
+
+        if (fauna.getArea().distanceTo(area) < 5) {
+            matingCounter++;
+            if (matingCounter == 10) {
+                multiply(area);
+            }
+            return area;
+        }
+
+        direcao = area.angleTo(fauna.getArea());
+
+        move(area);
+
+        for(int i = 0; i < 7 && move(area).isInvalid(); i++) {
+            direcao = Math.random() * 360;
+        }
+
+        return new Area(-1,-1,-1,-1);
+    }
+
+    public boolean eat(Area area) {
+        Flora erva;
+
+        for (IElemento elem : ecossistema.getElementos()) {
+            if (elem.getType() == Elemento.FLORA && elem.getArea().isOverlapping(area)) {
+                erva = (Flora)elem;
+                setForca(dano);
+                erva.setForca(-dano);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void multiply(Area area) {
+        setForca(-25);
+        ecossistema.addElemento(new Fauna(area.xi(), area.yi(), area.xf(), area.yf(), ecossistema));
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Verificacoes +-------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
     public boolean existemArvores(){
         return ecossistema.existemArvores();
     }
 
-    public boolean existemFauna(){
+    public boolean existeFauna(){
         if(ecossistema == null) return false;
         return ecossistema.existemAnimais();
     }
 
-    public boolean isDead() { return isDead; }
+    public boolean isDead() {return forca <= 0; }
 
-    public boolean eat(Set<IElemento> elementos, Area area) {
-        for (IElemento elem : elementos) {
-            if (elem.getType() == Elemento.FLORA && elem.getArea().isOverlapping(area)) {
-                setForca(dano);
-                ((Flora)elem).setForca(-dano);
-                return true;
-            }
-        }
-        return false;
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Outras +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
+    public void danoPorMovimento() {
+        forca -= danoPorMoviemnto;
+        if (forca <= 0) {isDead = true;}
     }
 
-    public boolean lookingForFood(Set<IElemento> elementos, Area area) {
-        for (IElemento elem : elementos) {
-            if (elem.getType() == Elemento.FLORA && elem.getArea().isOverlapping(area)) {
-                return true;
-            }
-        }
-
-        IElemento floraMaisProxima;
-
-        if ((floraMaisProxima = getFloraMaisProcima(elementos)) == null) {
-            return false;
-        }
-        direcao = area.angleTo(floraMaisProxima.getArea());
-
-        for(int i = 0; i < 7 && !move(elementos); i++) {
-            direcao = Math.random() * 360;
-        }
-        return false;
-
-    }
-
-    private IElemento getFloraMaisProcima(Set<IElemento> elementos){
-        IElemento floraMaisProxima = null;
-        double distancia = Double.MAX_VALUE;
-        for (IElemento elem : elementos) {
-            if (elem.getType() == Elemento.FLORA) {
-                if(elem.getArea().distanceTo(area) < distancia){
-                    distancia = elem.getArea().distanceTo(area);
-                    floraMaisProxima = elem;
-                }
-            }
-        }
-        return floraMaisProxima;
-    }
-
-    public boolean multiply(Set<IElemento> elementos) {
-        Fauna fauna;
-        if((fauna = getMaisForte(elementos)) == null){ return false; }
-
-
-        if(fauna.getArea().distanceTo(area) < 5){
-            matingCounter++;
-            if(matingCounter == 10){
-                matingCounter = 0;
-                ecossistema.addElemento(new Fauna(area.xi(), area.yi(), area.xf(), area.yf()));
-                setForca(-25);
-                return true;
-            }
-        }
-
-        direcao = area.angleTo(fauna.getArea());
-        for(int i = 0; i < 7 && !move(elementos); i++) {
-            direcao = Math.random() * 360;
-        }
-
-        return false;
-    }
-
-    public boolean hunting(Set<IElemento> elementos) {
-        Fauna fauna;
-        if((fauna = getMaisFraco(elementos)) == null){ return false; }
-
-        if(fauna.getArea().distanceTo(area) < area.width()){
-            if(fauna.getForca() < forca){
-                setForca(-10);
-                if(!isDead){
-                    setForca(fauna.getForca());
-                }
-                setForca(-999);
-            }
-            return true;
-        }
-
-        direcao = area.angleTo(fauna.getArea());
-        for(int i = 0; i < 7 && !move(elementos); i++) {
-            direcao = Math.random() * 360;
-        }
-
-        return false;
-    }
-
-    private Fauna getMaisFraco(Set<IElemento> elementos) {
-        Fauna fauna = null;
-        double forcaMaisFraco = Double.MAX_VALUE;
-        for(IElemento elem : elementos){
-            if(elem.getType() == Elemento.FAUNA && elem.getId() != id){
-                if(((Fauna)elem).getForca() < forcaMaisFraco){
-                    forcaMaisFraco = ((Fauna)elem).getForca();
-                    fauna = (Fauna) elem;
-                }
-            }
-        }
-        return  fauna;
-    }
-
-    @Override
-    public String toString() {
+    public String toString(Area area) {
         return "Fauna{" +
                 "id=" + id +
                 ", forca=" + forca +
@@ -223,11 +270,6 @@ public class FaunaData {
 
     @Override
     public FaunaData clone() throws CloneNotSupportedException{
-            return (FaunaData) super.clone();
+        return (FaunaData) super.clone();
     }
-
-    public Area getArea() {
-        return area;
-    }
-
 }

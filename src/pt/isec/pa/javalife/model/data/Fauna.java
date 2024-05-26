@@ -12,35 +12,38 @@ public non-sealed class Fauna
     IFaunaState atual;
     FaunaData data;
 
-    public Fauna(double xi, double yi, double xf, double yf) {
+    public Fauna(double xi, double yi, double xf, double yf, Ecossistema e) {
         super(xi, yi, xf, yf);
 
-        data = new FaunaData(area);
+        data = new FaunaData(e);
         atual = FaunaState.MOVING.getInstance(this, data);
     }
+
+    // Dependency injection
+    public Fauna(double xi, double yi, double xf, double yf, Ecossistema e, FaunaData data) {
+        super(xi, yi, xf, yf);
+
+        this.data = data;
+        atual = new MovingState(this, data);
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Transicao de Estados +-----------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
+    public void move_context() { atual.move(); }
+
+    public void eat_context() { atual.eat(); }
+
+    public void multiply_context() { atual.multiply(); }
 
     public void changeState(IFaunaState newState) { atual = newState; }
 
     // +----------------------------------------------------------------------------------------------------------------
-    // + Transicoes de Estados +----------------------------------------------------------------------------------------
-    // +----------------------------------------------------------------------------------------------------------------
-
-    public boolean _move(Set<IElemento> elementos) {
-
-        return atual.move(elementos);
-    }
-
-    /*public boolean _eat() { return atual.eat(); }
-
-    public boolean _multiply() { return atual.multiply(); }
-
-    // Getters
-    public FaunaState _getState() { return atual.getState(); }
-*/
-
-    // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+
+    public FaunaState _getState() { return atual.getState(); }
 
     @Override
     public int getId() { return data.getId(); }
@@ -54,46 +57,24 @@ public non-sealed class Fauna
     }
 
     @Override
-    public String getImagem() {  }
+    public String getImagem() { return data.getImage(); }
 
     @Override
-    public void setForca(double forca) {  }
+    public void setForca(double forca) { data.setForca(forca); }
 
     @Override
-    public void setImagem(String imagem) {  }
+    public void setImagem(String imagem) { }
+
+    public void setArea (Area area) { this.area = area; }
 
     // +----------------------------------------------------------------------------------------------------------------
-    // + Acoes +-------------------------------------------------------------------------------------------------------------
+    // + Verificacoes +-------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public boolean move(Set<IElemento> elementos) {
-        Area novaArea;
-        double newDirecao;
+    public boolean existemArvores(){ return data.existemArvores(); }
 
-        double variacaoX = data.getVelocidade() * Math.cos(data.getVelocidade());
-        double variacaoY = data.getVelocidade() * Math.sin(data.getVelocidade());
+    public boolean existemFauna(){ return data.existeFauna(); }
 
-        novaArea = new Area(
-                area.xi() + variacaoX,
-                area.yi() + variacaoY,
-                area.xf() + variacaoX,
-                area.yf() + variacaoY);
-
-        for( IElemento elem : elementos ) {
-            if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(novaArea)) {
-                newDirecao = (data.getDirecao() + 90) % 360;
-                data.setDirecao(newDirecao);
-                return false;
-            }
-        }
-
-        area = novaArea;
-        data.danoPorMovimento();
-
-        if (data.getForca() <= 0) { ; }
-
-        return true;
-    }
-
+    public boolean isDead() { return data.isDead(); }
 
 }

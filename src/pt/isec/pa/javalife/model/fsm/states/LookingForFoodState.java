@@ -1,12 +1,13 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
-import pt.isec.pa.javalife.model.data.FaunaData;
+import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.IElemento;
+import pt.isec.pa.javalife.model.data.FaunaData;
+
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 public class LookingForFoodState extends FaunaStateAdapter implements IFaunaState {
 
@@ -14,34 +15,41 @@ public class LookingForFoodState extends FaunaStateAdapter implements IFaunaStat
         super(context, data);
     }
 
-
     @Override
-    public boolean move(Set<IElemento> elementos) {
+    public void move() {
+        Area novaArea;
+        Boolean [] success = new Boolean[1]; // <- Encontrou comida
+
+        success[0] = false;
+
         System.out.println("LookingForFoodState");
-        boolean res = data.lookingForFoog(elementos);
-        if(data.getForca() <= 0){
+
+        if (data.isDead()) {
             changeState(FaunaState.DEAD);
         }
-        if(res){
-            changeState(FaunaState.EATING);
-        }
-        if(!data.existemArvores()){
+
+        if (!data.existemArvores()) {
             changeState(FaunaState.HUNTING);
+        } else {
+            novaArea = data.move_lookingForFood(context.getArea(), success);
+            if (!novaArea.isInvalid()) {
+                context.setArea(novaArea);
+
+                if (success[0]) {
+                    changeState(FaunaState.EATING);
+                }
+
+            }
         }
 
-        return res;
-    }
-/*
-    @Override
-    public boolean eat() {
-        return false;
     }
 
     @Override
-    public boolean multiply() {
-        return false;
-    }
-*/
+    public void eat() {}
+
+    @Override
+    public void multiply() {}
+
     @Override
     public FaunaState getState() { return FaunaState.LOOKING_FOR_FOOD; }
 }

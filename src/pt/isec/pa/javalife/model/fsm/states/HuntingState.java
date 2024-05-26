@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
+import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
 import pt.isec.pa.javalife.model.data.IElemento;
@@ -15,32 +16,53 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
     }
 
     @Override
-    public boolean move(Set<IElemento> elementos) {
+    public void move() {
+        Area novaArea;
+
         System.out.println("HuntingState");
-        boolean res = data.hunting(elementos);
-        if(data.getForca() <= 0){
+
+        if (data.isDead()) {
             changeState(FaunaState.DEAD);
+            return;
         }
-        if(res){
+
+        if (!data.existeFauna()) {
+            changeState(FaunaState.MOVING);
+        } else {
+            novaArea = data.move_hunting(context.getArea());
+            if (!novaArea.isInvalid()) {
+                context.setArea(novaArea);
+
+                if (data.isDead()) {
+                    changeState(FaunaState.DEAD);
+                } else if (data.getForca() <= 35) {
+
+                    if (data.existemArvores()) {
+                        changeState(FaunaState.LOOKING_FOR_FOOD);
+                    } else if (!data.existemArvores() && !data.existeFauna()) {
+                        changeState(FaunaState.MOVING);
+                    }
+
+                } else {
+                    changeState(FaunaState.MOVING);
+                }
+
+            }
+        }
+
+        if (!data.existemArvores() && !data.existeFauna()) {
             changeState(FaunaState.MOVING);
         }
-        if(!data.existemArvores() && !data.existemFauna()){
-            changeState(FaunaState.MOVING);
-        }
-        return res;
+
     }
 
-    /*
-    @Override
-    public boolean eat() {
-        return false;
-    }
 
     @Override
-    public boolean multiply() {
-        return false;
-    }
-*/
+    public void eat() {}
+
+    @Override
+    public void multiply() {}
+
     @Override
     public FaunaState getState() { return FaunaState.HUNTING; }
 }

@@ -21,17 +21,11 @@ abstract public class FaunaStateAdapter implements IFaunaState {
     }
 
     @Override
-    public boolean move(Set<IElemento> elementos) {
-        return false;
-    }
+    public void move() {}
 
     @Override
-    public boolean eat() {
-        return false;
-    }
+    public void eat() {}
 
     @Override
-    public boolean multiply() {
-        return false;
-    }
+    public void multiply() {}
 }

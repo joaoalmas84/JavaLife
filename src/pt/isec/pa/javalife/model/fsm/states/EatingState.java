@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
+import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
 import pt.isec.pa.javalife.model.data.IElemento;
@@ -17,40 +18,30 @@ public class EatingState
     }
 
     @Override
-    public boolean move(Set<IElemento> elementos) {
-        System.out.println("EatingState");
-        boolean res = data.eat(elementos);
+    public void eat() {
+        System.out.println("Skirt");
+    }
 
-        if (!res && data.getForca() < 80 && !data.existemArvores()) {
-            changeState(FaunaState.HUNTING);
-        }
+    @Override
+    public void move() {
+        data.eat(context.getArea());
 
-        if (!res && data.getForca() < 80) {
-            changeState(FaunaState.LOOKING_FOR_FOOD);
-        }
-
-        if (!res && data.getForca() >= 80) {
+        if (data.getForca() >= 80) {
             changeState(FaunaState.MOVING);
+        } else {
+            if (data.existemArvores()) {
+                changeState(FaunaState.LOOKING_FOR_FOOD);
+            } else if (data.existeFauna()) {
+                changeState(FaunaState.HUNTING);
+            } else {
+                changeState(FaunaState.MOVING);
+            }
         }
-
-        if (data.getForca() >= 100) {
-            changeState(FaunaState.CHASING_PARTNER);
-        }
-
-        return res;
-    }
-
-    /*
-    @Override
-    public boolean eat() {
-        return false;
     }
 
     @Override
-    public boolean multiply() {
-        return false;
-    }
-*/
+    public void multiply() {}
+
     @Override
     public FaunaState getState() { return FaunaState.EATING; }
 }

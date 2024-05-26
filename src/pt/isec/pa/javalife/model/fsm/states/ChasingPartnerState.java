@@ -15,32 +15,50 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
     }
 
     @Override
-    public boolean move(Set<IElemento> elementos) {
+    public void move() {
         System.out.println("ChasingPartnerState");
-        boolean res = data.multiply(elementos);
-        if(data.getForca() <= 0){
+
+        if (data.isDead()) {
             changeState(FaunaState.DEAD);
-        }
-        if(data.getForca() <= 50 && data.getForca() >= 35){
-            changeState(FaunaState.MOVING);
-        }
-        if (data.getForca() < 35){
-            changeState(FaunaState.LOOKING_FOR_FOOD);
-        }
+            return;
+        } else if (!data.existeFauna()) {
+            return;
+        } else {
+            data.move_chasingPartner(context.getArea());
 
-        return res;
-    }
-/*
-    @Override
-    public boolean eat() {
-        return false;
+            if (data.getMatingCounter() == 10) {
+                if (data.getForca() < 35) {
+
+                    if (data.existemArvores()) {
+                        changeState(FaunaState.LOOKING_FOR_FOOD);
+                    } else if (data.existeFauna()) {
+                        changeState(FaunaState.HUNTING);
+                    } else {
+                        changeState(FaunaState.MOVING);
+                    }
+
+                }
+                data.setMatingCounter(0);
+            } else if (data.getForca() < 35) {
+                data.setMatingCounter(0);
+                changeState(FaunaState.LOOKING_FOR_FOOD);
+            }
+
+            return;
+        }
     }
 
     @Override
-    public boolean multiply() {
-        return false;
+    public void eat() {}
+
+    @Override
+    public void multiply() {
+        System.out.println("ChasingPartnerState");
+
+
+
     }
-*/
+
     @Override
     public FaunaState getState() { return FaunaState.CHASING_PARTNER; }
 }
