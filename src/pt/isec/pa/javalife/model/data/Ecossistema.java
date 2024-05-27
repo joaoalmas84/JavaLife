@@ -265,7 +265,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
         for(IElemento elem : copySet){
             if(elem.getType() == Elemento.FLORA){
-                ((Flora)elem).move(copySet);
+                ((Flora)elem).evolve(copySet);
                 if( ((Flora)elem).isDead() ){
                     elementos.remove(elem);
                 }

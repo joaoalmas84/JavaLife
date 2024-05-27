@@ -98,7 +98,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         eventos.add(evento);
     }
 
-    public void move(Set<IElemento> elementos){
+    public void evolve(Set<IElemento> elementos){
         if(!isDead){
             setForca(0.5);
             reproduz(elementos);
