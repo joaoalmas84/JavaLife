@@ -8,6 +8,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Ecossistema implements Serializable, IGameEngineEvolve {
     private Set<IElemento> elementos;
@@ -21,7 +22,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public static final String PROP_UPDATE_MAP = "_update_map_";
 
     public Ecossistema() {
-        elementos = new HashSet<>();
+        elementos = ConcurrentHashMap.newKeySet();
         pcs = new PropertyChangeSupport(this);
         this.largura = 800.0;
         this.altura = 450.0;
@@ -46,7 +47,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public double getLargura() { return largura; }
 
-    public Set<IElemento> getElementos() { return elementos; }
+    public Set<IElemento> getElementos() {
+        return new HashSet<>(elementos);
+    }
 
     public Fauna getMaisForte(int id){
         Fauna fauna = null;
