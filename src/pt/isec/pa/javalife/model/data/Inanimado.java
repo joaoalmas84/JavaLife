@@ -6,6 +6,7 @@ public final class Inanimado extends ElementoBase {
     private final Area area;
     private final boolean podeRemove;
 
+    // Construtor
     Inanimado(double xi, double yi, double xf, double yf, boolean podeRemove) {
         super(xi, yi, xf, yf);
         area = new Area(xi, yi, xf, yf);

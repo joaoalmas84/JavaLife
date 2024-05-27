@@ -20,7 +20,7 @@ public class Simulacao {
 
 
     public Simulacao() {
-        tempoDeInstante = 1000;
+        tempoDeInstante = 250;
         this.ecossistema = new Ecossistema();
         this.gameEngine = new GameEngine();
         gameEngine.registerClient(ecossistema);
@@ -68,7 +68,10 @@ public class Simulacao {
         return ecossistema.removeElemento(elem);
     }
 
-    ////////////////////////////////////////////////////////////////////////// get
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters & Setters +--------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     public Set<IElemento> getElementos() {
         return ecossistema.getElementos();
     }
@@ -81,7 +84,56 @@ public class Simulacao {
 
     public Ecossistema getEcossistema() { return ecossistema; }
 
-    ////////////////////////////////////////////////////////////////////////// set
+    public GameEngineState getCurrentState_Of_GameEngine() { return gameEngine.getCurrentState(); }
+
+    public SimulacaoState getState() {
+        return state;
+    }
+
+    public double getDano() {
+        return ecossistema.getDano();
+    }
+
+    public int getTempo() {
+        return ecossistema.getTempo();
+    }
+
+    public void setState(SimulacaoState state) {
+        this.state = state;
+        pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
+    }
+
+    public boolean setDano(double valorNovo) {
+        return ecossistema.setDano(valorNovo);
+    }
+
+    public boolean setAltura(double altura) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY){
+            ecossistema.setAltura(altura);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setLargura(double largura) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY){
+            ecossistema.setLargura(largura);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setTempo(long tempo) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY){
+            return false ;
+        }
+        gameEngine.setInterval(tempo);
+        return true;
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Opcoes +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
     public void start(){
         gameEngine.start(tempoDeInstante);
@@ -103,21 +155,6 @@ public class Simulacao {
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
-    public boolean setAltura(double altura) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
-            ecossistema.setAltura(altura);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean setLargura(double largura) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
-            ecossistema.setLargura(largura);
-            return true;
-        }
-        return false;
-    }
 /*
     public boolean adicionaFauna(double xi, double yi, double xf, double yf){
         //return commandManager.invokeCommand(new AdicionaElemento(ecossistema ,new Fauna(xi, yi, xf, yf)));
@@ -145,34 +182,4 @@ public class Simulacao {
     }
 
 */
-    public GameEngineState getCurrentState_Of_GameEngine() { return gameEngine.getCurrentState(); }
-
-    public void setState(SimulacaoState state) {
-        this.state = state;
-        pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
-    }
-
-    public SimulacaoState getState() {
-        return state;
-    }
-
-    public double getDano() {
-        return ecossistema.getDano();
-    }
-
-    public boolean setDano(double valorNovo) {
-        return ecossistema.setDano(valorNovo);
-    }
-
-    public int getTempo() {
-        return ecossistema.getTempo();
-    }
-
-    public boolean setTempo(long tempo) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
-            return false ;
-        }
-        gameEngine.setInterval(tempo);
-        return true;
-    }
 }

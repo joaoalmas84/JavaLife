@@ -52,12 +52,7 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
     public void eat() {}
 
     @Override
-    public void multiply() {
-        System.out.println("ChasingPartnerState");
-
-
-
-    }
+    public void multiply() {}
 
     @Override
     public FaunaState getState() { return FaunaState.CHASING_PARTNER; }

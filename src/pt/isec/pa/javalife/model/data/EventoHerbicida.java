@@ -23,10 +23,6 @@ public class EventoHerbicida implements IEvento{
     }
 
 
-
-
-
-
     /*
     private int[] array;
     private ArrayList<IElemento> referencias;

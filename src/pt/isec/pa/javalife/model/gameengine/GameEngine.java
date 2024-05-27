@@ -11,26 +11,40 @@ public final class GameEngine implements IGameEngine {
 
     System.Logger logger;
 
-    private void setState(GameEngineState state) {
-        this.state = state;
-        logger.log(System.Logger.Level.INFO,state.toString());
-    }
-
     public GameEngine() {
         logger = System.getLogger("GameEngine");
         clients = new HashSet<>();
         setState(GameEngineState.READY);
     }
 
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters & Setters +--------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     @Override
-    public void registerClient(IGameEngineEvolve listener) {
-        clients.add(listener);
+    public GameEngineState getCurrentState() {
+        return state;
     }
 
     @Override
-    public void unregisterClient(IGameEngineEvolve listener) {
-        clients.remove(listener);
+    public long getInterval() {
+        return controlThread.interval;
     }
+
+    @Override
+    public void setInterval(long newInterval) {
+        if (controlThread != null)
+            controlThread.interval = newInterval;
+    }
+
+    private void setState(GameEngineState state) {
+        this.state = state;
+        logger.log(System.Logger.Level.INFO,state.toString());
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Opcoes +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean start(long interval) {
@@ -66,27 +80,26 @@ public final class GameEngine implements IGameEngine {
         return true;
     }
 
-    @Override
-    public GameEngineState getCurrentState() {
-        return state;
-    }
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Outras +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public long getInterval() {
-        return controlThread.interval;
-    }
-
-    @Override
-    public void setInterval(long newInterval) {
-        if (controlThread != null)
-            controlThread.interval = newInterval;
-    }
 
     @Override
     public void waitForTheEnd() {
         try {
             controlThread.join();
         } catch (InterruptedException ignored) {}
+    }
+
+    @Override
+    public void registerClient(IGameEngineEvolve listener) {
+        clients.add(listener);
+    }
+
+    @Override
+    public void unregisterClient(IGameEngineEvolve listener) {
+        clients.remove(listener);
     }
 
     private class GameEngineThread extends Thread {
@@ -119,4 +132,5 @@ public final class GameEngine implements IGameEngine {
             }
         }
     }
+
 }

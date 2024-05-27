@@ -6,7 +6,9 @@ import java.util.Set;
 
 public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem, Cloneable{
     private static int nextId = 0;
+
     private ArrayList<IEvento> eventos;
+
     private final int id;
     private int NumReproducoes;
     private double forca;
@@ -15,7 +17,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     private Ecossistema ecossistema;
     private double dano;
 
-
+    // Construtor
     public Flora(double xi, double yi, double xf, double yf) {
         super(xi, yi, xf, yf);
         id = nextId++;
@@ -26,29 +28,9 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         dano = -1.0;
     }
 
-    public void setEcossistema(Ecossistema ecossistema) {
-        this.ecossistema = ecossistema;
-    }
-
-    public void setIsDead(boolean isDead) {
-        this.isDead = isDead;
-    }
-
-    public void addEevnto(IEvento evento) {
-        eventos.add(evento);
-    }
-
-    @Override
-    public void setForca(double forca) {
-        if(forca + this.forca < 0){
-            this.forca = 0;
-            isDead = true;
-        }else if(forca + this.forca > 100){
-            this.forca = 100;
-        }else{
-            this.forca += forca;
-        }
-    }
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters & Setters +--------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
     @Override
     public String getImagem() {
@@ -57,9 +39,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     @Override
     public double getForca() {return forca;}
-
-    @Override
-    public void setImagem(String imagem) {}
 
     @Override
     public int getId() {
@@ -76,46 +55,55 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         return area;
     }
 
+    public void setEcossistema(Ecossistema ecossistema) {
+        this.ecossistema = ecossistema;
+    }
+
+    public void setIsDead(boolean isDead) {
+        this.isDead = isDead;
+    }
+
+    @Override
+    public void setForca(double forca) {
+        if(forca + this.forca < 0){
+            this.forca = 0;
+            isDead = true;
+        }else if(forca + this.forca > 100){
+            this.forca = 100;
+        }else{
+            this.forca += forca;
+        }
+    }
+
+    @Override
+    public void setImagem(String imagem) {}
+
+    public void setDano(double dano) {
+        this.dano = dano;
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Outras +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     public boolean isDead() {
         return isDead;
     }
 
-    @Override
-    public String toString() {
-        String sb = "Flora{" +
-                "id=" + id +
-                ", forca=" + forca +
-                ", Area=" + area +
-                ", isDead=" + isDead +
-                ", NumReproducoes=" + NumReproducoes +
-                ", dano=" + dano +
-                '}';
-        return sb;
+    private void semEnergia() {
+        isDead = forca <= 0;
     }
 
-
-    @Override
-    public Flora clone() {
-        try {
-            return (Flora) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
+    public void addEevnto(IEvento evento) {
+        eventos.add(evento);
     }
-
 
     public void move(Set<IElemento> elementos){
         if(!isDead){
-        setForca(0.5);
-        reproduz(elementos);
-        //serComida(elementos);
-        semEnergia();
-        }
-    }
-
-    private void semEnergia() {
-        if(forca <= 0){
-            isDead = true;
+            setForca(0.5);
+            reproduz(elementos);
+            //serComida(elementos);
+            semEnergia();
         }
     }
 
@@ -164,7 +152,26 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         return false;
     }
 
-    public void setDano(double dano) {
-        this.dano = dano;
+    @Override
+    public String toString() {
+        String sb = "Flora{" +
+                "id=" + id +
+                ", forca=" + forca +
+                ", Area=" + area +
+                ", isDead=" + isDead +
+                ", NumReproducoes=" + NumReproducoes +
+                ", dano=" + dano +
+                '}';
+        return sb;
     }
+
+    @Override
+    public Flora clone() {
+        try {
+            return (Flora) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+
 }

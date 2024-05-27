@@ -43,7 +43,7 @@ public non-sealed class Fauna
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public FaunaState _getState() { return atual.getState(); }
+    public FaunaState getState() { return atual.getState(); }
 
     @Override
     public int getId() { return data.getId(); }
@@ -65,17 +65,16 @@ public non-sealed class Fauna
     @Override
     public void setImagem(String imagem) { }
 
-    public void setArea (Area area) { this.area = area; }
-
     @Override
     public String toString() {
         return data.toString(area);
     }
 
+    public void setArea (Area area) { this.area = area; }
+
     // +----------------------------------------------------------------------------------------------------------------
     // + Verificacoes +-------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
-
 
     public boolean isDead() { return data.isDead(); }
 

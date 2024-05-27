@@ -4,6 +4,7 @@ import java.awt.*;
 
 public record Area(double xi, double yi, double xf, double yf) {
 
+    // Construtor
     public Area clone() throws CloneNotSupportedException {
         return (Area) super.clone();
     }
