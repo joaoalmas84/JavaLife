@@ -1,8 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.ui.gui.res.CSSManager;
 
@@ -10,6 +8,9 @@ public class RootPane extends BorderPane {
     SimulacaoManager simulacaoManager;
     SimulacaoArea simulacaoArea;
     Pane areaPane;
+
+    VBox vb;
+
 
     public RootPane(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -23,19 +24,22 @@ public class RootPane extends BorderPane {
     private void createViews() {
         CSSManager.applyCSS(this,"styles.css");
 
+
         simulacaoArea = new SimulacaoArea(simulacaoManager);
         areaPane = new Pane(simulacaoArea);
+
+        vb=new VBox(new ToolbarSimulacao(simulacaoManager),areaPane);
+        VBox.setVgrow(areaPane, Priority.ALWAYS);
+
         setTop( new MenuSimulacao(simulacaoManager));
         StackPane stackPane = new StackPane(
-                areaPane,
+                vb,
                 new MainMenuUI(simulacaoManager),
                 new MenuAddElemento(simulacaoManager),
                 new MenuRemoveElem(simulacaoManager),
                 new MenuIntervalo(simulacaoManager)
         );
-
         setCenter(stackPane);
-
     }
 
     private void registerHandlers() {
