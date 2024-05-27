@@ -28,19 +28,11 @@ public class Simulacao {
         state = SimulacaoState.NULL;
         ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
         ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-
         ecossistema.addElemento(new Flora(15, 15, 30, 30));
         ecossistema.addElemento(new Flora(15, 200, 30, 230));
         ecossistema.addElemento(new Flora(15, 115, 30, 130));
         ecossistema.addElemento(new Flora(215, 15, 230, 30));
         ecossistema.addElemento(new Flora(215, 215, 230, 230));
-
     }
 
 
@@ -91,7 +83,7 @@ public class Simulacao {
     }
 
     public double getDano() {
-        return ecossistema.getDano();
+        return ecossistema.getDanoFauna();
     }
 
     public int getTempo() {
@@ -103,8 +95,8 @@ public class Simulacao {
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
-    public boolean setDano(double valorNovo) {
-        return ecossistema.setDano(valorNovo);
+    public boolean setDanoFauna(double valorNovo) {
+        return ecossistema.setDanoFauna(valorNovo);
     }
 
     public boolean setAltura(double altura) {

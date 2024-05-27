@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
+import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
 import pt.isec.pa.javalife.model.data.IElemento;
@@ -15,17 +16,19 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
     }
 
     @Override
-    public void move() {
-        System.out.println("ChasingPartnerState");
+    public void act() {
 
         if (data.isDead()) {
             changeState(FaunaState.DEAD);
             return;
-        } else if (!data.existeFauna()) {
+        } else if (!data.existePartnerPrey()) {
+            changeState(FaunaState.MOVING);
             return;
         } else {
-            data.move_chasingPartner(context.getArea());
-
+            Area novaArea =data.move_chasingPartner(context.getArea());
+            if(!novaArea.isInvalid()){
+                context.setArea(novaArea);
+            }
             if (data.getMatingCounter() == 10) {
                 if (data.getForca() < 35) {
 
@@ -47,13 +50,6 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
             return;
         }
     }
-
-    @Override
-    public void eat() {}
-
-    @Override
-    public void multiply() {}
-
     @Override
     public FaunaState getState() { return FaunaState.CHASING_PARTNER; }
 }

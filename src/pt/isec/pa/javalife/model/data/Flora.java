@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
-public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem, Cloneable{
+public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem{
     private static int nextId = 0;
 
     private ArrayList<IEvento> eventos;
@@ -15,7 +15,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     private boolean isDead;
     private final Area area;
     private Ecossistema ecossistema;
-    private double dano;
 
     // Construtor
     public Flora(double xi, double yi, double xf, double yf) {
@@ -25,7 +24,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         forca = 50;
         isDead = false;
         area = new Area(xi, yi, xf, yf);
-        dano = -1.0;
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -64,7 +62,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     }
 
     @Override
-    public void setForca(double forca) {
+    public void addForca(double forca) {
         if(forca + this.forca < 0){
             this.forca = 0;
             isDead = true;
@@ -77,10 +75,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     @Override
     public void setImagem(String imagem) {}
-
-    public void setDano(double dano) {
-        this.dano = dano;
-    }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Outras +-------------------------------------------------------------------------------------------------------
@@ -100,31 +94,28 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     public void evolve(Set<IElemento> elementos){
         if(!isDead){
-            setForca(0.5);
+            addForca(0.5);
             reproduz(elementos);
-            //serComida(elementos);
             semEnergia();
         }
     }
 
-    private void serComida(Set<IElemento> elementos) {
-        for(IElemento elem : elementos){
-            if(elem.getType() == Elemento.FAUNA && elem.getArea().isOverlapping(area)){
-                setForca(dano);
-            }
-        }
+    void serComida() {
+        addForca(-Ecossistema.danoFauna);
     }
 
     public boolean reproduz(Set<IElemento> elementos) {
         if (forca < 90) {
             return false;
         }
-
+        if(NumReproducoes>=2){
+            return false;
+        }
         Random random = new Random();
         int tentativas = 3;
 
         while (tentativas > 0) {
-            Area areaAdjacente = area.getAriaAdjacente(random.nextInt(tentativas + 1));
+            Area areaAdjacente = area.getAreaAdjacente(random.nextInt(3 + 1));
 
             if (areaAdjacente == null) {
                 tentativas--;
@@ -132,17 +123,15 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
             }
 
             boolean areaOcupada = elementos.stream().anyMatch(elem ->
-                    (elem.getType() == Elemento.FLORA || elem.getType() == Elemento.INANIMADO) &&
+                    ((elem.getType() == Elemento.FLORA || elem.getType() == Elemento.INANIMADO)) &&
                             elem.getArea().isOverlapping(areaAdjacente)
             );
 
             if (!areaOcupada) {
                 ecossistema.addElemento(new Flora(areaAdjacente.xi(), areaAdjacente.yi(), areaAdjacente.xf(), areaAdjacente.yf()));
+                forca=60;
                 NumReproducoes++;
 
-                if (NumReproducoes == 3) {
-                    isDead = true;
-                }
                 return true;
             }
 
@@ -160,18 +149,7 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
                 ", Area=" + area +
                 ", isDead=" + isDead +
                 ", NumReproducoes=" + NumReproducoes +
-                ", dano=" + dano +
                 '}';
         return sb;
     }
-
-    @Override
-    public Flora clone() {
-        try {
-            return (Flora) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
-
 }

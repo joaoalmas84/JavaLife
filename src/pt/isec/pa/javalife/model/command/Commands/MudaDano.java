@@ -14,13 +14,13 @@ public class MudaDano extends AbstractCommand{
     @Override
     public boolean execute() {
         valor_velho = receiver.getDano();
-        success= receiver.setDano(valor_novo);
+        success= receiver.setDanoFauna(valor_novo);
         return true;
     }
 
     @Override
     public boolean undo() {
-        return receiver.setDano(valor_velho);
+        return receiver.setDanoFauna(valor_velho);
     }
 
     @Override

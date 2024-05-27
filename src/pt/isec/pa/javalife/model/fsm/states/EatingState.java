@@ -19,13 +19,7 @@ public class EatingState
     }
 
     @Override
-    public void eat() {
-        System.out.println("Skirt");
-    }
-
-    @Override
-    public void move() {
-        System.out.println("EatingState");
+    public void act() {
         if (data.eat(context.getArea()) && data.getForca()<80){
             return;
         }
@@ -42,9 +36,6 @@ public class EatingState
             }
         }
     }
-
-    @Override
-    public void multiply() {}
 
     @Override
     public FaunaState getState() { return FaunaState.EATING; }

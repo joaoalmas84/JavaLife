@@ -13,10 +13,8 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
     }
 
     @Override
-    public void move() {
+    public void act() {
         Area novaArea;
-
-        System.out.println("HuntingState");
 
         if (data.isDead()) {
             changeState(FaunaState.DEAD);
@@ -52,13 +50,6 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
         }
 
     }
-
-
-    @Override
-    public void eat() {}
-
-    @Override
-    public void multiply() {}
 
     @Override
     public FaunaState getState() { return FaunaState.HUNTING; }

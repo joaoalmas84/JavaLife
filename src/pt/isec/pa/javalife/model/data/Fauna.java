@@ -4,8 +4,6 @@ import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
 import pt.isec.pa.javalife.model.fsm.states.MovingState;
 
-import java.util.Set;
-
 public non-sealed class Fauna
         extends ElementoBase
         implements IElementoComImagem, IElementoComForca {
@@ -31,11 +29,7 @@ public non-sealed class Fauna
     // + Transicao de Estados +-----------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public void move_context() { atual.move(); }
-
-    public void eat_context() { atual.eat(); }
-
-    public void multiply_context() { atual.multiply(); }
+    public void act_context() { atual.act(); }
 
     public void changeState(IFaunaState newState) { atual = newState; }
 
@@ -60,7 +54,7 @@ public non-sealed class Fauna
     public String getImagem() { return data.getImage(); }
 
     @Override
-    public void setForca(double forca) { data.setForca(forca); }
+    public void addForca(double forca) { data.addForca(forca); }
 
     @Override
     public void setImagem(String imagem) { }
@@ -77,5 +71,9 @@ public non-sealed class Fauna
     // +----------------------------------------------------------------------------------------------------------------
 
     public boolean isDead() { return data.isDead(); }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Outros +-------------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
 
 }

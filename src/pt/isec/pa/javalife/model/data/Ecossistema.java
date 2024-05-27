@@ -8,24 +8,27 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Ecossistema implements Serializable, IGameEngineEvolve {
+
+    static double danoFauna;
+
     private Set<IElemento> elementos;
     PropertyChangeSupport pcs;
 
     private double largura;
     private double altura;
-    private double dano;
     private int tempo;
 
     public static final String PROP_UPDATE_MAP = "_update_map_";
 
     public Ecossistema() {
-        elementos = new HashSet<>();
+        elementos = ConcurrentHashMap.newKeySet();
         pcs = new PropertyChangeSupport(this);
         this.largura = 800.0;
         this.altura = 450.0;
-        dano = 1.0;
+        danoFauna = 1.0;
         tempo = 0;
         criarCerca();
     }
@@ -34,8 +37,8 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // + Getters & Setter +---------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public double getDano() {
-        return dano;
+    public double getDanoFauna() {
+        return danoFauna;
     }
 
     public int getTempo() {
@@ -46,7 +49,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public double getLargura() { return largura; }
 
-    public Set<IElemento> getElementos() { return elementos; }
+    public Set<IElemento> getElementos() {
+        return new HashSet<>(elementos);
+    }
 
     public Fauna getMaisForte(int id){
         Fauna fauna = null;
@@ -94,14 +99,12 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
     public void setAltura(double altura) { this.altura = altura; }
 
-    public boolean setDano(double valorNovo) {
-        dano = valorNovo;
-        for (IElemento elem : elementos) {
-            if (elem instanceof Flora) {
-                ((Flora) elem).setDano(dano);
-            }
+    public boolean setDanoFauna(double valorNovo) {
+        if(valorNovo>0){
+            danoFauna = valorNovo;
+            return true;
         }
-        return true;
+        return false;
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -257,9 +260,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
         tempo++;
-        if (tempo == 40) {
-            while(true);
-        }
         Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
 
@@ -273,7 +273,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
 
             if (elem.getType() == Elemento.FAUNA) {
                 assert elem instanceof Fauna;
-                ((Fauna)elem).move_context();
+                ((Fauna)elem).act_context();
                 if (((Fauna)elem).isDead()) {
                     elementos.remove(elem);
                 }

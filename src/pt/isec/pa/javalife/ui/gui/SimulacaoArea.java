@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class SimulacaoArea extends Canvas {

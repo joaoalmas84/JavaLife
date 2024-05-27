@@ -18,7 +18,7 @@ public class EventoSol implements IEvento{
             if(!iniciado) {
                 if (elemento.getType() == Elemento.FLORA) {
                     Flora f = (Flora) elemento;
-                    f.setForca(f.getForca() * 2);
+                    f.addForca(f.getForca() * 2);
                     iniciado = true;
                     return true;
                 } else if (elemento.getType() == Elemento.FAUNA) {
@@ -32,7 +32,7 @@ public class EventoSol implements IEvento{
             if(iniciado == true) {
                 if (elemento.getType() == Elemento.FLORA) {
                     Flora f = (Flora) elemento;
-                    f.setForca(f.getForca() / 2);
+                    f.addForca(f.getForca() / 2);
                     return false;
                 } else if (elemento.getType() == Elemento.FAUNA) {
                     FaunaData f = (FaunaData) elemento;

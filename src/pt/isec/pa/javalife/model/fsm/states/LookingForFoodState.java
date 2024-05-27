@@ -16,13 +16,12 @@ public class LookingForFoodState extends FaunaStateAdapter implements IFaunaStat
     }
 
     @Override
-    public void move() {
+    public void act() {
         Area novaArea;
         Boolean [] success = new Boolean[1]; // <- Encontrou comida
 
         success[0] = false;
 
-        System.out.println("LookingForFoodState");
 
         if (data.isDead()) {
             changeState(FaunaState.DEAD);
@@ -43,12 +42,6 @@ public class LookingForFoodState extends FaunaStateAdapter implements IFaunaStat
         }
 
     }
-
-    @Override
-    public void eat() {}
-
-    @Override
-    public void multiply() {}
 
     @Override
     public FaunaState getState() { return FaunaState.LOOKING_FOR_FOOD; }

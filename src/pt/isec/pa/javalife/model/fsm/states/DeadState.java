@@ -14,18 +14,8 @@ public class DeadState extends FaunaStateAdapter implements IFaunaState {
 
 /*
     @Override
-    public boolean move(Set<IElemento> elementos) {
+    public boolean act(Set<IElemento> elementos) {
         System.out.println("DeadState");
-        return false;
-    }
-
-    @Override
-    public boolean eat() {
-        return false;
-    }
-
-    @Override
-    public boolean multiply() {
         return false;
     }
 */

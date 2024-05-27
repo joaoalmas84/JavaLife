@@ -2,7 +2,6 @@ package pt.isec.pa.javalife.model.data;
 
 public class FaunaData {
     private static int nextId = 0;
-    private static double dano = 1;
     private static double danoPorMoviemnto = 0.5;
 
     private int id;
@@ -56,7 +55,6 @@ public class FaunaData {
 
     public double getDirecao() { return direcao; }
 
-    public double getDano() { return dano; }
 
     public String getImage() { return image; }
 
@@ -68,7 +66,7 @@ public class FaunaData {
         this.ecossistema = ecossistema;
     }
 
-    public void setForca(double forca) {
+    public void addForca(double forca) {
         if ((this.forca + forca) < 0) {
             this.forca = 0;
             isDead = true;
@@ -156,16 +154,16 @@ public class FaunaData {
 
         if (fauna.getArea().isOverlapping(area)) {
             if (fauna.getForca() < forca) {
-                setForca(-10);
-                fauna.setForca(-999);
+                addForca(-10);
+                fauna.addForca(-999);
                 if (isDead) {
                     return new Area(-1,-1,-1,-1);
                 } else {
-                    setForca(fauna.getForca());
+                    addForca(fauna.getForca());
                     return area;
                 }
             } else {
-                setForca(-999);
+                addForca(-999);
                 return new Area(-1,-1,-1,-1);
             }
         } else {
@@ -197,6 +195,9 @@ public class FaunaData {
             }
             return area;
         }
+        else {
+            matingCounter=0;
+        }
 
         direcao = area.angleTo(fauna.getArea());
 
@@ -215,8 +216,8 @@ public class FaunaData {
         for (IElemento elem : ecossistema.getElementos()) {
             if (elem.getType() == Elemento.FLORA && elem.getArea().isOverlapping(area)) {
                 erva = (Flora)elem;
-                setForca(dano);
-                erva.setForca(-dano);
+                addForca(Ecossistema.danoFauna);
+                erva.serComida();
                 return !erva.isDead();
             }
         }
@@ -225,7 +226,7 @@ public class FaunaData {
     }
 
     public void multiply(Area area) {
-        setForca(-25);
+        addForca(-25);
         ecossistema.addElemento(new Fauna(area.xi(), area.yi(), area.xf(), area.yf(), ecossistema));
     }
 
@@ -266,7 +267,6 @@ public class FaunaData {
                 ", area=" + area +
                 ", velocidade=" + velocidade +
                 ", direcao=" + direcao +
-                ", dano=" + dano +
                 ", matingCounter=" + matingCounter +
                 '}';
     }

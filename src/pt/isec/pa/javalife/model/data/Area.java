@@ -1,11 +1,9 @@
 package pt.isec.pa.javalife.model.data;
 
-import java.awt.*;
-
 public record Area(double xi, double yi, double xf, double yf) {
 
     // Construtor
-    public Area clone() throws CloneNotSupportedException {
+    public Area clone() throws CloneNotSupportedException { //isto vai sempre atirar isto pq a Area não é clonable mas ok
         return (Area) super.clone();
     }
 
@@ -23,23 +21,23 @@ public record Area(double xi, double yi, double xf, double yf) {
         return xi < 0 || yi < 0 || xf < 0 || yf < 0 || xi > xf || yi > yf;
     }
 
-    public Area getAriaAdjacente(int direcao) {
+    public Area getAreaAdjacente(int direcao) {
         switch (direcao) {
             case 0 -> {
-                Area novaAria = new Area(xi, yi - (yf - yi), xf, yi);
-                return novaAria.isInvalid() ? null : novaAria;
+                Area novaArea = new Area(xi, yi - (yf - yi), xf, yi);
+                return novaArea.isInvalid() ? null : novaArea;
             }
             case 1 -> {
-                Area novaAria = new Area(xf, yi, xf + (xf - xi), yf);
-                return novaAria.isInvalid() ? null : novaAria;
+                Area novaArea = new Area(xf, yi, xf + (xf - xi), yf);
+                return novaArea.isInvalid() ? null : novaArea;
             }
             case 2 -> {
-                Area novaAria = new Area(xi, yf, xf, yf + (yf - yi));
-                return novaAria.isInvalid() ? null : novaAria;
+                Area novaArea = new Area(xi, yf, xf, yf + (yf - yi));
+                return novaArea.isInvalid() ? null : novaArea;
             }
             case 3 -> {
-                Area novaAria = new Area(xi - (xf - xi), yi, xi, yf);
-                return novaAria.isInvalid() ? null : novaAria;
+                Area novaArea = new Area(xi - (xf - xi), yi, xi, yf);
+                return novaArea.isInvalid() ? null : novaArea;
             }
             default -> {
                 return null;
