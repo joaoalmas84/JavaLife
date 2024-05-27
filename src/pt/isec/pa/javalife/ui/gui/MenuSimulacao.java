@@ -40,6 +40,7 @@ public class MenuSimulacao extends MenuBar {
         mnAddElemento.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN));
         mnRemove.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
         mnExit.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
+        mnIntervalo.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 
         mnEdit.getItems().addAll(mnUndo, mnRedo, mnAddElemento, mnRemove, mnPause, mnIntervalo, mnExit);
 

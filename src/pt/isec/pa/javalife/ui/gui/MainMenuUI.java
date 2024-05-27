@@ -112,6 +112,8 @@ public class MainMenuUI extends BorderPane {
 
         btnStart.setOnAction(event -> simulacaoManager.start());
 
+        btnExit.setOnAction(event -> ((Stage)getScene().getWindow()).close());
+
     }
 
     private void update(){

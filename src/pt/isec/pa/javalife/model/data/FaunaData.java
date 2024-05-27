@@ -1,7 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-import java.util.Set;
-
 public class FaunaData {
     private static int nextId = 0;
     private static double dano = 1;
@@ -93,8 +91,8 @@ public class FaunaData {
         Area novaArea;
         double newDirecao;
 
-        double variacaoX = velocidade * Math.cos(velocidade);
-        double variacaoY = velocidade * Math.sin(velocidade);
+        double variacaoX = velocidade * Math.cos(direcao);
+        double variacaoY = velocidade * Math.sin(direcao);
 
         novaArea = new Area(
                 area.xi() + variacaoX,
@@ -156,7 +154,7 @@ public class FaunaData {
             return new Area(-1,-1,-1,-1);
         }
 
-        if (fauna.getType() == Elemento.FAUNA && fauna.getArea().isOverlapping(area)) {
+        if (fauna.getArea().isOverlapping(area)) {
             if (fauna.getForca() < forca) {
                 setForca(-10);
                 fauna.setForca(-999);
@@ -175,17 +173,17 @@ public class FaunaData {
 
             novaArea = move(area);
 
-            for(int i = 0; i < 7 && move(area).isInvalid(); i++) {
-                direcao = Math.random() * 360;
+            if( novaArea.isInvalid()) {
+                direcao = Math.random() * 2*Math.PI;
+                return new Area(-1,-1,-1,-1);
             }
-
-            return new Area(-1,-1,-1,-1);
+            return novaArea;
         }
     }
 
     public Area move_chasingPartner(Area area) {
         Fauna fauna;
-        Area newArea = area;
+        Area newArea;
 
         fauna = ecossistema.getMaisForte(id);
         if (fauna == null) {
@@ -202,13 +200,13 @@ public class FaunaData {
 
         direcao = area.angleTo(fauna.getArea());
 
-        move(area);
+        newArea = move(area);
 
-        for(int i = 0; i < 7 && move(area).isInvalid(); i++) {
-            direcao = Math.random() * 360;
+        if(newArea.isInvalid()) {
+            direcao = Math.random() * 2*Math.PI;
+            return new Area(-1,-1,-1,-1);
         }
-
-        return new Area(-1,-1,-1,-1);
+        return newArea;
     }
 
     public boolean eat(Area area) {
@@ -219,7 +217,7 @@ public class FaunaData {
                 erva = (Flora)elem;
                 setForca(dano);
                 erva.setForca(-dano);
-                return true;
+                return !erva.isDead();
             }
         }
 
@@ -242,6 +240,11 @@ public class FaunaData {
     public boolean existeFauna(){
         if(ecossistema == null) return false;
         return ecossistema.existemAnimais();
+    }
+
+    public boolean existePartnerPrey(){
+        if(ecossistema==null) return false;
+        return ecossistema.existemPartners();
     }
 
     public boolean isDead() {return forca <= 0; }

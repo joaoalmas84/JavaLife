@@ -252,6 +252,19 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         return false;
     }
 
+    public boolean existemPartners(){
+        int count=0;
+        for(IElemento elem : elementos){
+            if(elem.getType() == Elemento.FAUNA){
+                count++;
+                if (count>1){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public double getDano() {
         return dano;
     }

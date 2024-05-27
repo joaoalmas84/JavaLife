@@ -67,13 +67,15 @@ public non-sealed class Fauna
 
     public void setArea (Area area) { this.area = area; }
 
+    @Override
+    public String toString() {
+        return data.toString(area);
+    }
+
     // +----------------------------------------------------------------------------------------------------------------
     // + Verificacoes +-------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public boolean existemArvores(){ return data.existemArvores(); }
-
-    public boolean existemFauna(){ return data.existeFauna(); }
 
     public boolean isDead() { return data.isDead(); }
 

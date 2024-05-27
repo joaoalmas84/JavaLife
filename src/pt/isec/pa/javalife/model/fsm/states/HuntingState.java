@@ -3,11 +3,8 @@ package pt.isec.pa.javalife.model.fsm.states;
 import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
-
-import java.util.Set;
 
 public class HuntingState extends FaunaStateAdapter implements IFaunaState {
 
@@ -26,7 +23,7 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
             return;
         }
 
-        if (!data.existeFauna()) {
+        if (!data.existePartnerPrey()) {
             changeState(FaunaState.MOVING);
         } else {
             novaArea = data.move_hunting(context.getArea());
@@ -39,7 +36,7 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
 
                     if (data.existemArvores()) {
                         changeState(FaunaState.LOOKING_FOR_FOOD);
-                    } else if (!data.existemArvores() && !data.existeFauna()) {
+                    } else if (!data.existemArvores() && !data.existePartnerPrey()) {
                         changeState(FaunaState.MOVING);
                     }
 

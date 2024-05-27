@@ -7,6 +7,7 @@ import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
+import java.sql.SQLOutput;
 import java.util.Set;
 
 public class EatingState
@@ -24,7 +25,10 @@ public class EatingState
 
     @Override
     public void move() {
-        data.eat(context.getArea());
+        System.out.println("EatingState");
+        if (data.eat(context.getArea()) && data.getForca()<80){
+            return;
+        }
 
         if (data.getForca() >= 80) {
             changeState(FaunaState.MOVING);
