@@ -1,14 +1,9 @@
 package pt.isec.pa.javalife.model.fsm.states;
 
-import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
-
-import java.sql.SQLOutput;
-import java.util.Set;
 
 public class EatingState
         extends FaunaStateAdapter
@@ -20,7 +15,7 @@ public class EatingState
 
     @Override
     public void act() {
-        if (data.eat(context.getArea()) && data.getForca()<80){
+        if (data.act_eat(context.getArea()) && data.getForca()<100){
             return;
         }
 

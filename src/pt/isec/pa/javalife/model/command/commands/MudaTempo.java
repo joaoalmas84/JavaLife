@@ -13,11 +13,11 @@ public class MudaTempo extends AbstractCommand {
 
     @Override
     public boolean execute() {
-        tempo_velho = receiver.getTempo();
+        tempo_velho = receiver.getTempoDeInstante();
         success = receiver.setTempo(tempo_novo);
         return true;
     }
 
     @Override
-    public boolean undo() { return success; }
+    public boolean undo() { return receiver.setTempo(tempo_velho); }
 }

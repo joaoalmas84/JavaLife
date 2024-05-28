@@ -5,18 +5,15 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import pt.isec.pa.javalife.model.data.Area;
-import pt.isec.pa.javalife.model.data.Simulacao;
-import pt.isec.pa.javalife.model.data.SimulacaoManager;
-import pt.isec.pa.javalife.model.data.SimulacaoState;
+import pt.isec.pa.javalife.model.data.*;
 
 public class MenuAddElemento extends BorderPane {
     SimulacaoManager simulacaoManager;
     Button btnGoBack, btnAddElemento;
-    ChoiceBox<String> cb;
+    ChoiceBox<Elemento> cb;
     TextField tfXI, tfYI, tfXF, tfYF;
     Label lblTitle, label_xI, label_yI, label_xF, label_yF;
-    String tipo;
+    Elemento tipo;
     Double xI, yI, xF, yF;
 
     public MenuAddElemento(SimulacaoManager simulacaoManager) {
@@ -44,19 +41,12 @@ public class MenuAddElemento extends BorderPane {
         btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnAddElemento.setOnAction(e -> {
-            if (tipo == null || tipo.isEmpty() || new Area(xI, yI, xF, yF).isInvalid()) {
+            if (tipo == null || new Area(xI, yI, xF, yF).isInvalid()) {
                 return;
             }
 
-
-            switch (tipo) {
-                case "Flora" -> simulacaoManager.adicionarFlora(xI, yI, xF, yF);
-                case "Fauna" -> simulacaoManager.adicionarFauna(xI, yI, xF, yF);
-                case "Inanimado" -> simulacaoManager.adicionarInanimado(xI, yI, xF, yF);
-            }
-
+            tipo.makeElemento(xI,yI,xF,yF,simulacaoManager);
             simulacaoManager.setState(SimulacaoState.NULL);
-
         });
 
         tfXI.setOnKeyReleased(e -> {
@@ -105,7 +95,7 @@ public class MenuAddElemento extends BorderPane {
         this.setBackground(new Background(new BackgroundFill(Color.rgb(255,255,244), null, null)));
         lblTitle = new Label("add elementos");
 
-        cb = new ChoiceBox<>(FXCollections.observableArrayList("Flora", "Fauna", "Inanimado"));
+        cb = new ChoiceBox<>(FXCollections.observableArrayList(Elemento.FLORA,Elemento.FAUNA,Elemento.INANIMADO));
 
         label_xI = new Label("xI :");
         label_yI = new Label("yI :");

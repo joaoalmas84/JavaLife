@@ -24,7 +24,7 @@ public class HuntingState extends FaunaStateAdapter implements IFaunaState {
         if (!data.existePartnerPrey()) {
             changeState(FaunaState.MOVING);
         } else {
-            novaArea = data.move_hunting(context.getArea());
+            novaArea = data.act_hunting(context.getArea());
             if (!novaArea.isInvalid()) {
                 context.setArea(novaArea);
 

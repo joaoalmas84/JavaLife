@@ -6,6 +6,7 @@ import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.NotSerializableException;
 import java.util.Set;
 
 public class SimulacaoManager {
@@ -118,7 +119,7 @@ public class SimulacaoManager {
      * @param tipo O tipo do elemento.
      * @return true se a operação de remover foi bem-sucedida, caso contrário false.
      */
-    public boolean removerElemento(int id, String tipo){
+    public boolean removerElemento(int id, Elemento tipo){
         return commandManager.invokeCommand(new RemoveElemento(this, id, tipo));
     }
     /**
@@ -257,6 +258,10 @@ public class SimulacaoManager {
         return simulacao.getTempo();
     }
 
+    public long getTempoDeInstante(){
+        return simulacao.getTempoDeInstante();
+    }
+
     public double getDanoFauna() { return simulacao.getDanoFauna(); }
 
     /**
@@ -276,6 +281,14 @@ public class SimulacaoManager {
 
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
 
+    public boolean isHerbicida() {
+        return simulacao.isHerbicida();
+    }
+
+    public void setHerbicida(boolean herbicida) {
+        simulacao.setHerbicida(herbicida);
+    }
+
     // +----------------------------------------------------------------------------------------------------------------
     // + Adds & Removes +-----------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
@@ -284,7 +297,7 @@ public class SimulacaoManager {
        return simulacao.addElemento(elemento);
     }
 
-    public IElemento removeElemento(int id, String tipo) {
+    public IElemento removeElemento(int id, Elemento tipo) {
         return simulacao.removeElemento(id, tipo);
     }
 

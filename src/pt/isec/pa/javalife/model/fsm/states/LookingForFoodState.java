@@ -7,8 +7,6 @@ import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
 
-import java.util.ArrayList;
-
 public class LookingForFoodState extends FaunaStateAdapter implements IFaunaState {
 
     public LookingForFoodState(Fauna context, FaunaData data) {
@@ -30,7 +28,7 @@ public class LookingForFoodState extends FaunaStateAdapter implements IFaunaStat
         if (!data.existemArvores()) {
             changeState(FaunaState.HUNTING);
         } else {
-            novaArea = data.move_lookingForFood(context.getArea(), success);
+            novaArea = data.act_lookingForFood(context.getArea(), success);
             if (!novaArea.isInvalid()) {
                 context.setArea(novaArea);
 

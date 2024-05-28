@@ -103,7 +103,7 @@ public class FaunaData {
 
         for (IElemento elem : ecossistema.getElementos()) {
             if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(novaArea)) {
-                newDirecao = (direcao + Math.PI/2); // <- radianos
+                newDirecao = Math.random() * 2*Math.PI;
                 direcao = newDirecao;
 
                 return new Area(-1, -1, -1, -1);
@@ -116,7 +116,7 @@ public class FaunaData {
     }
 
     // Success -> encontrou flora
-    public Area move_lookingForFood(Area area, Boolean[] success) {
+    public Area act_lookingForFood(Area area, Boolean[] success) {
         Flora floraMaisProxima;
         Area novaArea;
 
@@ -146,7 +146,7 @@ public class FaunaData {
         return novaArea;
     }
 
-    public Area move_hunting(Area area) {
+    public Area act_hunting(Area area) {
         Fauna fauna;
         Area novaArea;
 
@@ -182,7 +182,7 @@ public class FaunaData {
         }
     }
 
-    public Area move_chasingPartner(Area area) {
+    public Area act_chasingPartner(Area area) {
         Fauna fauna;
         Area newArea;
 
@@ -213,7 +213,7 @@ public class FaunaData {
         return newArea;
     }
 
-    public boolean eat(Area area) {
+    public boolean act_eat(Area area) {
         Flora erva;
 
         for (IElemento elem : ecossistema.getElementos()) {

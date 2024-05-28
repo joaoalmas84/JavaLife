@@ -5,18 +5,21 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import pt.isec.pa.javalife.model.data.Elemento;
 import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.model.data.SimulacaoState;
 
+import javax.swing.text.html.parser.Element;
+
 public class MenuRemoveElem extends BorderPane {
     SimulacaoManager simulacaoManager;
     Button btnGoBack, btnRemoveElemento;
-    ChoiceBox<String> cb;
+    ChoiceBox<Elemento> cb;
     TextField tfID;
     Label lblTitle, label_ID;
     int id;
-    String tipo;
+    Elemento tipo;
 
     public MenuRemoveElem(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -36,16 +39,11 @@ public class MenuRemoveElem extends BorderPane {
         btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnRemoveElemento.setOnAction(e -> {
-            if (tipo == null || tipo.isEmpty() || id < -1) {
+            if (tipo == null || id < -1) {
                 return;
             }
 
-            switch (tipo) {
-                case "Flora" -> simulacaoManager.removerElemento(id, "Flora");
-                case "Fauna" -> simulacaoManager.removerElemento(id, "Fauna");
-                case "Inanimado" -> simulacaoManager.removerElemento(id, "Inanimado");
-            }
-
+            simulacaoManager.removerElemento(id,tipo);
             simulacaoManager.setState(SimulacaoState.NULL);
 
         });
@@ -65,7 +63,7 @@ public class MenuRemoveElem extends BorderPane {
         this.setBackground(new Background(new BackgroundFill(Color.rgb(255,255,244), null, null)));
         lblTitle = new Label("Remover Elemento");
 
-        cb = new ChoiceBox<>(FXCollections.observableArrayList("Flora", "Fauna", "Inanimado"));
+        cb = new ChoiceBox<>(FXCollections.observableArrayList(Elemento.FLORA,Elemento.FAUNA,Elemento.INANIMADO));
 
         label_ID = new Label("ID :");
         tfID = new TextField();

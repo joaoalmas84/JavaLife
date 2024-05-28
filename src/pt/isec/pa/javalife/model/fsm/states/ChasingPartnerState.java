@@ -3,11 +3,8 @@ package pt.isec.pa.javalife.model.fsm.states;
 import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.IElemento;
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.FaunaStateAdapter;
-
-import java.util.Set;
 
 public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaState {
 
@@ -25,7 +22,7 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
             changeState(FaunaState.MOVING);
             return;
         } else {
-            Area novaArea =data.move_chasingPartner(context.getArea());
+            Area novaArea =data.act_chasingPartner(context.getArea());
             if(!novaArea.isInvalid()){
                 context.setArea(novaArea);
             }

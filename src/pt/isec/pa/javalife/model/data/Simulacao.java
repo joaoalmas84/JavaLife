@@ -9,6 +9,8 @@ import java.beans.PropertyChangeSupport;
 import java.util.Set;
 
 public class Simulacao {
+
+    private boolean herbicida;
     protected Ecossistema ecossistema;
     protected PropertyChangeSupport pcs;
     protected IGameEngine gameEngine;
@@ -53,7 +55,7 @@ public class Simulacao {
         return ecossistema.toString();
     }
 
-    public IElemento removeElemento(int id, String tipo) {
+    public IElemento removeElemento(int id, Elemento tipo) {
         return ecossistema.removeElemento(id, tipo);
     }
 
@@ -89,6 +91,10 @@ public class Simulacao {
 
     public int getTempo() {
         return ecossistema.getTempo();
+    }
+
+    public long getTempoDeInstante() {
+        return tempoDeInstante;
     }
 
     public void setState(SimulacaoState state) {
@@ -129,6 +135,14 @@ public class Simulacao {
         }
     }
 
+    public boolean isHerbicida() {
+        return herbicida;
+    }
+
+    public void setHerbicida(boolean herbicida) {
+        this.herbicida = herbicida;
+    }
+
     // +----------------------------------------------------------------------------------------------------------------
     // + Opcoes +-------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
@@ -152,6 +166,8 @@ public class Simulacao {
         gameEngine.resume();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
+
+
 
 /*
     public boolean adicionaFauna(double xi, double yi, double xf, double yf){

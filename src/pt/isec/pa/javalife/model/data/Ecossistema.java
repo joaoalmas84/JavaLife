@@ -3,6 +3,7 @@ package pt.isec.pa.javalife.model.data;
 import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 import pt.isec.pa.javalife.model.gameengine.IGameEngineEvolve;
 
+import javax.lang.model.util.Elements;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -167,12 +168,12 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         return null;
     }
 
-    public IElemento removeElemento(int id, String tipo) {
+    public IElemento removeElemento(int id, Elemento tipo) {
         if(tipo == null) return null;
         return switch (tipo) {
-            case "Fauna" -> removeFauna(id);
-            case "Flora" -> removeFlora(id);
-            case "Inanimado" -> removeInanimado(id);
+            case Elemento.FAUNA -> removeFauna(id);
+            case Elemento.FLORA -> removeFlora(id);
+            case Elemento.INANIMADO -> removeInanimado(id);
             default -> null;
         };
     }

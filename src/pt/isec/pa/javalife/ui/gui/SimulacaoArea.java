@@ -3,6 +3,7 @@ package pt.isec.pa.javalife.ui.gui;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -39,13 +40,15 @@ public class SimulacaoArea extends Canvas {
             y = evt.getY();
             update();
         });
-
         this.setOnMouseClicked(evt -> {
-            x = evt.getX();
-            y = evt.getY();
+            double x_ = evt.getX()/largura;
+            double y_ = evt.getY()/altura;
             for (IElemento elem : simulacaoManager.getElementos()) {
-                if(elem.getArea().isPointOverlapping(x,y)){
+                if(elem.getArea().isPointOverlapping(x_,y_)){
                     System.out.println(elem);
+                    if(simulacaoManager.isHerbicida() && elem.getType()==Elemento.FLORA){
+                        simulacaoManager.removeElemento(elem.getId(),elem.getType());
+                    }
                     return ;
                 }
             }
@@ -66,7 +69,19 @@ public class SimulacaoArea extends Canvas {
         clearScreen(gc);
         drawline(gc);
         gc.setLineWidth(2);
-        simulacaoManager.getElementos().forEach( elemento -> drawElemento(gc,elemento));
+
+        HashSet<IElemento> floraSet = new HashSet<>();
+        HashSet<IElemento> outrosSet = new HashSet<>();
+        simulacaoManager.getElementos().forEach( elemento -> {
+            if(elemento.getType()==Elemento.FLORA){
+                floraSet.add(elemento);
+            }
+            else
+                outrosSet.add(elemento);
+        });
+        floraSet.forEach(elemento -> drawElemento(gc,elemento));
+        outrosSet.forEach(elemento -> drawElemento(gc,elemento));
+
 
         Set<IElemento> elementos = simulacaoManager.getElementos();
 
@@ -115,8 +130,8 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void drawRectanglelive(GraphicsContext gc, double x, double y, double width, double height, double forca) {
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.GREEN.darker());
+        gc.setFill(Color.RED);
+        gc.setStroke(Color.RED.darker());
         gc.setLineWidth(1);
         gc.fillRect(x, y, width * (forca / 100), height);
         gc.strokeRect(x, y, width , height);
