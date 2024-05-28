@@ -1,10 +1,7 @@
 package pt.isec.pa.javalife.model.data;
 
 import pt.isec.pa.javalife.model.command.CommandManager;
-import pt.isec.pa.javalife.model.command.Commands.AdicionaElemento;
-import pt.isec.pa.javalife.model.command.Commands.MudaAltura;
-import pt.isec.pa.javalife.model.command.Commands.MudaLargura;
-import pt.isec.pa.javalife.model.command.Commands.RemoveElemento;
+import pt.isec.pa.javalife.model.command.commands.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
@@ -37,9 +34,11 @@ public class SimulacaoManager {
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(PROP_UPDATE_COMMAND, listener);
     }
-    /*
-     *  ///////////////////////////////////////////////////////////// Command
-     */
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Commands +-----------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     /**
      * Desfaz a última operação.
      *
@@ -86,7 +85,7 @@ public class SimulacaoManager {
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
      */
     public boolean adicionarFauna(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(simulacao, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
+        return commandManager.invokeCommand(new AdicionaElemento(this, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
     }
     /**
      * Adiciona um elemento de flora na simulação.
@@ -98,7 +97,7 @@ public class SimulacaoManager {
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
      */
     public boolean adicionarFlora(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(simulacao, new Flora( XI, YI, XF, YF)));
+        return commandManager.invokeCommand(new AdicionaElemento(this, new Flora( XI, YI, XF, YF)));
     }
     /**
      * Adiciona um elemento inanimado na simulação.
@@ -110,7 +109,7 @@ public class SimulacaoManager {
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
      */
     public boolean adicionarInanimado(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(simulacao, new Inanimado(XI, YI, XF, YF, true)));
+        return commandManager.invokeCommand(new AdicionaElemento(this, new Inanimado(XI, YI, XF, YF, true)));
     }
     /**
      * Remove um elemento da simulação pelo seu ID e tipo.
@@ -120,7 +119,7 @@ public class SimulacaoManager {
      * @return true se a operação de remover foi bem-sucedida, caso contrário false.
      */
     public boolean removerElemento(int id, String tipo){
-        return commandManager.invokeCommand(new RemoveElemento(simulacao, id, tipo));
+        return commandManager.invokeCommand(new RemoveElemento(this, id, tipo));
     }
     /**
      * Muda a altura da simulação.
@@ -129,7 +128,7 @@ public class SimulacaoManager {
      * @return true se a operação de mudar altura foi bem-sucedida, caso contrário false.
      */
     public boolean mudarAltura(double altura){
-        return commandManager.invokeCommand(new MudaAltura(simulacao, altura));
+        return commandManager.invokeCommand(new MudaAltura(this, altura));
     }
     /**
      * Muda a largura da simulação.
@@ -138,11 +137,23 @@ public class SimulacaoManager {
      * @return true se a operação de mudar largura foi bem-sucedida, caso contrário false.
      */
     public boolean mudarLargura(double largura){
-        return commandManager.invokeCommand(new MudaLargura(simulacao, largura));
+        return commandManager.invokeCommand(new MudaLargura(this, largura));
     }
-    /*
-     *  ///////////////////////////////////////////////////////////// GameEngine
+
+    /**
+     * Muda o intervalo de tempo entre os ticks da simulação.
+     *
+     * @param tempo -> novo tempo
+     * @return true se a operação de mudar o tempo foi bem-sucedida, caso contrário false.
      */
+    public boolean mudarTempo(long tempo) {
+        return commandManager.invokeCommand(new MudaTempo(this, tempo));
+    }
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Game Engine +--------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     /**
      * Inicia a simulação.
      */
@@ -180,9 +191,11 @@ public class SimulacaoManager {
     public GameEngineState getCurrentState_Of_GameEngine() {
         return simulacao.getCurrentState_Of_GameEngine();
     }
-    /*
-     *  ///////////////////////////////////////////////////////////// Observer/Observable pattern
-     */
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Observer +-----------------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     /**
      * Adiciona um listener para mudanças de propriedade na simulação.
      *
@@ -206,6 +219,11 @@ public class SimulacaoManager {
      *
      * @return A altura do ecossistema.
      */
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters & Setters +--------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
     public double getAlturaEcossistema() {
         return simulacao.getAlturaEcossistema();
     }
@@ -225,17 +243,7 @@ public class SimulacaoManager {
     public Set<IElemento> getElementos() {
         return simulacao.getElementos();
     }
-    /*
-     *  ///////////////////////////////////////////////////////////// set
-     */
-    /**
-     * Define o estado da simulação.
-     *
-     * @param state O novo estado da simulação.
-     */
-    public void setState(SimulacaoState state){
-        simulacao.setState(state);
-    }
+
     /**
      * Obtém o estado atual da simulação.
      *
@@ -244,10 +252,40 @@ public class SimulacaoManager {
     public SimulacaoState getState(){
         return simulacao.getState();
     }
-    public String getTempo() {
-        return String.valueOf(simulacao.getTempo());
+
+    public int getTempo() {
+        return simulacao.getTempo();
     }
-    public void setTempo(int tempo) {
-        simulacao.setTempo(tempo);
+
+    public double getDanoFauna() { return simulacao.getDanoFauna(); }
+
+    /**
+     * Define o estado da simulação.
+     *
+     * @param state O novo estado da simulação.
+     */
+    public void setState(SimulacaoState state){
+        simulacao.setState(state);
     }
+
+    public boolean setTempo(long tempo) { return simulacao.setTempo(tempo); }
+
+    public boolean setAltura(double altura) { return simulacao.setAltura(altura); }
+
+    public boolean setLargura(double largura) {return simulacao.setLargura(largura);}
+
+    public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
+
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Adds & Removes +-----------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
+
+    public boolean addElemento(IElemento elemento) {
+       return simulacao.addElemento(elemento);
+    }
+
+    public IElemento removeElemento(int id, String tipo) {
+        return simulacao.removeElemento(id, tipo);
+    }
+
 }

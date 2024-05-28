@@ -1,12 +1,12 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
-import pt.isec.pa.javalife.model.data.Simulacao;
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
-public class MudaLargura extends AbstractCommand{
+public class MudaLargura extends AbstractCommand {
 
     double valor_novo, valor_velho;
 
-    public MudaLargura(Simulacao receiver, double valor_novo_){
+    public MudaLargura(SimulacaoManager receiver, double valor_novo_){
         super(receiver);
         valor_novo=valor_novo_;
     }

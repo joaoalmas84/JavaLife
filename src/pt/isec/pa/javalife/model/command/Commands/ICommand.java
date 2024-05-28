@@ -1,4 +1,4 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
 public interface ICommand {
     boolean execute();

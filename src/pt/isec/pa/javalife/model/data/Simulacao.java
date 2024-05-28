@@ -20,7 +20,7 @@ public class Simulacao {
 
 
     public Simulacao() {
-        tempoDeInstante = 250;
+        tempoDeInstante = 10;
         this.ecossistema = new Ecossistema();
         this.gameEngine = new GameEngine();
         gameEngine.registerClient(ecossistema);
@@ -83,8 +83,8 @@ public class Simulacao {
         return state;
     }
 
-    public double getDano() {
-        return ecossistema.getDanoFauna();
+    public double getDanoFauna() {
+        return ecossistema.danoFauna;
     }
 
     public int getTempo() {
@@ -117,11 +117,16 @@ public class Simulacao {
     }
 
     public boolean setTempo(long tempo) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
+        if (gameEngine.getCurrentState() == GameEngineState.READY) {
             return false ;
         }
-        gameEngine.setInterval(tempo);
-        return true;
+
+        if (tempo >= 10) {
+            gameEngine.setInterval(tempo);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // +----------------------------------------------------------------------------------------------------------------

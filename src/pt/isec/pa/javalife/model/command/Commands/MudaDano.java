@@ -1,20 +1,20 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
-import pt.isec.pa.javalife.model.data.Simulacao;
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
-public class MudaDano extends AbstractCommand{
+public class MudaDano extends AbstractCommand {
 
     double valor_novo, valor_velho;
 
-    public MudaDano(Simulacao receiver, double valor_novo_){
+    public MudaDano(SimulacaoManager receiver, double valor_novo_){
         super(receiver);
-        valor_novo=valor_novo_;
+        valor_novo = valor_novo_;
     }
 
     @Override
     public boolean execute() {
-        valor_velho = receiver.getDano();
-        success= receiver.setDanoFauna(valor_novo);
+        valor_velho = receiver.getDanoFauna();
+        success = receiver.setDanoFauna(valor_novo);
         return true;
     }
 

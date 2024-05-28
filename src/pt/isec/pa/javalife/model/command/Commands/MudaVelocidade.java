@@ -1,12 +1,12 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
-import pt.isec.pa.javalife.model.data.Simulacao;
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
-public class MudaVelocidadeSimul extends AbstractCommand{
+public class MudaVelocidade extends AbstractCommand{
     private long valor_novo, valor_velho;
     private boolean success;
 
-    MudaVelocidadeSimul(Simulacao receiver, long valor_novo_){
+    MudaVelocidade(SimulacaoManager receiver, long valor_novo_){
         super(receiver);
         valor_novo = valor_novo_;
         success = false;

@@ -1,7 +1,8 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
 import pt.isec.pa.javalife.model.data.IElemento;
-import pt.isec.pa.javalife.model.data.Simulacao;
+
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
 public class RemoveElemento extends AbstractCommand{
     private IElemento elem;
@@ -10,7 +11,7 @@ public class RemoveElemento extends AbstractCommand{
 
     String tipo;
 
-    public RemoveElemento(Simulacao receiver, int id_, String tipo_){
+    public RemoveElemento(SimulacaoManager receiver, int id_, String tipo_){
         super(receiver);
         success=false;
         id=id_;
@@ -23,7 +24,7 @@ public class RemoveElemento extends AbstractCommand{
     }
 
     public boolean execute() {
-        elem=receiver.removeElemento(id, tipo);
+        elem = receiver.removeElemento(id, tipo);
         success= (elem != null);
         return true;
     }

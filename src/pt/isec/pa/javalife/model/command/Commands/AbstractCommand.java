@@ -1,14 +1,14 @@
-package pt.isec.pa.javalife.model.command.Commands;
+package pt.isec.pa.javalife.model.command.commands;
 
-import pt.isec.pa.javalife.model.data.Simulacao;
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
 abstract public class AbstractCommand implements ICommand{
 
     protected boolean success;
 
-    protected Simulacao receiver;
+    protected SimulacaoManager receiver;
 
-    protected AbstractCommand(Simulacao receiver_){
+    protected AbstractCommand(SimulacaoManager receiver_){
         receiver=receiver_;
     }
 

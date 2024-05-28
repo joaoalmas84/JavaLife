@@ -1,6 +1,6 @@
 package pt.isec.pa.javalife.model.command;
 
-import pt.isec.pa.javalife.model.command.Commands.ICommand;
+import pt.isec.pa.javalife.model.command.commands.ICommand;
 
 import java.util.Stack;
 

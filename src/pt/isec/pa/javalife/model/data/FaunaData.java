@@ -32,7 +32,7 @@ public class FaunaData {
         matingCounter = 0;
 
         velocidade = 10;
-        direcao = Math.random() * 360;
+        direcao = Math.random() * (2 * Math.PI);
 
         ecossistema = e;
     }
@@ -100,7 +100,7 @@ public class FaunaData {
 
         for (IElemento elem : ecossistema.getElementos()) {
             if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(novaArea)) {
-                newDirecao = (direcao + 90) % 360;
+                newDirecao = (direcao + Math.PI/2); // <- radianos
                 direcao = newDirecao;
 
                 return new Area(-1, -1, -1, -1);
@@ -135,7 +135,7 @@ public class FaunaData {
         novaArea = move( area);
 
         if (novaArea.isInvalid()) {
-            direcao = Math.random() * 360;
+            direcao = Math.random() * (2 * Math.PI);
             novaArea = move(area);
         }
 

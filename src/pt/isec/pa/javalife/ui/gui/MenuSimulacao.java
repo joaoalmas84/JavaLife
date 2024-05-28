@@ -25,7 +25,7 @@ public class MenuSimulacao extends MenuBar {
 
     private void createViews() {
         mnFile = new Menu("File");
-        mnEdit = new Menu("Edit");
+        mnEdit = new Menu("Propriedades");
 
         mnUndo = new MenuItem("_Undo");
         mnRedo = new MenuItem("_Redo");

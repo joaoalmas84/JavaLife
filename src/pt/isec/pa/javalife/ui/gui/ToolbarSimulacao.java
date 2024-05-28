@@ -22,7 +22,7 @@ public class ToolbarSimulacao extends ToolBar {
 
     private void createViews() {
         Rectangle rectSol = new Rectangle(0,0, BTN_IMG_SIZE, BTN_IMG_SIZE);
-        rectSol.setFill(Color.color(0,1,0));
+        rectSol.setFill(Color.YELLOW);
 
         btnEventoSol = new Button(null,rectSol);
         btnEventoSol.setPrefSize(BTN_SIZE,BTN_SIZE);

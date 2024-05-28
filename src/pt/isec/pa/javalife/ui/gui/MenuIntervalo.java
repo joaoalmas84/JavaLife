@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import pt.isec.pa.javalife.model.data.Simulacao;
@@ -16,6 +17,8 @@ public class MenuIntervalo extends BorderPane {
     private TextField txtIntervalo;
     private Button btnSetIntervalo;
     private Button btnCancel;
+
+    private Label label;
 
     public MenuIntervalo(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -37,17 +40,26 @@ public class MenuIntervalo extends BorderPane {
                 }
                 intervalo = Integer.parseInt(text);
             } catch (NumberFormatException ex) {
-                intervalo = 1000;
+                intervalo = 250;
             }
             System.out.println(intervalo + " intervalo");
-            simulacaoManager.setTempo(intervalo);
-            simulacaoManager.setState(SimulacaoState.NULL);
+            if (!simulacaoManager.mudarTempo(intervalo)) {
+                label.setText("Intervalo inválido. Tem que ser maior ou igual a 10");
+                label.setStyle("-fx-text-fill: red");
+            } else {
+                simulacaoManager.setState(SimulacaoState.NULL);
+            }
         });
+
+    txtIntervalo.setOnKeyPressed(keyEvent -> {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            btnSetIntervalo.fire();
+        }
+    });
 
         btnCancel.setOnAction(event ->{
             simulacaoManager.setState(SimulacaoState.NULL);
         });
-
 
     }
 
@@ -66,10 +78,14 @@ public class MenuIntervalo extends BorderPane {
         hbInput.setAlignment(Pos.CENTER);
         hbInput.setSpacing(15);
 
-        VBox vBox = new VBox(hbInput,hbButtons);
+        label = new Label();
+
+        VBox vBox = new VBox(hbInput,hbButtons, label);
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
         setCenter(vBox);
+
+
     }
 
     private void update() {
