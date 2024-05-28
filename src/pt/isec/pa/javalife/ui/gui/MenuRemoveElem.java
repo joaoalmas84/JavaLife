@@ -57,7 +57,7 @@ public class MenuRemoveElem extends BorderPane {
             } catch (NumberFormatException ex) {
                 id = -1;
             }
-            System.out.println(id + " : id");
+            //System.out.println(id + " : id");
         });
     }
 
@@ -91,8 +91,8 @@ public class MenuRemoveElem extends BorderPane {
     }
 
     private void update() {
-        System.out.println("remover add elementos");
-        System.out.println(simulacaoManager.getState());
+        //System.out.println("remover add elementos");
+        //System.out.println(simulacaoManager.getState());
         if(!(simulacaoManager.getState() == SimulacaoState.REMOVE)){
             this.setVisible(false);
             return ;

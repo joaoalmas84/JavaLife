@@ -28,8 +28,6 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void update() {
-        System.out.println("update add elementos");
-        System.out.println(simulacaoManager.getState());
         if(!(simulacaoManager.getState() == SimulacaoState.ADD)){
             this.setVisible(false);
             return ;

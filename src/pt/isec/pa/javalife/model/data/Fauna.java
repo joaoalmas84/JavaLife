@@ -57,7 +57,7 @@ public non-sealed class Fauna
     public void addForca(double forca) { data.addForca(forca); }
 
     @Override
-    public void setImagem(String imagem) { }
+    public void setImagem(String imagem) { data.setImage(imagem); }
 
     @Override
     public String toString() {

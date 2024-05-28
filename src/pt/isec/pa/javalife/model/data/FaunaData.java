@@ -35,6 +35,7 @@ public class FaunaData {
         direcao = Math.random() * (2 * Math.PI);
 
         ecossistema = e;
+        image = "guepardo.png";
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -57,6 +58,8 @@ public class FaunaData {
 
 
     public String getImage() { return image; }
+
+    public String setImage(String image) { return this.image = image; }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Setters +------------------------------------------------------------------------------------------------------
