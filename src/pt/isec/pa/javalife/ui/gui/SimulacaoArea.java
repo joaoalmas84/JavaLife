@@ -3,9 +3,12 @@ package pt.isec.pa.javalife.ui.gui;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
+import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -105,7 +108,7 @@ public class SimulacaoArea extends Canvas {
             case Elemento.INANIMADO -> drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.GRAY);
             case Elemento.FAUNA -> {
                 Fauna fauna = (Fauna) elemento;
-                drawRectangle(gc, x * largura, y * altura, width * largura, height * altura, Color.RED);
+                drawRectangleFAUNA(gc, x * largura, y * altura, width * largura, height * altura, Color.RED, fauna.getImagem());
                 drawRectanglelive(gc,x * largura , (y - 7) * altura, width * largura, 7 * altura, fauna.getForca());
             }
         }
@@ -140,6 +143,14 @@ public class SimulacaoArea extends Canvas {
             gc.strokeLine(0, i * getHeight() / valor, getWidth(), i * getHeight() / valor);
             gc.strokeLine(i * getWidth() / valor, 0, i  * getWidth() / valor, getHeight());
         }
+    }
+
+    private void drawRectangleFAUNA(GraphicsContext gc, double x, double y, double width, double height, Color color, String Imagns) {
+        Image imageView = ImageManager.getImage(Imagns);
+        if(imageView == null) return;
+        gc.setFill(new ImagePattern(imageView));
+        gc.setStroke(color.darker());
+        gc.fillRect(x, y, width, height);
     }
 
 }

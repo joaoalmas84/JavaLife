@@ -114,6 +114,7 @@ public class MainMenuUI extends BorderPane {
 
         btnExit.setOnAction(event -> ((Stage)getScene().getWindow()).close());
 
+
     }
 
     private void update(){
