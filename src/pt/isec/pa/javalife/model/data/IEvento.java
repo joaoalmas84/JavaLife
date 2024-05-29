@@ -1,6 +1,8 @@
 package pt.isec.pa.javalife.model.data;
 
-public interface IEvento {
+import java.io.Serializable;
+
+public interface IEvento extends Serializable {
     public boolean execute();
     public int tempoExecucao();
 }

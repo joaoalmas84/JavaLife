@@ -4,7 +4,9 @@ import pt.isec.pa.javalife.model.data.Fauna;
 import pt.isec.pa.javalife.model.data.FaunaData;
 import pt.isec.pa.javalife.model.fsm.states.*;
 
-public enum FaunaState  {
+import java.io.Serializable;
+
+public enum FaunaState implements Serializable {
     MOVING, LOOKING_FOR_FOOD, EATING, DEAD, HUNTING, CHASING_PARTNER;
 
     public static IFaunaState getInstance(FaunaState type, Fauna context, FaunaData data) {

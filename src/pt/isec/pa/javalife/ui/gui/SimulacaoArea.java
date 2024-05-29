@@ -31,9 +31,8 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
-        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, (evt) -> Platform.runLater(this::setProp));
+        setProp();
         //this.setOnMousePressed(evt -> update());
         this.setOnMouseMoved(evt -> {
             x = evt.getX();
@@ -53,6 +52,12 @@ public class SimulacaoArea extends Canvas {
                 }
             }
         });
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
     }
 
     private void update() {

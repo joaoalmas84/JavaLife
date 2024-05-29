@@ -19,8 +19,14 @@ public class Relogio extends BorderPane {
     }
 
     private void registerHandlers() {
+        setProp();
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS ,(evt) -> Platform.runLater(this::setProp));
+    }
+
+    private void setProp() {
         simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP ,(evt) -> Platform.runLater(this::update));
     }
+
     private void createViews() {
         tempo = new Label("Tempo: 0");
         tempo.setStyle("-fx-font-size: 20px;");

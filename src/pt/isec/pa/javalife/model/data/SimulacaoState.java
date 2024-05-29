@@ -1,3 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-public enum SimulacaoState {ADD, REMOVE, NULL, INTERVALO}
+import java.io.Serializable;
+
+public enum SimulacaoState implements Serializable {ADD, REMOVE, NULL, INTERVALO}

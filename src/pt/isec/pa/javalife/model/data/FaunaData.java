@@ -1,6 +1,8 @@
 package pt.isec.pa.javalife.model.data;
 
-public class FaunaData {
+import java.io.Serializable;
+
+public class FaunaData implements Serializable {
     private static int nextId = 0;
     private static double danoPorMoviemnto = 0.5;
 

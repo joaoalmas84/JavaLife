@@ -6,7 +6,7 @@ import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.NotSerializableException;
+import java.io.*;
 import java.util.Set;
 
 public class SimulacaoManager {
@@ -15,6 +15,7 @@ public class SimulacaoManager {
     protected PropertyChangeSupport pcs;
 
     public static final String PROP_UPDATE_COMMAND = "_update_COMMAND_";
+    public static final String PROP_ADD_LIS = "UPDATE_ADD_LIS";
 
     /**
      * Construtor da classe SimulacaoManager.
@@ -33,7 +34,7 @@ public class SimulacaoManager {
      * @param listener O listener que será notificado sobre mudanças.
      */
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(PROP_UPDATE_COMMAND, listener);
+        pcs.addPropertyChangeListener(property, listener);
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -301,4 +302,53 @@ public class SimulacaoManager {
         return simulacao.removeElemento(id, tipo);
     }
 
+    public boolean save(File file) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(simulacao);
+            oos.writeObject(commandManager);
+        } catch (NotSerializableException e) {
+            System.err.println("Object not serializable: " + e.getMessage());
+            return false;
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+            return false;
+        } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error writing drawing: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean load(File file) {
+        if(simulacao.getCurrentState_Of_GameEngine() == GameEngineState.READY) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                simulacao = (Simulacao) ois.readObject();
+                commandManager = (CommandManager) ois.readObject();
+            } catch (Exception e) {
+                System.err.println("Error loading drawing");
+                return false;
+            }
+            simulacao.setGameEngine();
+            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
+            return true;
+        }else if(simulacao.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING || simulacao.getCurrentState_Of_GameEngine() == GameEngineState.PAUSED){
+            simulacao.stop();
+            System.out.println("SimulacaoManager.load" + simulacao.getCurrentState_Of_GameEngine());
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                simulacao = (Simulacao) ois.readObject();
+                commandManager = (CommandManager) ois.readObject();
+            } catch (Exception e) {
+                System.err.println("Error loading drawing");
+                return false;
+            }
+            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
+            simulacao.setGameEngine();
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
