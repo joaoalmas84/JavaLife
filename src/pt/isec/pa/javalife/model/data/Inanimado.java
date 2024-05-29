@@ -14,6 +14,14 @@ public final class Inanimado extends ElementoBase {
         this.podeRemove = podeRemove;
     }
 
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(int nextId) {
+        Inanimado.nextId = nextId;
+    }
+
     @Override
     public int getId() {
         return id;

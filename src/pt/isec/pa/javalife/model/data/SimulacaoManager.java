@@ -141,7 +141,6 @@ public class SimulacaoManager {
     public boolean mudarLargura(double largura){
         return commandManager.invokeCommand(new MudaLargura(this, largura));
     }
-
     /**
      * Muda o intervalo de tempo entre os ticks da simulação.
      *
@@ -306,6 +305,9 @@ public class SimulacaoManager {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(simulacao);
             oos.writeObject(commandManager);
+            oos.writeObject(Flora.getNextId());
+            oos.writeObject(FaunaData.getNextId());
+            oos.writeObject(Inanimado.getNextId());
         } catch (NotSerializableException e) {
             System.err.println("Object not serializable: " + e.getMessage());
             return false;
@@ -327,6 +329,9 @@ public class SimulacaoManager {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
                 simulacao = (Simulacao) ois.readObject();
                 commandManager = (CommandManager) ois.readObject();
+                Flora.setNextId((int) ois.readObject());
+                FaunaData.setNextId((int) ois.readObject());
+                Inanimado.setNextId((int) ois.readObject());
             } catch (Exception e) {
                 System.err.println("Error loading drawing");
                 return false;

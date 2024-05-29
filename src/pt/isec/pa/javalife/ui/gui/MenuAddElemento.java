@@ -26,6 +26,7 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void update() {
+        System.out.println("teste e ´oiiii");
         if(!(simulacaoManager.getState() == SimulacaoState.ADD)){
             this.setVisible(false);
             return ;
@@ -34,8 +35,8 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS,  evt -> Platform.runLater(this::setProp));
         setProp();
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS,  evt -> Platform.runLater(this::setProp));
 
         cb.setOnAction(e -> tipo = cb.getValue());
 
@@ -93,7 +94,8 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void setProp() {
-        simulacaoManager.addPropertyChangeListener(Simulacao.PROP_UPDATE_SIMULACAO,  evt -> Platform.runLater(this::update));
+        System.out.println("teste e ´ss");
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO,  evt -> Platform.runLater(this::update));
     }
 
     private void createViews() {

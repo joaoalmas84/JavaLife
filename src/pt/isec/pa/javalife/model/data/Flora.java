@@ -29,6 +29,13 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(int nextId) {
+        Flora.nextId = nextId;
+    }
 
     @Override
     public String getImagem() {
