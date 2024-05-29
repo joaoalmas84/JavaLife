@@ -2,12 +2,13 @@ package pt.isec.pa.javalife.model.command;
 
 import pt.isec.pa.javalife.model.command.commands.ICommand;
 
+import java.io.Serializable;
 import java.util.Stack;
 
 /*ao fazer esta implementação considerei que os comandos retornam true se forem undoable, se não gostarem dá sempre para
 fazer uma interface "IUndoable" e dizer que certos comandos a implementam, e depois perguntar se implementa undoable
 está da primeira maneira pq foi como fizemos na aula*/
-public class CommandManager{
+public class CommandManager implements Serializable {
     private Stack<ICommand> undos;
     private Stack<ICommand> redos;
 

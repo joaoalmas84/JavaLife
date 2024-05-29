@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -30,7 +31,8 @@ public class MenuRemoveElem extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
+        setProp();
         cb.setOnAction(e -> {
             tipo = cb.getValue();
             System.out.println(tipo);
@@ -57,6 +59,10 @@ public class MenuRemoveElem extends BorderPane {
             }
             //System.out.println(id + " : id");
         });
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
     }
 
     private void createViews() {

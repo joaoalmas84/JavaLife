@@ -6,13 +6,14 @@ import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.Set;
 
-public class Simulacao {
+public class Simulacao implements Serializable {
 
     protected Ecossistema ecossistema;
     protected PropertyChangeSupport pcs;
-    protected IGameEngine gameEngine;
+    protected transient IGameEngine gameEngine;
     protected SimulacaoState state;
     // valores para a simulacao
     protected long tempoDeInstante;
@@ -27,14 +28,15 @@ public class Simulacao {
         gameEngine.registerClient(ecossistema);
         this.pcs = new PropertyChangeSupport(this);
         state = SimulacaoState.NULL;
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
-        ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
+        //ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
+        //ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
 
         ecossistema.addElemento(new Flora(15, 15, 30, 30));
-        ecossistema.addElemento(new Flora(15, 200, 30, 230));
-        ecossistema.addElemento(new Flora(15, 115, 30, 130));
-        ecossistema.addElemento(new Flora(215, 15, 230, 30));
-        ecossistema.addElemento(new Flora(215, 215, 230, 230));
+        //ecossistema.addElemento(new Flora(15, 200, 30, 230));
+        //ecossistema.addElemento(new Flora(15, 115, 30, 130));
+        //ecossistema.addElemento(new Flora(215, 15, 230, 30));
+        //ecossistema.addElemento(new Flora(215, 215, 230, 230));
+
     }
 
 
@@ -65,6 +67,11 @@ public class Simulacao {
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+
+    public void setGameEngine() {
+        this.gameEngine = new GameEngine();
+        gameEngine.registerClient(ecossistema);
+    }
 
     public Set<IElemento> getElementos() {
         return ecossistema.getElementos();

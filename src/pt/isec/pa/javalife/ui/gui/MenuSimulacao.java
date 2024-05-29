@@ -6,15 +6,18 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.FileChooser;
 import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.model.data.SimulacaoState;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
+import java.io.File;
+
 public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
-    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnLoad;
+    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -29,13 +32,13 @@ public class MenuSimulacao extends MenuBar {
 
         mnUndo = new MenuItem("_Undo");
         mnRedo = new MenuItem("_Redo");
-        mnLoad = new MenuItem("_Load");
         mnSave = new MenuItem("_Save");
         mnAddElemento = new MenuItem("_Add Elemento");
         mnPause = new MenuItem("_Pause");
         mnRemove = new MenuItem("_Remove");
         mnExit = new MenuItem("_Exit");
         mnIntervalo = new MenuItem("_Intervalo");
+        mnOpen = new MenuItem("_Open");
 
         mnUndo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         mnRedo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
@@ -47,7 +50,7 @@ public class MenuSimulacao extends MenuBar {
 
 
         mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnIntervalo);
-        mnFile.getItems().addAll(mnUndo, mnRedo,mnLoad,mnSave,mnExit);
+        mnFile.getItems().addAll(mnUndo, mnRedo,mnOpen,mnSave,mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
 
@@ -55,7 +58,43 @@ public class MenuSimulacao extends MenuBar {
 
     private void registerHandlers() {
         simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, evt -> Platform.runLater(this::update));
+
+        mnSave.setOnAction(e -> {
+            if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
+                simulacaoManager.pause();
+            }
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("File save...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Drawing (*.dat)", "*.dat"),
+                    new FileChooser.ExtensionFilter("All", "*.*")
+            );
+            File hFile = fileChooser.showSaveDialog(this.getScene().getWindow());
+            if (hFile != null) {
+                simulacaoManager.save(hFile);
+            }
+        });
+
+        mnOpen.setOnAction(e -> {
+            if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
+                simulacaoManager.pause();
+            }
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("File open...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Drawing (*.dat)", "*.dat"),
+                    new FileChooser.ExtensionFilter("All", "*.*")
+            );
+            File hFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+            if (hFile != null) {
+                simulacaoManager.load(hFile);
+            }
+        });
+
 
         mnAddElemento.setOnAction(e -> {
             simulacaoManager.setState(SimulacaoState.ADD);
@@ -85,6 +124,10 @@ public class MenuSimulacao extends MenuBar {
         });
 
         mnExit.setOnAction(e -> Platform.exit());
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
     }
 
     private void update() {

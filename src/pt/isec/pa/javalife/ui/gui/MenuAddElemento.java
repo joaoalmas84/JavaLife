@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -25,6 +26,7 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void update() {
+        System.out.println("teste e ´oiiii");
         if(!(simulacaoManager.getState() == SimulacaoState.ADD)){
             this.setVisible(false);
             return ;
@@ -33,8 +35,8 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void registerHandlers() {
-
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
+        setProp();
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS,  evt -> Platform.runLater(this::setProp));
 
         cb.setOnAction(e -> tipo = cb.getValue());
 
@@ -89,6 +91,11 @@ public class MenuAddElemento extends BorderPane {
             System.out.println(yF + " YF");
         });
 
+    }
+
+    private void setProp() {
+        System.out.println("teste e ´ss");
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO,  evt -> Platform.runLater(this::update));
     }
 
     private void createViews() {

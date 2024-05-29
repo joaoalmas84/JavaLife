@@ -1,6 +1,8 @@
 package pt.isec.pa.javalife.model.data;
 
-public enum Elemento { INANIMADO, FLORA, FAUNA;
+import java.io.Serializable;
+
+public enum Elemento implements Serializable { INANIMADO, FLORA, FAUNA;
     public void makeElemento(double xI,double yI,double xF,double yF, SimulacaoManager SM){
         switch (this){
             case INANIMADO -> SM.adicionarInanimado(xI,yI,xF,yF);

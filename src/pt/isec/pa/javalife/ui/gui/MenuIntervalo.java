@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,7 +30,8 @@ public class MenuIntervalo extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
+        setProp();
 
         btnSetIntervalo.setOnAction(event ->{
             int intervalo;
@@ -61,6 +63,10 @@ public class MenuIntervalo extends BorderPane {
             simulacaoManager.setState(SimulacaoState.NULL);
         });
 
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
     }
 
     private void createViews() {

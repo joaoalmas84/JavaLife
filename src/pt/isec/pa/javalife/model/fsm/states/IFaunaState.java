@@ -2,7 +2,9 @@ package pt.isec.pa.javalife.model.fsm.states;
 
 import pt.isec.pa.javalife.model.fsm.FaunaState;
 
-public interface IFaunaState {
+import java.io.Serializable;
+
+public interface IFaunaState extends Serializable {
     void act();
 
     FaunaState getState();

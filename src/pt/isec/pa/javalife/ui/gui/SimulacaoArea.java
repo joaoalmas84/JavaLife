@@ -10,6 +10,7 @@ import javafx.scene.paint.ImagePattern;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
+import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,9 +32,8 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
-        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, (evt) -> Platform.runLater(this::setProp));
+        setProp();
         //this.setOnMousePressed(evt -> update());
         this.setOnMouseMoved(evt -> {
             x = evt.getX();
@@ -59,6 +59,12 @@ public class SimulacaoArea extends Canvas {
                 return ;
             }
         }
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
     }
 
     private void update() {
@@ -167,7 +173,7 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void drawRectangleFAUNA(GraphicsContext gc, double x, double y, double width, double height, Color color, String Imagns) {
-        Image imageView = ImageManager.getImage(Imagns);
+        Image imageView = MultitonImage.getModel(Imagns);
         if(imageView == null) return;
         gc.setFill(new ImagePattern(imageView));
         gc.setStroke(color.darker());

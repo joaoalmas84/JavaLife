@@ -1,11 +1,8 @@
 package pt.isec.pa.javalife.model.data;
 
-public record Area(double xi, double yi, double xf, double yf) {
+import java.io.Serializable;
 
-    // Construtor
-    public Area clone() throws CloneNotSupportedException { //isto vai sempre atirar isto pq a Area não é clonable mas ok
-        return (Area) super.clone();
-    }
+public record Area(double xi, double yi, double xf, double yf) implements Serializable {
 
     public boolean isOverlapping(Area other) {
         // Verifica se uma área está totalmente à direita, à esquerda, acima ou abaixo da outra

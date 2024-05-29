@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.ui.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -75,8 +76,8 @@ public class MainMenuUI extends BorderPane {
     }
 
     private void registerHandlers() {
-
-        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
+        setProp();
+        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
 
         btnFullScreen.setOnAction(event -> {
             Stage stage = (Stage) btnFullScreen.getScene().getWindow();
@@ -115,6 +116,10 @@ public class MainMenuUI extends BorderPane {
         btnExit.setOnAction(event -> ((Stage)getScene().getWindow()).close());
 
 
+    }
+
+    private void setProp() {
+        simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> update());
     }
 
     private void update(){

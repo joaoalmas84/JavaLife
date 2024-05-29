@@ -1,6 +1,8 @@
 package pt.isec.pa.javalife.model.data;
 
-public class FaunaData {
+import java.io.Serializable;
+
+public class FaunaData implements Serializable {
     private static int nextId = 0;
     private static double danoPorMoviemnto = 0.5;
 
@@ -42,6 +44,8 @@ public class FaunaData {
     // + Getters +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
+    public static int getNextId() { return nextId; }
+
     public int getMatingCounter() { return matingCounter; }
 
     public int getId() { return id; }
@@ -64,6 +68,8 @@ public class FaunaData {
     // +----------------------------------------------------------------------------------------------------------------
     // + Setters +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+
+    public static void setNextId(int nextId) { FaunaData.nextId = nextId; }
 
     public void setEcossistema(Ecossistema ecossistema) {
         this.ecossistema = ecossistema;
