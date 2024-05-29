@@ -6,7 +6,7 @@ import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.NotSerializableException;
+import java.io.*;
 import java.util.Set;
 
 public class SimulacaoManager {

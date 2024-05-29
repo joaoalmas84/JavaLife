@@ -7,7 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import pt.isec.pa.javalife.model.data.*;
+
+
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
