@@ -3,7 +3,6 @@ package pt.isec.pa.javalife.model.data;
 import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 import pt.isec.pa.javalife.model.gameengine.IGameEngineEvolve;
 
-import javax.lang.model.util.Elements;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -44,39 +43,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setter +---------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
-
-    public boolean isEventoHerbicida() {
-        return eventoHerbicida;
-    }
-
-    public boolean isEvForca(){
-        return evForca;
-    }
-
-    public void setEventoHerbicida(boolean herbicida) {
-        this.eventoHerbicida = herbicida;
-    }
-
-    public void setEventoForca(boolean evForca_) {
-        evForca=evForca_;
-    }
-
-    public void setEventoSol() {
-        this.solTicks=10;
-    }
-
-    public void tickSol(){
-        solTicks--;
-    }
-
-    public boolean isEventoSol(){
-        return(solTicks>0);
-    }
-
-
-    public double getDanoFauna() {
-        return danoFauna;
-    }
 
     public int getTempo() {
         return tempo;
@@ -210,7 +176,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             case Elemento.FAUNA -> removeFauna(id);
             case Elemento.FLORA -> removeFlora(id);
             case Elemento.INANIMADO -> removeInanimado(id);
-            default -> null;
         };
     }
 
@@ -220,7 +185,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             case Elemento.FAUNA -> removeFauna(elemento.getId());
             case Elemento.FLORA -> removeFlora(elemento.getId());
             case Elemento.INANIMADO -> removeInanimado(elemento.getId());
-            default -> null;
         };
     }
 
@@ -228,13 +192,28 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // + Evento +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public boolean addEventoHerbicida(int[] array) {
-        for(IElemento f : elementos){
-            if(f instanceof Flora && ArrayContains(array, f.getId())){
-                ((Flora)f).addEevnto(new EventoHerbicida(f));
-            }
-        }
-        return true;
+    public boolean isEventoHerbicida() {
+        return eventoHerbicida;
+    }
+
+    public boolean isEvForca(){
+        return evForca;
+    }
+
+    public void setEventoHerbicida(boolean herbicida) {
+        this.eventoHerbicida = herbicida;
+    }
+
+    public void setEventoForca(boolean evForca_) {
+        evForca=evForca_;
+    }
+
+    public void setEventoSol() {
+        this.solTicks=10;
+    }
+
+    public boolean isEventoSol(){
+        return(solTicks>0);
     }
 
     // +----------------------------------------------------------------------------------------------------------------

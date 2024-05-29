@@ -1,14 +1,10 @@
 package pt.isec.pa.javalife.model.data;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
 public final class Flora extends ElementoBase implements IElementoComForca, IElementoComImagem{
     private static int nextId = 0;
-
-    private ArrayList<IEvento> eventos;
-
     private final int id;
     private int NumReproducoes;
     private double forca;
@@ -86,10 +82,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     private void semEnergia() {
         isDead = forca <= 0;
-    }
-
-    public void addEevnto(IEvento evento) {
-        eventos.add(evento);
     }
 
     public void evolve(Set<IElemento> elementos){

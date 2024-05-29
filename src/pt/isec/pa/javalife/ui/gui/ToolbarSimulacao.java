@@ -1,11 +1,10 @@
 package pt.isec.pa.javalife.ui.gui;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ToolBar;
+import javafx.application.Platform;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
 
 public class ToolbarSimulacao extends ToolBar {
@@ -13,7 +12,7 @@ public class ToolbarSimulacao extends ToolBar {
     private static final int BTN_SIZE = 40;
     private static final int BTN_IMG_SIZE = BTN_SIZE -10;
 
-    Button btnEventoSol;
+    Button btnEventoSol,btnUndo,btnRedo;
 
     ToggleButton btnEventoHerbicida;
     ToggleButton btnEventoForca;
@@ -54,10 +53,18 @@ public class ToolbarSimulacao extends ToolBar {
         btnEventoHerbicida.setToggleGroup(tgEventos);
         btnEventoForca.setToggleGroup(tgEventos);
 
-        getItems().addAll(btnEventoSol,btnEventoHerbicida,btnEventoForca);
+        btnUndo= new Button("Undo");
+        btnRedo=new Button("Redo");
+
+        getItems().addAll(btnUndo,btnRedo,new Separator(),btnEventoSol,btnEventoHerbicida,btnEventoForca);
     }
 
     private void registerHandlers() {
+        manager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
+        manager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, evt -> Platform.runLater(this::update));
+
+        btnUndo.setOnAction(evt->manager.undo());
+        btnRedo.setOnAction(evt->manager.redo());
         btnEventoSol.setOnAction(evt ->{
             manager.setEventoSol();
         });
@@ -80,5 +87,7 @@ public class ToolbarSimulacao extends ToolBar {
     }
 
     private void update() {
+        btnUndo.setDisable(!manager.hasUndo());
+        btnRedo.setDisable(!manager.hasRedo());
     }
 }

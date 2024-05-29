@@ -14,7 +14,7 @@ import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
-    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo;
+    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnLoad;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -29,6 +29,7 @@ public class MenuSimulacao extends MenuBar {
 
         mnUndo = new MenuItem("_Undo");
         mnRedo = new MenuItem("_Redo");
+        mnLoad = new MenuItem("_Load");
         mnSave = new MenuItem("_Save");
         mnAddElemento = new MenuItem("_Add Elemento");
         mnPause = new MenuItem("_Pause");
@@ -44,7 +45,9 @@ public class MenuSimulacao extends MenuBar {
         mnExit.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
         mnIntervalo.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 
-        mnEdit.getItems().addAll(mnUndo, mnRedo, mnAddElemento, mnRemove, mnPause, mnIntervalo, mnExit);
+
+        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnIntervalo);
+        mnFile.getItems().addAll(mnUndo, mnRedo,mnLoad,mnSave,mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
 
@@ -88,22 +91,19 @@ public class MenuSimulacao extends MenuBar {
         switch (simulacaoManager.getCurrentState_Of_GameEngine())
         {
             case GameEngineState.PAUSED:
-                mnPause.setVisible(true);
-                mnAddElemento.setVisible(true);
+                mnEdit.setVisible(true);
                 mnPause.setText("_Resume");
                 mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
                 mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;
             case GameEngineState.RUNNING:
-                mnPause.setVisible(true);
-                mnAddElemento.setVisible(true);
+                mnEdit.setVisible(true);
                 mnPause.setText("_Pause");
                 mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
                 mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;
             case  GameEngineState.READY:
-                mnPause.setVisible(false);
-                mnAddElemento.setVisible(false);
+                mnEdit.setVisible(false);
                 mnUndo.disableProperty().setValue(!simulacaoManager.hasUndo());
                 mnRedo.disableProperty().setValue(!simulacaoManager.hasRedo());
                 break;

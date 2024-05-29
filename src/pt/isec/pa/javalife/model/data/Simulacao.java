@@ -85,7 +85,7 @@ public class Simulacao {
     }
 
     public double getDanoFauna() {
-        return ecossistema.danoFauna;
+        return Ecossistema.danoFauna;
     }
 
     public int getTempo() {
@@ -152,10 +152,6 @@ public class Simulacao {
 
     public void setEventoSol() {
         ecossistema.setEventoSol();
-    }
-
-    public boolean isEventoSol(){
-        return ecossistema.isEventoSol();
     }
 
 
