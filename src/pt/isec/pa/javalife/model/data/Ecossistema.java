@@ -13,7 +13,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Ecossistema implements Serializable, IGameEngineEvolve {
 
-    static double danoFauna;
+    private boolean eventoHerbicida;
+    private boolean evForca;
+    private int solTicks;
+
+    static double danoFauna = 1;
+
+    static double forcaInjetar = 50;
+
+    static double regenFlora=0.5;
 
     private Set<IElemento> elementos;
     PropertyChangeSupport pcs;
@@ -29,7 +37,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         pcs = new PropertyChangeSupport(this);
         this.largura = 800.0;
         this.altura = 450.0;
-        danoFauna = 1.0;
         tempo = 0;
         criarCerca();
     }
@@ -37,6 +44,35 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setter +---------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+
+    public boolean isEventoHerbicida() {
+        return eventoHerbicida;
+    }
+
+    public boolean isEvForca(){
+        return evForca;
+    }
+
+    public void setEventoHerbicida(boolean herbicida) {
+        this.eventoHerbicida = herbicida;
+    }
+
+    public void setEventoForca(boolean evForca_) {
+        evForca=evForca_;
+    }
+
+    public void setEventoSol() {
+        this.solTicks=10;
+    }
+
+    public void tickSol(){
+        solTicks--;
+    }
+
+    public boolean isEventoSol(){
+        return(solTicks>0);
+    }
+
 
     public double getDanoFauna() {
         return danoFauna;
@@ -281,6 +317,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             }
 
         }
+        solTicks--;
         pcs.firePropertyChange(PROP_UPDATE_MAP, null, null);
     }
 
@@ -292,4 +329,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         return sb.toString();
     }
 
+    public void evAddForcaFauna(Fauna elemento) {
+        elemento.addForca(forcaInjetar);
+    }
 }

@@ -6,7 +6,6 @@ import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.NotSerializableException;
 import java.util.Set;
 
 public class SimulacaoManager {
@@ -282,12 +281,24 @@ public class SimulacaoManager {
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
 
     public boolean isHerbicida() {
-        return simulacao.isHerbicida();
+        return simulacao.isEventoHerbicida();
+    }
+    public void setEventoHerbicida(boolean herbicida) {
+        simulacao.setEventoHerbicida(herbicida);
     }
 
-    public void setHerbicida(boolean herbicida) {
-        simulacao.setHerbicida(herbicida);
+    public boolean isEventoForca(){
+        return simulacao.isEvForca();
     }
+
+    public void setEventoForca(boolean evForca){
+        simulacao.setEventoForca(evForca);
+    }
+
+    public void setEventoSol() {
+        simulacao.setEventoSol();
+    }
+
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Adds & Removes +-----------------------------------------------------------------------------------------------
@@ -301,4 +312,7 @@ public class SimulacaoManager {
         return simulacao.removeElemento(id, tipo);
     }
 
+    public void evAddForca(Fauna elemento){
+        simulacao.evAddForcaFauna(elemento);
+    }
 }

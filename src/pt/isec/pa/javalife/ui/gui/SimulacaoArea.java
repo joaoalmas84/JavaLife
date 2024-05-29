@@ -3,8 +3,8 @@ package pt.isec.pa.javalife.ui.gui;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import pt.isec.pa.javalife.model.data.*;
@@ -40,19 +40,25 @@ public class SimulacaoArea extends Canvas {
             y = evt.getY();
             update();
         });
-        this.setOnMouseClicked(evt -> {
-            double x_ = evt.getX()/largura;
-            double y_ = evt.getY()/altura;
-            for (IElemento elem : simulacaoManager.getElementos()) {
-                if(elem.getArea().isPointOverlapping(x_,y_)){
-                    System.out.println(elem);
-                    if(simulacaoManager.isHerbicida() && elem.getType()==Elemento.FLORA){
-                        simulacaoManager.removeElemento(elem.getId(),elem.getType());
-                    }
-                    return ;
+        this.setOnMouseClicked(this::handleMouseClicked);
+    }
+
+    private void handleMouseClicked(MouseEvent evt){
+        double x_ = evt.getX()/largura;
+        double y_ = evt.getY()/altura;
+        for (IElemento elem : simulacaoManager.getElementos()) {
+            if(elem.getArea().isPointOverlapping(x_,y_)){
+                System.out.println(elem);
+                if(simulacaoManager.isHerbicida() && elem.getType()==Elemento.FLORA){
+                    simulacaoManager.removeElemento(elem.getId(),elem.getType());
                 }
+                else if(simulacaoManager.isEventoForca() && elem.getType()==Elemento.FAUNA){
+                    simulacaoManager.evAddForca((Fauna)elem);
+                }
+                update();
+                return ;
             }
-        });
+        }
     }
 
     private void update() {

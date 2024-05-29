@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class Simulacao {
 
-    private boolean herbicida;
     protected Ecossistema ecossistema;
     protected PropertyChangeSupport pcs;
     protected IGameEngine gameEngine;
@@ -135,13 +134,30 @@ public class Simulacao {
         }
     }
 
-    public boolean isHerbicida() {
-        return herbicida;
+    public boolean isEventoHerbicida() {
+        return ecossistema.isEventoHerbicida();
     }
 
-    public void setHerbicida(boolean herbicida) {
-        this.herbicida = herbicida;
+    public boolean isEvForca(){
+        return ecossistema.isEvForca();
     }
+
+    public void setEventoHerbicida(boolean herbicida) {
+        ecossistema.setEventoHerbicida(herbicida);
+    }
+
+    public void setEventoForca(boolean evForca) {
+        ecossistema.setEventoForca(evForca);
+    }
+
+    public void setEventoSol() {
+        ecossistema.setEventoSol();
+    }
+
+    public boolean isEventoSol(){
+        return ecossistema.isEventoSol();
+    }
+
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Opcoes +-------------------------------------------------------------------------------------------------------
@@ -165,6 +181,10 @@ public class Simulacao {
     public void resume() {
         gameEngine.resume();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
+    }
+
+    public void evAddForcaFauna(Fauna elemento) {
+        ecossistema.evAddForcaFauna(elemento);
     }
 
 

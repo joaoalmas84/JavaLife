@@ -94,7 +94,11 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
 
     public void evolve(Set<IElemento> elementos){
         if(!isDead){
-            addForca(0.5);
+            if(ecossistema.isEventoSol()){
+                addForca(Ecossistema.regenFlora*2);
+            }
+            else
+                addForca(Ecossistema.regenFlora);
             reproduz(elementos);
             semEnergia();
         }

@@ -58,12 +58,23 @@ public class ToolbarSimulacao extends ToolBar {
     }
 
     private void registerHandlers() {
+        btnEventoSol.setOnAction(evt ->{
+            manager.setEventoSol();
+        });
         btnEventoHerbicida.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue){
-                manager.setHerbicida(true);
+                manager.setEventoHerbicida(true);
             }
             else
-                manager.setHerbicida(false);
+                manager.setEventoHerbicida(false);
+        });
+
+        btnEventoForca.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue){
+                manager.setEventoForca(true);
+            }
+            else
+                manager.setEventoForca(false);
         });
 
     }
