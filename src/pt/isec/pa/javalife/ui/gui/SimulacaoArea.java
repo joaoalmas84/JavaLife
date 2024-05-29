@@ -10,6 +10,7 @@ import javafx.scene.paint.ImagePattern;
 import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
+import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -166,7 +167,7 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void drawRectangleFAUNA(GraphicsContext gc, double x, double y, double width, double height, Color color, String Imagns) {
-        Image imageView = ImageManager.getImage(Imagns);
+        Image imageView = MultitonImage.getModel(Imagns);
         if(imageView == null) return;
         gc.setFill(new ImagePattern(imageView));
         gc.setStroke(color.darker());
