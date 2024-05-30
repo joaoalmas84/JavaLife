@@ -372,4 +372,84 @@ public class SimulacaoManager {
             return false;
         }
     }
+
+
+    public boolean saveElementos(File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            // Adicionando cabeçalho ao CSV
+            writer.append("Tipo;Xi;Yi;Xf;Yf;Força\n");
+
+            for (IElemento e : simulacao.getElementos()) {
+                if(e.getType() == Elemento.FLORA || e.getType() == Elemento.FAUNA) {
+                    Area area = e.getArea();
+                    String tipo = e.getType().toString();
+                    String linha = String.format("%s;%s;%s;%s;%s;%s",
+                            tipo, area.xi(), area.yi(), area.xf(), area.yf(), ((IElementoComForca)e).getForca());
+                    writer.append(linha).append("\n");
+                }else if(e.getType() == Elemento.INANIMADO){
+                    if(((Inanimado)e).podeRemove()){
+                        Area area = e.getArea();
+                        String tipo = e.getType().toString();
+                        String linha = String.format("%s;%s;%s;%s;%s",
+                                tipo, area.xi(), area.yi(), area.xf(), area.yf());
+                        writer.append(linha).append("\n");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao escrever no arquivo " + file);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public void loadElementosFromCSV(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            reader.readLine(); // Ignora o cabeçalho
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+
+                String tipo = parts[0];
+                double xi = Double.parseDouble(parts[1]);
+                double yi = Double.parseDouble(parts[2]);
+                double xf = Double.parseDouble(parts[3]);
+                double yf = Double.parseDouble(parts[4]);
+
+                switch (tipo) {
+                    case "FLORA":
+                        if (parts.length >= 6) {
+                            double forca = Double.parseDouble(parts[5]);
+                            Flora flora = new Flora(xi, yi, xf, yf);
+                            flora.addForca(forca - flora.getForca());
+                            commandManager.invokeCommand(new AdicionaElemento(this, flora));
+                        } else {
+                            System.err.println("Força não fornecida para o tipo FLORA.");
+                        }
+                        break;
+                    case "FAUNA":
+                        if (parts.length >= 6) {
+                            double forca = Double.parseDouble(parts[5]);
+                            Fauna fauna = new Fauna(xi, yi, xf, yf, simulacao.getEcossistema());
+                            fauna.addForca(forca - fauna.getForca());
+                            commandManager.invokeCommand(new AdicionaElemento(this, fauna));
+                        } else {
+                            System.err.println("Força não fornecida para o tipo FAUNA.");
+                        }
+                        break;
+                    case "INANIMADO":
+                        commandManager.invokeCommand(new AdicionaElemento(this, new Inanimado(xi, yi, xf, yf, true)));
+                        break;
+                    default:
+                        System.err.println("Tipo desconhecido: " + tipo);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao ler o arquivo " + file);
+        }
+    }
+
+
 }

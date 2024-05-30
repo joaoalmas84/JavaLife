@@ -17,7 +17,7 @@ import java.io.File;
 public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
-    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen;
+    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen, mnSaveElemento, mnLoadElemento;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -39,6 +39,8 @@ public class MenuSimulacao extends MenuBar {
         mnExit = new MenuItem("_Exit");
         mnIntervalo = new MenuItem("_Intervalo");
         mnOpen = new MenuItem("_Open");
+        mnSaveElemento = new MenuItem("_Save Elemento");
+        mnLoadElemento = new MenuItem("_Load Elemento");
 
         mnUndo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         mnRedo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
@@ -50,7 +52,7 @@ public class MenuSimulacao extends MenuBar {
 
 
         mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnIntervalo);
-        mnFile.getItems().addAll(mnUndo, mnRedo,mnOpen,mnSave,mnExit);
+        mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnSaveElemento, mnLoadElemento, mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
 
@@ -69,12 +71,46 @@ public class MenuSimulacao extends MenuBar {
             fileChooser.setTitle("File save...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.dat)", "*.dat"),
+                    new FileChooser.ExtensionFilter("Nome File (*.dat)", "*.dat"),
                     new FileChooser.ExtensionFilter("All", "*.*")
             );
             File hFile = fileChooser.showSaveDialog(this.getScene().getWindow());
             if (hFile != null) {
                 simulacaoManager.save(hFile);
+            }
+        });
+
+        mnLoadElemento.setOnAction(e -> {
+            if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
+                simulacaoManager.pause();
+            }
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("File open...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Nome File (*.csv)", "*.csv"),
+                    new FileChooser.ExtensionFilter("All", "*.*")
+            );
+            File hFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+            if (hFile != null) {
+                simulacaoManager.loadElementosFromCSV(hFile);
+            }
+        });
+
+        mnSaveElemento.setOnAction(e -> {
+            if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
+                simulacaoManager.pause();
+            }
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("File save...");
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Nome File (*.csv)", "*.csv"),
+                    new FileChooser.ExtensionFilter("All", "*.*")
+            );
+            File hFile = fileChooser.showSaveDialog(this.getScene().getWindow());
+            if (hFile != null) {
+                simulacaoManager.saveElementos(hFile);
             }
         });
 
@@ -86,7 +122,7 @@ public class MenuSimulacao extends MenuBar {
             fileChooser.setTitle("File open...");
             fileChooser.setInitialDirectory(new File("."));
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Drawing (*.dat)", "*.dat"),
+                    new FileChooser.ExtensionFilter("Nome File (*.dat)", "*.dat"),
                     new FileChooser.ExtensionFilter("All", "*.*")
             );
             File hFile = fileChooser.showOpenDialog(this.getScene().getWindow());

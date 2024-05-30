@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
 
-import pt.isec.pa.javalife.model.data.SimulacaoManager;
+import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
@@ -51,7 +51,7 @@ public class SimulacaoArea extends Canvas {
         for (IElemento elem : simulacaoManager.getElementos()) {
             if(elem.getArea().isPointOverlapping(x_,y_)){
                 System.out.println(elem);
-                if(simulacaoManager.isHerbicida() && elem.getType()==Elemento.FLORA){
+                if(simulacaoManager.isHerbicida() && elem.getType()== Elemento.FLORA){
                     simulacaoManager.removeElemento(elem.getId(),elem.getType());
                 }
                 else if(simulacaoManager.isEventoForca() && elem.getType()==Elemento.FAUNA){
