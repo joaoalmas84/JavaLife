@@ -13,7 +13,6 @@ public class Simulacao implements Serializable {
 
     protected Ecossistema ecossistema;
     protected PropertyChangeSupport pcs;
-    protected transient IGameEngine gameEngine;
     protected SimulacaoState state;
     // valores para a simulacao
     protected long tempoDeInstante;
@@ -24,8 +23,6 @@ public class Simulacao implements Serializable {
     public Simulacao() {
         tempoDeInstante = 10;
         this.ecossistema = new Ecossistema();
-        this.gameEngine = new GameEngine();
-        gameEngine.registerClient(ecossistema);
         this.pcs = new PropertyChangeSupport(this);
         state = SimulacaoState.NULL;
         //ecossistema.addElemento(new Fauna(130, 130, 160, 160, ecossistema));
@@ -68,11 +65,6 @@ public class Simulacao implements Serializable {
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public void setGameEngine() {
-        this.gameEngine = new GameEngine();
-        gameEngine.registerClient(ecossistema);
-    }
-
     public Set<IElemento> getElementos() {
         return ecossistema.getElementos();
     }
@@ -84,8 +76,6 @@ public class Simulacao implements Serializable {
     }
 
     public Ecossistema getEcossistema() { return ecossistema; }
-
-    public GameEngineState getCurrentState_Of_GameEngine() { return gameEngine.getCurrentState(); }
 
     public SimulacaoState getState() {
         return state;
@@ -113,32 +103,20 @@ public class Simulacao implements Serializable {
     }
 
     public boolean setAltura(double altura) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
-            ecossistema.setAltura(altura);
-            return true;
-        }
-        return false;
+        ecossistema.setAltura(altura);
+        return true;
     }
 
     public boolean setLargura(double largura) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY){
-            ecossistema.setLargura(largura);
-            return true;
-        }
-        return false;
+        ecossistema.setLargura(largura);
+        return true;
     }
 
-    public boolean setTempo(long tempo) {
-        if (gameEngine.getCurrentState() == GameEngineState.READY) {
-            return false ;
-        }
 
-        if (tempo >= 10) {
-            gameEngine.setInterval(tempo);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean setTempo(long tempo) {
+        tempoDeInstante = tempo;
+        return true;
+
     }
 
     public boolean isEventoHerbicida() {
@@ -167,24 +145,20 @@ public class Simulacao implements Serializable {
     // +----------------------------------------------------------------------------------------------------------------
 
     public void start(){
-        gameEngine.start(tempoDeInstante);
         ecossistema.criarCerca();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
     public void stop(){
-        gameEngine.stop();
         ecossistema.clear();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
     public void pause(){
-        gameEngine.pause();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
     public void resume() {
-        gameEngine.resume();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 

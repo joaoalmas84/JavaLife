@@ -18,7 +18,7 @@ public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
     MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen,
-            mnSaveElemento, mnLoadElemento, mnstop;
+            mnSaveElemento, mnLoadElemento, mnstop, mnNewSnapshot, mnGetSnapshot;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -43,6 +43,8 @@ public class MenuSimulacao extends MenuBar {
         mnSaveElemento = new MenuItem("_Save Elemento");
         mnLoadElemento = new MenuItem("_Load Elemento");
         mnstop = new MenuItem("_stop");
+        mnNewSnapshot = new MenuItem("_NewSnapshot");
+        mnGetSnapshot = new MenuItem("_GetSnapshot");
 
         mnUndo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         mnRedo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
@@ -54,7 +56,7 @@ public class MenuSimulacao extends MenuBar {
         mnstop.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
 
-        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo);
+        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo, mnGetSnapshot, mnNewSnapshot);
         mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnLoadElemento, mnSaveElemento, mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
@@ -70,6 +72,13 @@ public class MenuSimulacao extends MenuBar {
             simulacaoManager.stop();
         });
 
+        mnNewSnapshot.setOnAction(e -> {
+            simulacaoManager.newSnapshot();
+        });
+
+        mnGetSnapshot.setOnAction(e -> {
+            simulacaoManager.getSnapshot();
+        });
 
         mnSave.setOnAction(e -> {
             if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
