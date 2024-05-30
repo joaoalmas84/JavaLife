@@ -13,20 +13,47 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.util.Set;
-
+/**
+ * Esta classe representa um exemplo de uso de tags Javadoc.
+ *
+ * @author Guilherme Lopes / João Pinto / João Almas
+ * @version 1.0
+ * @since 2024-05-30
+ */
 public class SimulacaoManager implements Serializable {
+    /**
+     * Gerenciador de comandos da simulação.
+     */
     protected CommandManager commandManager;
+    /**
+     * Simulação associada ao gerenciador.
+     */
     protected Simulacao simulacao;
+    /**
+     * Simulação associada ao gerenciador.
+     */
     protected PropertyChangeSupport pcs;
+    /**
+     * Interface para captura de instantâneos da simulação.
+     */
     protected transient IMemento memento;
+    /**
+     * Motor do jogo responsável pela execução da simulação.
+     */
     protected transient IGameEngine gameEngine;
-
+    /**
+     * Propriedade para atualização de comandos.
+     */
     public static final String PROP_UPDATE_COMMAND = "_update_COMMAND_";
+    /**
+     * Propriedade para adição de listeners.
+     */
     public static final String PROP_ADD_LIS = "UPDATE_ADD_LIS";
-
     /**
      * Construtor da classe SimulacaoManager.
      * Inicializa a simulação, o gerenciador de comandos e o suporte para mudanças de propriedade.
+     * @since 1.0
+     *
      */
     public SimulacaoManager() {
         simulacao = new Simulacao();
@@ -36,31 +63,25 @@ public class SimulacaoManager implements Serializable {
         this.pcs = new PropertyChangeSupport(this);
         //this.pcs = new PropertyChangeSupport(this);
     }
-
-    public void setGameEngine() {
-        this.gameEngine = new GameEngine();
-        gameEngine.registerClient(simulacao.getEcossistema());
-    }
-
     /**
      * Adiciona um listener para mudanças de propriedade.
      *
      * @param property Nome da propriedade.
      * @param listener O listener que será notificado sobre mudanças.
+     * @since 1.0
      */
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(PROP_UPDATE_COMMAND, listener);
         pcs.addPropertyChangeListener(property, listener);
     }
-
     // +----------------------------------------------------------------------------------------------------------------
     // + Commands +-----------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
-
     /**
      * Desfaz a última operação.
      *
      * @return true se a operação de desfazer foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean undo(){
         boolean res = commandManager.undo();
@@ -70,7 +91,8 @@ public class SimulacaoManager implements Serializable {
     /**
      * Refaz a última operação desfeita.
      *
-     * @return true se a operação de refazer foi bem-sucedida, caso contrário false.
+     * @return true se a operação de refazer foi bem-sucedida, caso contrário false.7
+     * @since 1.0
      */
     public boolean redo(){
         boolean res = commandManager.redo();
@@ -81,6 +103,7 @@ public class SimulacaoManager implements Serializable {
      * Verifica se há operações que podem ser desfeitas.
      *
      * @return true se houver operações para desfazer, caso contrário false.
+     * @since 1.0
      */
     public boolean hasUndo(){
         return commandManager.hasUndo();
@@ -89,6 +112,7 @@ public class SimulacaoManager implements Serializable {
      * Verifica se há operações que podem ser refeitas.
      *
      * @return true se houver operações para refazer, caso contrário false.
+     * @since 1.0
      */
     public boolean hasRedo(){
         return commandManager.hasRedo();
@@ -101,6 +125,7 @@ public class SimulacaoManager implements Serializable {
      * @param XF Coordenada X final.
      * @param YF Coordenada Y final.
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean adicionarFauna(double XI, double YI, double XF, double YF){
         return commandManager.invokeCommand(new AdicionaElemento(this, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
@@ -113,6 +138,7 @@ public class SimulacaoManager implements Serializable {
      * @param XF Coordenada X final.
      * @param YF Coordenada Y final.
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean adicionarFlora(double XI, double YI, double XF, double YF){
         return commandManager.invokeCommand(new AdicionaElemento(this, new Flora( XI, YI, XF, YF)));
@@ -125,6 +151,7 @@ public class SimulacaoManager implements Serializable {
      * @param XF Coordenada X final.
      * @param YF Coordenada Y final.
      * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean adicionarInanimado(double XI, double YI, double XF, double YF){
         return commandManager.invokeCommand(new AdicionaElemento(this, new Inanimado(XI, YI, XF, YF, true)));
@@ -135,6 +162,7 @@ public class SimulacaoManager implements Serializable {
      * @param id O ID do elemento.
      * @param tipo O tipo do elemento.
      * @return true se a operação de remover foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean removerElemento(int id, Elemento tipo){
         return commandManager.invokeCommand(new RemoveElemento(this, id, tipo));
@@ -144,6 +172,7 @@ public class SimulacaoManager implements Serializable {
      *
      * @param altura A nova altura.
      * @return true se a operação de mudar altura foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean mudarAltura(double altura){
         return commandManager.invokeCommand(new MudaAltura(this, altura));
@@ -153,6 +182,7 @@ public class SimulacaoManager implements Serializable {
      *
      * @param largura A nova largura.
      * @return true se a operação de mudar largura foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean mudarLargura(double largura){
         return commandManager.invokeCommand(new MudaLargura(this, largura));
@@ -162,6 +192,7 @@ public class SimulacaoManager implements Serializable {
      *
      * @param tempo -> novo tempo
      * @return true se a operação de mudar o tempo foi bem-sucedida, caso contrário false.
+     * @since 1.0
      */
     public boolean mudarTempo(long tempo) {
         return commandManager.invokeCommand(new MudaTempo(this, tempo));
@@ -173,6 +204,7 @@ public class SimulacaoManager implements Serializable {
 
     /**
      * Inicia a simulação.
+     * @since 1.0
      */
     public void start() {
         if(gameEngine.getCurrentState() == GameEngineState.READY) {
@@ -184,6 +216,7 @@ public class SimulacaoManager implements Serializable {
     }
     /**
      * Para a simulação.
+     * @since 1.0
      */
     public void stop() {
         gameEngine.stop();
@@ -192,6 +225,7 @@ public class SimulacaoManager implements Serializable {
     }
     /**
      * Pausa a simulação.
+     * @since 1.0
      */
     public void pause() {
         gameEngine.pause();
@@ -199,6 +233,7 @@ public class SimulacaoManager implements Serializable {
     }
     /**
      * Retoma a simulação.
+     * @since 1.0
      */
     public void resume() {
         gameEngine.resume();
@@ -208,6 +243,7 @@ public class SimulacaoManager implements Serializable {
      * Obtém o estado atual do motor de jogo.
      *
      * @return O estado atual do motor de jogo.
+     * @since 1.0
      */
     public GameEngineState getCurrentState_Of_GameEngine() {
         return gameEngine.getCurrentState();
@@ -222,6 +258,7 @@ public class SimulacaoManager implements Serializable {
      *
      * @param property Nome da propriedade.
      * @param listener O listener que será notificado sobre mudanças.
+     * @since 1.0
      */
     public void addPropertyChangeListenerSimulacao(String property, PropertyChangeListener listener) {
         simulacao.addPropertyChangeListener(property, listener);
@@ -231,20 +268,20 @@ public class SimulacaoManager implements Serializable {
      *
      * @param property Nome da propriedade.
      * @param listener O listener que será notificado sobre mudanças.
+     * @since 1.0
      */
     public void addPropertyChangeListenerEcossistema(String property, PropertyChangeListener listener) {
         simulacao.addPropertyChangeListenerEcossitema(property, listener);
     }
+    // +----------------------------------------------------------------------------------------------------------------
+    // + Getters & Setters +--------------------------------------------------------------------------------------------
+    // +----------------------------------------------------------------------------------------------------------------
     /**
      * Obtém a altura do ecossistema.
      *
      * @return A altura do ecossistema.
+     * @since 1.0
      */
-
-    // +----------------------------------------------------------------------------------------------------------------
-    // + Getters & Setters +--------------------------------------------------------------------------------------------
-    // +----------------------------------------------------------------------------------------------------------------
-
     public double getAlturaEcossistema() {
         return simulacao.getAlturaEcossistema();
     }
@@ -252,6 +289,7 @@ public class SimulacaoManager implements Serializable {
      * Obtém a largura do ecossistema.
      *
      * @return A largura do ecossistema.
+     * @since 1.0
      */
     public double getLarguraEcossistema() {
         return simulacao.getLarguraEcossistema();
@@ -260,30 +298,38 @@ public class SimulacaoManager implements Serializable {
      * Obtém os elementos do ecossistema.
      *
      * @return Um conjunto de elementos do ecossistema.
+     * @since 1.0
      */
     public Set<IElemento> getElementos() {
         return simulacao.getElementos();
     }
-
     /**
      * Obtém o estado atual da simulação.
      *
      * @return O estado atual da simulação.
+     * @since 1.0
      */
     public SimulacaoState getState(){
         return simulacao.getState();
     }
-
-    public int getTempo() {
-        return simulacao.getTempo();
-    }
-
-    public long getTempoDeInstante(){
-        return simulacao.getTempoDeInstante();
-    }
-
+    /**
+     * Obtém o tempo da simulação.
+     * @since 1.0
+     * @return O tempo da simulação.
+     */
+    public int getTempo() {return simulacao.getTempo();}
+    /**
+     * Obtém o intervalo de cada tick da simulação.
+     * @since 1.0
+     * @return O intervalo de cada tick.
+     */
+    public long getTempoDeInstante(){return simulacao.getTempoDeInstante();}
+    /**
+     * Obtém o dano da fauna.
+     * @since 1.0
+     * @return O dano da fauna.
+     */
     public double getDanoFauna() { return simulacao.getDanoFauna(); }
-
     /**
      * Define o estado da simulação.
      *
@@ -292,7 +338,12 @@ public class SimulacaoManager implements Serializable {
     public void setState(SimulacaoState state){
         simulacao.setState(state);
     }
-
+    /**
+     * Define o tempo do intervalo de cada tick da simulação.
+     *
+     * @param tempo tempo de espaco de cada tick.
+     * @return true se a operação de mudar o tempo foi bem-sucedida, caso contrário false.
+     */
     public boolean setTempo(long tempo) {
         if (gameEngine.getCurrentState() == GameEngineState.READY) {
             return false ;
@@ -304,7 +355,12 @@ public class SimulacaoManager implements Serializable {
             return false;
         }
     }
-
+    /**
+     * Define a altura do ecossistema.
+     *
+     * @param altura A nova altura do ecossistema.
+     * @return true se a operação de mudar a altura foi bem-sucedida, caso contrário false.
+     */
     public boolean setAltura(double altura) {
         if(gameEngine.getCurrentState() == GameEngineState.READY){
             return simulacao.setAltura(altura);
@@ -312,31 +368,64 @@ public class SimulacaoManager implements Serializable {
         }
         return false;
     }
-
+    /**
+     * Define a largura do ecossistema.
+     *
+     * @param largura A nova largura do ecossistema.
+     * @return true se a operação de mudar a largura foi bem-sucedida, caso contrário false.
+     */
     public boolean setLargura(double largura) {
         if (gameEngine.getCurrentState() == GameEngineState.READY) {
             return simulacao.setLargura(largura);
         }
         return false;
     }
-
+    /**
+     * Define o dano da fauna.
+     *
+     * @param dano O novo dano da fauna.
+     * @return true se a operação de mudar o dano da fauna foi bem-sucedida, caso contrário false.
+     */
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
-
+    /**
+     * Verifica se o evento de herbicida está ativo.
+     *
+     * @return true se o evento de herbicida está ativo, caso contrário false.
+     */
     public boolean isHerbicida() {
         return simulacao.isEventoHerbicida();
     }
+    /**
+     * Define o evento de herbicida.
+     *
+     * @param herbicida O novo estado do evento de herbicida.
+     *                  @since 1.0
+     */
     public void setEventoHerbicida(boolean herbicida) {
         simulacao.setEventoHerbicida(herbicida);
     }
-
+    /**
+     * Verifica se o evento de força está ativo.
+     *
+     * @return true se o evento de força está ativo, caso contrário false.
+     * @since 1.0
+     */
     public boolean isEventoForca(){
         return simulacao.isEvForca();
     }
-
+    /**
+     * Define o evento de força.
+     *
+     * @param evForca O novo estado do evento de força.
+     *                @since 1.0
+     */
     public void setEventoForca(boolean evForca){
         simulacao.setEventoForca(evForca);
     }
-
+    /**
+     * Define o evento de sol.
+     * @since 1.0
+     */
     public void setEventoSol() {
         simulacao.setEventoSol();
     }
@@ -344,19 +433,43 @@ public class SimulacaoManager implements Serializable {
     // +----------------------------------------------------------------------------------------------------------------
     // + Adds & Removes +-----------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
-
+    /**
+     * Adiciona um elemento à simulação.
+     *
+     * @param elemento O elemento a ser adicionado.
+     * @return true se a operação de adicionar foi bem-sucedida, caso contrário false.
+     * @since 1.0
+     */
     public boolean addElemento(IElemento elemento) {
        return simulacao.addElemento(elemento);
     }
-
+    /**
+     * Remove um elemento da simulação.
+     *
+     * @param id O ID do elemento a ser removido.
+     * @param tipo O tipo do elemento a ser removido.
+     * @return O elemento removido.
+     * @since 1.0
+     */
     public IElemento removeElemento(int id, Elemento tipo) {
         return simulacao.removeElemento(id, tipo);
     }
-
+    /**
+     * nao sei para que isto serve mudar depois
+     *
+     * @param elemento nao sei mudar depois teste
+     * @since 1.0
+     */
     public void evAddForca(Fauna elemento){
         simulacao.evAddForcaFauna(elemento);
     }
-
+    /**
+     * Salve em um arquivo em bits o estado da simulação do CommandManager e de alguns atributos estáticos.
+     * @param file arquivo onde será salvo.
+     * @return false se nao der certo e true se der certo.
+     *
+     * @since 1.0
+     */
     public boolean save(File file) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(simulacao);
@@ -366,20 +479,29 @@ public class SimulacaoManager implements Serializable {
             oos.writeObject(Inanimado.getNextId());
         } catch (NotSerializableException e) {
             System.err.println("Object not serializable: " + e.getMessage());
+            Platform.exit();
             return false;
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + e.getMessage());
+            Platform.exit();
             return false;
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
+            Platform.exit();
             return false;
         } catch (Exception e) {
             System.err.println("Error writing SimulacaoManager: " + e.getMessage());
+            Platform.exit();
             return false;
         }
         return true;
     }
-
+    /**
+     * volta de um arquivo em bits o estado da simulação do CommandManager e de alguns atributos estáticos.
+     * @param file arquivo onde será lido.
+     * @return false se nao der certo e true se der certo.
+     * @since 1.0
+     */
     public Boolean load(File file) {
         if(gameEngine.getCurrentState() == GameEngineState.READY) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
@@ -418,7 +540,12 @@ public class SimulacaoManager implements Serializable {
             return false;
         }
     }
-
+    /**
+     * Salve em um arquivo CSV o tipo, a posição e a força dos elementos da ecossistema.
+     * @param file arquivo onde será salvo.
+     * @return false se nao der certo e true se der certo.
+     * @since 1.0
+     */
     public boolean saveElementos(File file) {
         try (FileWriter writer = new FileWriter(file)) {
             // Adicionando cabeçalho ao CSV
@@ -448,7 +575,11 @@ public class SimulacaoManager implements Serializable {
         }
         return true;
     }
-
+    /**
+     * retorne de um arquivo CSV os elementos que estão escritos, o tipo, a força e a sua posição.
+     * @param file arquivo onde será lido.
+     * @since 1.0
+     */
     public void loadElementosFromCSV(File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -495,13 +626,19 @@ public class SimulacaoManager implements Serializable {
             System.err.println("Erro ao ler o arquivo " + file);
         }
     }
-
+    /**
+     * Cria um novo instantâneo da simulação.
+     * @since 1.0
+     */
     public void newSnapshot() {
         if(gameEngine.getCurrentState() != GameEngineState.READY) {
             memento = new Snapshot(simulacao);
         }
     }
-
+    /**
+     * Obtém o instantâneo da simulação.
+     * @since 1.0
+     */
     public void getSnapshot() {
         if(gameEngine.getCurrentState() != GameEngineState.READY) {
             simulacao = (Simulacao) memento.getSnapshot();
