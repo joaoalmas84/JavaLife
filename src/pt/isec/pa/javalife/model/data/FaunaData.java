@@ -188,7 +188,7 @@ public class FaunaData implements Serializable {
         }
     }
 
-    public Area act_chasingPartner(Area area) {
+    public Area act_chasingPartner(Area area, boolean[] multiplied) {
         Fauna fauna;
         Area newArea;
 
@@ -200,8 +200,12 @@ public class FaunaData implements Serializable {
         if (fauna.getArea().distanceTo(area) < 5) {
             matingCounter++;
             if (matingCounter == 10) {
+                matingCounter=0;
                 multiply(area);
+                multiplied[0]=true;
             }
+            else
+                multiplied[0]=false;
             return area;
         }
         else {

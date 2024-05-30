@@ -55,7 +55,7 @@ public class MenuSimulacao extends MenuBar {
 
 
         mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo);
-        mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnSaveElemento, mnLoadElemento, mnExit);
+        mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnLoadElemento, mnSaveElemento, mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
 

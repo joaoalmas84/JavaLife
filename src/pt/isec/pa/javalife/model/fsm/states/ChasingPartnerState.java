@@ -22,11 +22,12 @@ public class ChasingPartnerState extends FaunaStateAdapter implements IFaunaStat
             changeState(FaunaState.MOVING);
             return;
         } else {
-            Area novaArea =data.act_chasingPartner(context.getArea());
+            boolean[] multiplied=new boolean[1];
+            Area novaArea =data.act_chasingPartner(context.getArea(),multiplied);
             if(!novaArea.isInvalid()){
                 context.setArea(novaArea);
             }
-            if (data.getMatingCounter() == 10) {
+            if (multiplied[0]) {
                 if (data.getForca() < 35) {
 
                     if (data.existemArvores()) {
