@@ -124,6 +124,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public boolean addElemento(IElemento elemento) {
         Area area = elemento.getArea();
 
+        if(!area.isOverlapping(new Area(0,0,largura,altura)))
+            return false;
+
         for (IElemento elem :  elementos){
             if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)) {
                 return false;

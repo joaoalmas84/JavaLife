@@ -13,7 +13,7 @@ public class MenuAddElemento extends BorderPane {
     Button btnGoBack, btnAddElemento;
     ChoiceBox<Elemento> cb;
     TextField tfXI, tfYI, tfXF, tfYF;
-    Label lblTitle, label_xI, label_yI, label_xF, label_yF;
+    Label lblTitle, label_xI, label_yI, label_xF, label_yF, lblErro;
     Elemento tipo;
     Double xI, yI, xF, yF;
 
@@ -28,7 +28,7 @@ public class MenuAddElemento extends BorderPane {
     private void update() {
         if(!(simulacaoManager.getState() == SimulacaoState.ADD)){
             this.setVisible(false);
-            return ;
+            return;
         }
         this.setVisible(true);
     }
@@ -43,11 +43,17 @@ public class MenuAddElemento extends BorderPane {
 
         btnAddElemento.setOnAction(e -> {
             if (tipo == null || new Area(xI, yI, xF, yF).isInvalid()) {
+                lblErro.setText("Por favor introduza uma area válida (xi<xf,yi<yf)");
                 return;
             }
 
-            tipo.makeElemento(xI,yI,xF,yF,simulacaoManager);
-            simulacaoManager.setState(SimulacaoState.NULL);
+            if(tipo.makeElemento(xI,yI,xF,yF,simulacaoManager)){
+                lblErro.setText("");
+                simulacaoManager.setState(SimulacaoState.NULL);
+            }
+            else{
+                lblErro.setText("Por favor introduza uma area dentro do ecossistema");
+            }
         });
 
         tfXI.setOnKeyReleased(e -> {
@@ -106,6 +112,8 @@ public class MenuAddElemento extends BorderPane {
         label_yI = new Label("yI :");
         label_xF = new Label("xF :");
         label_yF = new Label("yF :");
+        lblErro =new Label("");
+        lblErro.setStyle("-fx-text-fill: red");
 
         tfXI = new TextField();
         tfYI = new TextField();
@@ -135,7 +143,7 @@ public class MenuAddElemento extends BorderPane {
         HBox2.setAlignment(Pos.CENTER);
         HBox2.setSpacing(25);
 
-        VBox vBox = new VBox(cb, HBox1, HBox2);
+        VBox vBox = new VBox(cb, HBox1, HBox2,lblErro);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(50);
         setCenter(vBox);
