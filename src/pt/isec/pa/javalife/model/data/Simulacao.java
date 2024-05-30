@@ -174,7 +174,7 @@ public class Simulacao implements Serializable {
 
     public void stop(){
         gameEngine.stop();
-        //ecossistema.clear();
+        ecossistema.clear();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 

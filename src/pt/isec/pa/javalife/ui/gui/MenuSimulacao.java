@@ -17,7 +17,8 @@ import java.io.File;
 public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
-    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen, mnSaveElemento, mnLoadElemento;
+    MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen,
+            mnSaveElemento, mnLoadElemento, mnstop;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -41,6 +42,7 @@ public class MenuSimulacao extends MenuBar {
         mnOpen = new MenuItem("_Open");
         mnSaveElemento = new MenuItem("_Save Elemento");
         mnLoadElemento = new MenuItem("_Load Elemento");
+        mnstop = new MenuItem("_stop");
 
         mnUndo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         mnRedo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
@@ -49,9 +51,10 @@ public class MenuSimulacao extends MenuBar {
         mnRemove.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
         mnExit.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
         mnIntervalo.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
+        mnstop.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
 
-        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnIntervalo);
+        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo);
         mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnSaveElemento, mnLoadElemento, mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
@@ -62,6 +65,11 @@ public class MenuSimulacao extends MenuBar {
         simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, evt -> Platform.runLater(this::update));
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, evt -> Platform.runLater(this::update));
+
+        mnstop.setOnAction(e -> {
+            simulacaoManager.stop();
+        });
+
 
         mnSave.setOnAction(e -> {
             if(simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING){
