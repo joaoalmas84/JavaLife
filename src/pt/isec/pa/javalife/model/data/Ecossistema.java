@@ -37,12 +37,15 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         this.largura = 800.0;
         this.altura = 450.0;
         tempo = 0;
-        criarCerca();
     }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setter +---------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+
+    public void clear(){
+        elementos.clear();
+    }
 
     public int getTempo() {
         return tempo;

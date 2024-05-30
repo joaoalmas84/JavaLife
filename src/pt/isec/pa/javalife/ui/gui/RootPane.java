@@ -37,7 +37,8 @@ public class RootPane extends BorderPane {
                 new MainMenuUI(simulacaoManager),
                 new MenuAddElemento(simulacaoManager),
                 new MenuRemoveElem(simulacaoManager),
-                new MenuIntervalo(simulacaoManager)
+                new MenuIntervalo(simulacaoManager),
+                new MenuDefinicao(simulacaoManager)
         );
         setCenter(stackPane);
     }

@@ -1,5 +1,6 @@
 package pt.isec.pa.javalife.model.data;
 
+import javafx.application.Platform;
 import pt.isec.pa.javalife.model.command.CommandManager;
 import pt.isec.pa.javalife.model.command.commands.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
@@ -9,7 +10,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.util.Set;
 
-public class SimulacaoManager {
+public class SimulacaoManager implements Serializable {
     protected CommandManager commandManager;
     protected Simulacao simulacao;
     protected PropertyChangeSupport pcs;
@@ -334,7 +335,7 @@ public class SimulacaoManager {
             System.err.println("I/O error: " + e.getMessage());
             return false;
         } catch (Exception e) {
-            System.err.println("Error writing drawing: " + e.getMessage());
+            System.err.println("Error writing SimulacaoManager: " + e.getMessage());
             return false;
         }
         return true;
@@ -349,9 +350,11 @@ public class SimulacaoManager {
                 FaunaData.setNextId((int) ois.readObject());
                 Inanimado.setNextId((int) ois.readObject());
             } catch (Exception e) {
-                System.err.println("Error loading drawing");
+                System.err.println("Error loading SimulacaoManager: " + e.getMessage());
+                Platform.exit();
                 return false;
             }
+
             simulacao.setGameEngine();
             pcs.firePropertyChange(PROP_ADD_LIS, null, null);
             return true;
@@ -361,8 +364,12 @@ public class SimulacaoManager {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
                 simulacao = (Simulacao) ois.readObject();
                 commandManager = (CommandManager) ois.readObject();
+                Flora.setNextId((int) ois.readObject());
+                FaunaData.setNextId((int) ois.readObject());
+                Inanimado.setNextId((int) ois.readObject());
             } catch (Exception e) {
-                System.err.println("Error loading drawing");
+                System.err.println("Error loading SimulacaoManager: " + e.getMessage());
+                Platform.exit();
                 return false;
             }
             pcs.firePropertyChange(PROP_ADD_LIS, null, null);
@@ -372,7 +379,6 @@ public class SimulacaoManager {
             return false;
         }
     }
-
 
     public boolean saveElementos(File file) {
         try (FileWriter writer = new FileWriter(file)) {

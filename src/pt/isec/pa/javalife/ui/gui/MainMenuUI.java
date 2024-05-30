@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
+import pt.isec.pa.javalife.model.data.SimulacaoState;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 
@@ -78,6 +79,11 @@ public class MainMenuUI extends BorderPane {
     private void registerHandlers() {
         setProp();
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
+
+        btnSettings.setOnAction(event -> {
+            simulacaoManager.setState(SimulacaoState.Definicaos);
+        });
+
 
         btnFullScreen.setOnAction(event -> {
             Stage stage = (Stage) btnFullScreen.getScene().getWindow();

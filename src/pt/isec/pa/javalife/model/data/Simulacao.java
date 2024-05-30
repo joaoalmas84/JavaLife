@@ -168,11 +168,13 @@ public class Simulacao implements Serializable {
 
     public void start(){
         gameEngine.start(tempoDeInstante);
+        ecossistema.criarCerca();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 
     public void stop(){
         gameEngine.stop();
+        //ecossistema.clear();
         pcs.firePropertyChange(PROP_UPDATE_SIMULACAO, null, null);
     }
 

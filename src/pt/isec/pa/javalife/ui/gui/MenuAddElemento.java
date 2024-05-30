@@ -26,7 +26,6 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void update() {
-        System.out.println("teste e ´oiiii");
         if(!(simulacaoManager.getState() == SimulacaoState.ADD)){
             this.setVisible(false);
             return ;
@@ -94,7 +93,6 @@ public class MenuAddElemento extends BorderPane {
     }
 
     private void setProp() {
-        System.out.println("teste e ´ss");
         simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO,  evt -> Platform.runLater(this::update));
     }
 
