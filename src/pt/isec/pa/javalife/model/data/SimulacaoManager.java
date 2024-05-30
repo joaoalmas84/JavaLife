@@ -497,12 +497,16 @@ public class SimulacaoManager implements Serializable {
     }
 
     public void newSnapshot() {
-        memento = new Snapshot(simulacao);
+        if(gameEngine.getCurrentState() != GameEngineState.READY) {
+            memento = new Snapshot(simulacao);
+        }
     }
 
     public void getSnapshot() {
-        simulacao = (Simulacao) memento.getSnapshot();
-        gameEngine.registerClient(simulacao.getEcossistema());
+        if(gameEngine.getCurrentState() != GameEngineState.READY) {
+            simulacao = (Simulacao) memento.getSnapshot();
+            gameEngine.registerClient(simulacao.getEcossistema());
+        }
     }
 
 }
