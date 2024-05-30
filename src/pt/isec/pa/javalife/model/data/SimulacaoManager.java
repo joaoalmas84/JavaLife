@@ -3,7 +3,11 @@ package pt.isec.pa.javalife.model.data;
 import javafx.application.Platform;
 import pt.isec.pa.javalife.model.command.CommandManager;
 import pt.isec.pa.javalife.model.command.commands.*;
+import pt.isec.pa.javalife.model.gameengine.GameEngine;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
+import pt.isec.pa.javalife.model.gameengine.IGameEngine;
+import pt.isec.pa.javalife.model.memento.IMemento;
+import pt.isec.pa.javalife.model.memento.Snapshot;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,6 +18,8 @@ public class SimulacaoManager implements Serializable {
     protected CommandManager commandManager;
     protected Simulacao simulacao;
     protected PropertyChangeSupport pcs;
+    protected transient IMemento memento;
+    protected transient IGameEngine gameEngine;
 
     public static final String PROP_UPDATE_COMMAND = "_update_COMMAND_";
     public static final String PROP_ADD_LIS = "UPDATE_ADD_LIS";
@@ -25,9 +31,17 @@ public class SimulacaoManager implements Serializable {
     public SimulacaoManager() {
         simulacao = new Simulacao();
         this.commandManager = new CommandManager();
+        this.gameEngine = new GameEngine();
+        gameEngine.registerClient(simulacao.getEcossistema());
         this.pcs = new PropertyChangeSupport(this);
         //this.pcs = new PropertyChangeSupport(this);
     }
+
+    public void setGameEngine() {
+        this.gameEngine = new GameEngine();
+        gameEngine.registerClient(simulacao.getEcossistema());
+    }
+
     /**
      * Adiciona um listener para mudanças de propriedade.
      *
@@ -161,16 +175,18 @@ public class SimulacaoManager implements Serializable {
      * Inicia a simulação.
      */
     public void start() {
-        if(simulacao.getCurrentState_Of_GameEngine() == GameEngineState.READY) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY) {
             commandManager.clear();
         }
 
+        gameEngine.start(simulacao.getTempoDeInstante());
         simulacao.start();
     }
     /**
      * Para a simulação.
      */
     public void stop() {
+        gameEngine.stop();
         simulacao.stop();
         commandManager.clear();
     }
@@ -178,12 +194,14 @@ public class SimulacaoManager implements Serializable {
      * Pausa a simulação.
      */
     public void pause() {
+        gameEngine.pause();
         simulacao.pause();
     }
     /**
      * Retoma a simulação.
      */
     public void resume() {
+        gameEngine.resume();
         simulacao.resume();
     }
     /**
@@ -192,7 +210,7 @@ public class SimulacaoManager implements Serializable {
      * @return O estado atual do motor de jogo.
      */
     public GameEngineState getCurrentState_Of_GameEngine() {
-        return simulacao.getCurrentState_Of_GameEngine();
+        return gameEngine.getCurrentState();
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -275,11 +293,32 @@ public class SimulacaoManager implements Serializable {
         simulacao.setState(state);
     }
 
-    public boolean setTempo(long tempo) { return simulacao.setTempo(tempo); }
+    public boolean setTempo(long tempo) {
+        if (gameEngine.getCurrentState() == GameEngineState.READY) {
+            return false ;
+        }
+        if (tempo >= 10) {
+            gameEngine.setInterval(tempo);
+            return simulacao.setTempo(tempo);
+        } else {
+            return false;
+        }
+    }
 
-    public boolean setAltura(double altura) { return simulacao.setAltura(altura); }
+    public boolean setAltura(double altura) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY){
+            return simulacao.setAltura(altura);
 
-    public boolean setLargura(double largura) {return simulacao.setLargura(largura);}
+        }
+        return false;
+    }
+
+    public boolean setLargura(double largura) {
+        if (gameEngine.getCurrentState() == GameEngineState.READY) {
+            return simulacao.setLargura(largura);
+        }
+        return false;
+    }
 
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
 
@@ -342,9 +381,10 @@ public class SimulacaoManager implements Serializable {
     }
 
     public Boolean load(File file) {
-        if(simulacao.getCurrentState_Of_GameEngine() == GameEngineState.READY) {
+        if(gameEngine.getCurrentState() == GameEngineState.READY) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
                 simulacao = (Simulacao) ois.readObject();
+                gameEngine.registerClient(simulacao.getEcossistema());
                 commandManager = (CommandManager) ois.readObject();
                 Flora.setNextId((int) ois.readObject());
                 FaunaData.setNextId((int) ois.readObject());
@@ -355,14 +395,14 @@ public class SimulacaoManager implements Serializable {
                 return false;
             }
 
-            simulacao.setGameEngine();
             pcs.firePropertyChange(PROP_ADD_LIS, null, null);
             return true;
-        }else if(simulacao.getCurrentState_Of_GameEngine() == GameEngineState.RUNNING || simulacao.getCurrentState_Of_GameEngine() == GameEngineState.PAUSED){
+        }else if(gameEngine.getCurrentState() == GameEngineState.RUNNING || gameEngine.getCurrentState() == GameEngineState.PAUSED){
             simulacao.stop();
-            System.out.println("SimulacaoManager.load" + simulacao.getCurrentState_Of_GameEngine());
+            System.out.println("SimulacaoManager.load" + gameEngine.getCurrentState());
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
                 simulacao = (Simulacao) ois.readObject();
+                gameEngine.registerClient(simulacao.getEcossistema());
                 commandManager = (CommandManager) ois.readObject();
                 Flora.setNextId((int) ois.readObject());
                 FaunaData.setNextId((int) ois.readObject());
@@ -373,7 +413,6 @@ public class SimulacaoManager implements Serializable {
                 return false;
             }
             pcs.firePropertyChange(PROP_ADD_LIS, null, null);
-            simulacao.setGameEngine();
             return true;
         }else{
             return false;
@@ -457,5 +496,13 @@ public class SimulacaoManager implements Serializable {
         }
     }
 
+    public void newSnapshot() {
+        memento = new Snapshot(simulacao);
+    }
+
+    public void getSnapshot() {
+        simulacao = (Simulacao) memento.getSnapshot();
+        gameEngine.registerClient(simulacao.getEcossistema());
+    }
 
 }
