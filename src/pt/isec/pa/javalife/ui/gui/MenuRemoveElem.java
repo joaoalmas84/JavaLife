@@ -31,7 +31,6 @@ public class MenuRemoveElem extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         setProp();
         cb.setOnAction(e -> {
             tipo = cb.getValue();

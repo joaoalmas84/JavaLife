@@ -291,7 +291,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
                     elementos.remove(elem);
                 }
             } else if (elem.getType() == Elemento.FAUNA) {
-                assert elem instanceof Fauna;
                 ((Fauna) elem).act_context();
                 if (((Fauna) elem).isDead()) {
                     elementos.remove(elem);

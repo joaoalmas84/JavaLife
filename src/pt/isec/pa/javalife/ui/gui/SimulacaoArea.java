@@ -34,7 +34,6 @@ public class SimulacaoArea extends Canvas {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, (evt) -> Platform.runLater(this::setProp));
         setProp();
         //this.setOnMousePressed(evt -> update());
         this.setOnMouseMoved(evt -> {

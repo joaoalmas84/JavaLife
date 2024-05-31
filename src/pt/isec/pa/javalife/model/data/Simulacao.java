@@ -175,9 +175,15 @@ public class Simulacao implements Serializable {
         return ecossistema.editInanimado(id, xi, yi);
     }
 
+    public PropertyChangeSupport getPCS() {
+        return pcs;
+    }
 
+    public void setPCS(PropertyChangeSupport pcs) {
+        this.pcs = pcs;
+    }
 
-/*
+    /*
     public boolean adicionaFauna(double xi, double yi, double xf, double yf){
         //return commandManager.invokeCommand(new AdicionaElemento(ecossistema ,new Fauna(xi, yi, xf, yf)));
         return false;

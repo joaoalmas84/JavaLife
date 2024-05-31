@@ -27,7 +27,6 @@ public class MenuDefinicao extends BorderPane {
 
     private void registerHandlers() {
 
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         setProp();
 
         btnsetAltura.setOnAction(e -> {

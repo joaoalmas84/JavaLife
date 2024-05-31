@@ -20,7 +20,6 @@ public class Relogio extends BorderPane {
 
     private void registerHandlers() {
         setProp();
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS ,(evt) -> Platform.runLater(this::setProp));
     }
 
     private void setProp() {

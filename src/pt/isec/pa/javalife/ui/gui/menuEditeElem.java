@@ -24,7 +24,6 @@ public class menuEditeElem  extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         setProp();
         btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 

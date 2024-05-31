@@ -46,10 +46,6 @@ public class SimulacaoManager implements Serializable {
      */
     public static final String PROP_UPDATE_COMMAND = "_update_COMMAND_";
     /**
-     * Propriedade para adição de listeners.
-     */
-    public static final String PROP_ADD_LIS = "UPDATE_ADD_LIS";
-    /**
      * Construtor da classe SimulacaoManager.
      * Inicializa a simulação, o gerenciador de comandos e o suporte para mudanças de propriedade.
      * @since 1.0
@@ -503,27 +499,15 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public Boolean load(File file) {
-        if(gameEngine.getCurrentState() == GameEngineState.READY) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                simulacao = (Simulacao) ois.readObject();
-                gameEngine.registerClient(simulacao.getEcossistema());
-                commandManager = (CommandManager) ois.readObject();
-                Flora.setNextId((int) ois.readObject());
-                FaunaData.setNextId((int) ois.readObject());
-                Inanimado.setNextId((int) ois.readObject());
-            } catch (Exception e) {
-                System.err.println("Error loading SimulacaoManager: " + e.getMessage());
-                Platform.exit();
-                return false;
-            }
-
-            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
-            return true;
-        }else if(gameEngine.getCurrentState() == GameEngineState.RUNNING || gameEngine.getCurrentState() == GameEngineState.PAUSED){
+        if(gameEngine.getCurrentState() == GameEngineState.RUNNING || gameEngine.getCurrentState() == GameEngineState.PAUSED){
             simulacao.stop();
             System.out.println("SimulacaoManager.load" + gameEngine.getCurrentState());
+        }
+        if(gameEngine.getCurrentState()==GameEngineState.READY || gameEngine.getCurrentState()==GameEngineState.RUNNING || gameEngine.getCurrentState()==GameEngineState.PAUSED){
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                Simulacao temp=simulacao;
                 simulacao = (Simulacao) ois.readObject();
+                simulacao.setPCS(temp.getPCS());
                 gameEngine.registerClient(simulacao.getEcossistema());
                 commandManager = (CommandManager) ois.readObject();
                 Flora.setNextId((int) ois.readObject());
@@ -534,11 +518,10 @@ public class SimulacaoManager implements Serializable {
                 Platform.exit();
                 return false;
             }
-            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
             return true;
-        }else{
-            return false;
         }
+        else
+            return false;
     }
     /**
      * Salve em um arquivo CSV o tipo, a posição e a força dos elementos da ecossistema.
@@ -642,9 +625,10 @@ public class SimulacaoManager implements Serializable {
     public void getSnapshot() {
         if(gameEngine.getCurrentState() != GameEngineState.READY && memento!=null) {
             gameEngine.unregisterClient(simulacao.getEcossistema());
+            Simulacao temp=simulacao;
             simulacao = (Simulacao) memento.getSnapshot();
+            simulacao.setPCS(temp.getPCS());
             gameEngine.registerClient(simulacao.getEcossistema());
-            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
             commandManager.clear();
         }
     }

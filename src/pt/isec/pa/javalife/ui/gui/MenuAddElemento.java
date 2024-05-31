@@ -35,7 +35,6 @@ public class MenuAddElemento extends BorderPane {
 
     private void registerHandlers() {
         setProp();
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS,  evt -> Platform.runLater(this::setProp));
 
         cb.setOnAction(e -> tipo = cb.getValue());
 

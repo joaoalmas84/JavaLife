@@ -30,7 +30,6 @@ public class MenuIntervalo extends BorderPane {
     }
 
     private void registerHandlers() {
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
         setProp();
 
         btnSetIntervalo.setOnAction(event ->{

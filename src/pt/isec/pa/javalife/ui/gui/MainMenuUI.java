@@ -78,8 +78,6 @@ public class MainMenuUI extends BorderPane {
 
     private void registerHandlers() {
         setProp();
-        simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_ADD_LIS, evt -> Platform.runLater(this::setProp));
-
         btnSettings.setOnAction(event -> {
             simulacaoManager.setState(SimulacaoState.Definicaos);
         });

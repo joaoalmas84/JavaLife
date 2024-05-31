@@ -185,7 +185,7 @@ public class FaunaData implements Serializable {
 
             if( novaArea.isInvalid()) {
                 direcao = Math.random() * 2*Math.PI;
-                return new Area(-1,-1,-1,-1);
+                return move(area);
             }
             return novaArea;
         }
@@ -221,7 +221,7 @@ public class FaunaData implements Serializable {
 
         if(newArea.isInvalid()) {
             direcao = Math.random() * 2*Math.PI;
-            return new Area(-1,-1,-1,-1);
+            return move(area);
         }
         return newArea;
     }
