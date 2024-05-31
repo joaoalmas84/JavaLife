@@ -1,8 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-import pt.isec.pa.javalife.model.gameengine.GameEngine;
-import pt.isec.pa.javalife.model.gameengine.GameEngineState;
-import pt.isec.pa.javalife.model.gameengine.IGameEngine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
