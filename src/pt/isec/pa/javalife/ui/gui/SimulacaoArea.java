@@ -9,7 +9,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
 
-import pt.isec.pa.javalife.model.data.*;
+import pt.isec.pa.javalife.model.data.Ecossistema;
+import pt.isec.pa.javalife.model.data.Simulacao;
+import pt.isec.pa.javalife.model.data.SimulacaoManager;
+import pt.isec.pa.javalife.model.data.IElemento;
+import pt.isec.pa.javalife.model.data.Elemento;
+import pt.isec.pa.javalife.model.data.Fauna;
+import pt.isec.pa.javalife.model.data.Flora;
+import pt.isec.pa.javalife.model.data.Area;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
