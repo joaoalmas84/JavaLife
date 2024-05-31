@@ -5,20 +5,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
 
-import pt.isec.pa.javalife.model.data.Ecossistema;
-import pt.isec.pa.javalife.model.data.Simulacao;
-import pt.isec.pa.javalife.model.data.SimulacaoManager;
-import pt.isec.pa.javalife.model.data.IElemento;
-import pt.isec.pa.javalife.model.data.Elemento;
-import pt.isec.pa.javalife.model.data.Fauna;
-import pt.isec.pa.javalife.model.data.Flora;
-import pt.isec.pa.javalife.model.data.Area;
+import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
-import pt.isec.pa.javalife.ui.gui.res.ImageManager;
 import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
 
 import java.util.HashSet;
@@ -49,7 +42,14 @@ public class SimulacaoArea extends Canvas {
             y = evt.getY();
             update();
         });
-        this.setOnMouseClicked(this::handleMouseClicked);
+        this.setOnMouseClicked(event -> {
+            if(event.getButton() == MouseButton.PRIMARY){
+                handleMouseClicked(event);
+            }else if(event.getButton() == MouseButton.SECONDARY){
+                handleMouseClikdEdit(event);
+            }
+
+        });
     }
 
     private void handleMouseClicked(MouseEvent evt){
@@ -65,6 +65,27 @@ public class SimulacaoArea extends Canvas {
                     simulacaoManager.evAddForca((Fauna)elem);
                 }
                 update();
+                return ;
+            }
+        }
+    }
+
+    private void handleMouseClikdEdit(MouseEvent evt){
+        double x_ = evt.getX()/largura;
+        double y_ = evt.getY()/altura;
+        for (IElemento elem : simulacaoManager.getElementos()) {
+            if(elem.getArea().isPointOverlapping(x_,y_)){
+                simulacaoManager.pause();
+                GuardarUltimo.setId(elem.getId());
+                GuardarUltimo.setTipo(elem.getType());
+
+                if(elem.getType() == Elemento.FAUNA)
+                    simulacaoManager.setState(SimulacaoState.editfauna);
+                else if(elem.getType() == Elemento.FLORA)
+                    simulacaoManager.setState(SimulacaoState.editFlora);
+                else if(elem.getType() == Elemento.INANIMADO)
+                    simulacaoManager.setState(SimulacaoState.editInanimado);
+
                 return ;
             }
         }

@@ -56,7 +56,7 @@ public class MenuDefinicao extends BorderPane {
             }
         });
 
-        btnGoBack.setOnAction(e -> simulacaoManager.setState(null));
+        btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
 
     }

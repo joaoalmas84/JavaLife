@@ -3,7 +3,6 @@ package pt.isec.pa.javalife.model.data;
 public final class Inanimado extends ElementoBase {
     private static int nextId = 0;
     private final int id;
-    private final Area area;
     private final boolean podeRemove;
 
     // Construtor
@@ -32,10 +31,10 @@ public final class Inanimado extends ElementoBase {
         return Elemento.INANIMADO;
     }
 
-    @Override
-    public Area getArea() {
-        return area;
+    public void setArea(Area area) {
+        this.area = area;
     }
+
 
     @Override
     public String toString() {

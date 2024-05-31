@@ -163,6 +163,18 @@ public class Simulacao implements Serializable {
         ecossistema.evAddForcaFauna(elemento);
     }
 
+    public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes) {
+        return ecossistema.editFlora(id, xi, yi, forca, numReproducoes);
+    }
+
+    public boolean editFauna(int id, double xi, double yi, double forca, double velocidade) {
+        return ecossistema.editFauna(id, xi, yi, forca, velocidade);
+    }
+
+    public boolean editInanimado(int id, double xi, double yi) {
+        return ecossistema.editInanimado(id, xi, yi);
+    }
+
 
 
 /*

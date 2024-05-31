@@ -313,4 +313,72 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public void evAddForcaFauna(Fauna elemento) {
         elemento.addForca(forcaInjetar);
     }
+
+    public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes) {
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.FLORA){
+                Flora f = (Flora) elem;
+                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+                if(arieaVarificarSePode(getElementos(), novaAria))
+                    f.setArea(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+
+                f.addForca(forca - f.getForca());
+                f.setNumReproducoes(numReproducoes);
+                return true;
+            }
+        }
+    return false;
+    }
+
+    public boolean editFauna(int id, double xi, double yi, double forca, double velocidade) {
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.FAUNA){
+                Fauna f = (Fauna) elem;
+                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+                if(areaVarificarSePodeBase(getElementos(), novaAria))
+                    f.setArea(novaAria);
+                f.addForca(forca - f.getForca());
+                f.setVelocidade(velocidade);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean editInanimado(int id, double xi, double yi) {
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == Elemento.INANIMADO){
+                Inanimado f = (Inanimado) elem;
+                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+                if(!f.podeRemove())
+                    return false;
+                if(arieaVarificarSePode(getElementos(), novaAria))
+                    f.setArea(novaAria);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean arieaVarificarSePode(Set<IElemento> elementos, Area area) {
+        for (IElemento elem : elementos) {
+            if (area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.INANIMADO)
+                return false;
+            if(area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.FLORA)
+                return false;
+            if(!area.isOverlapping(new Area(0,0,largura,altura)))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean areaVarificarSePodeBase(Set<IElemento> elementos, Area area) {
+        for (IElemento elem : elementos) {
+            if (area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.INANIMADO)
+                return false;
+            if(!area.isOverlapping(new Area(0,0,largura,altura)))
+                return false;
+        }
+        return true;
+    }
 }

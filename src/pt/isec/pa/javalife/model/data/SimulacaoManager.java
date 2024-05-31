@@ -645,7 +645,20 @@ public class SimulacaoManager implements Serializable {
             simulacao = (Simulacao) memento.getSnapshot();
             gameEngine.registerClient(simulacao.getEcossistema());
             pcs.firePropertyChange(PROP_ADD_LIS, null, null);
+            commandManager.clear();
         }
+    }
+
+    public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes){
+        return simulacao.editFlora(id, xi, yi, forca, numReproducoes);
+    }
+
+    public boolean editFauna(int id, double xi, double yi, double forca, double velocidade){
+        return simulacao.editFauna(id, xi, yi, forca, velocidade);
+    }
+
+    public boolean editInanimado(int id, double xi, double yi){
+        return simulacao.editInanimado(id, xi, yi);
     }
 
 }

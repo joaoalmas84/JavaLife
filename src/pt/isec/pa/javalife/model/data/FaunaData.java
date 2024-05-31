@@ -58,16 +58,19 @@ public class FaunaData implements Serializable {
 
     public double getVelocidade() { return velocidade; }
 
+    public void setVelocidade(double velocidade) { this.velocidade = velocidade; }
+
     public double getDirecao() { return direcao; }
 
 
     public String getImage() { return image; }
 
-    public String setImage(String image) { return this.image = image; }
+
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Setters +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
+    public String setImage(String image) { return this.image = image; }
 
     public static void setNextId(int nextId) { FaunaData.nextId = nextId; }
 

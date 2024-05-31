@@ -86,4 +86,6 @@ public record Area(double xi, double yi, double xf, double yf) implements Serial
     public double width() {
         return xf - xi;
     }
+
+    public double Height() {return yf - yi;}
 }

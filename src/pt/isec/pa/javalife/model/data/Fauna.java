@@ -66,11 +66,23 @@ public non-sealed class Fauna
 
     public void setArea (Area area) { this.area = area; }
 
+    public double getVelocidade() { return data.getVelocidade(); }
+
+    public void setVelocidade(double velocidade) { data.setVelocidade(velocidade); }
+
     // +----------------------------------------------------------------------------------------------------------------
     // + Verificacoes +-------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
     public boolean isDead() { return data.isDead(); }
+
+    public FaunaData gatData() {
+        return data;
+    }
+
+    public void setForca(double forca) {
+        data.addForca(forca);
+    }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Outros +-------------------------------------------------------------------------------------------------------

@@ -9,7 +9,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     private int NumReproducoes;
     private double forca;
     private boolean isDead;
-    private final Area area;
     private Ecossistema ecossistema;
 
     // Construtor
@@ -39,9 +38,6 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     }
 
     @Override
-    public double getForca() {return forca;}
-
-    @Override
     public int getId() {
         return id;
     }
@@ -54,6 +50,10 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
     @Override
     public Area getArea() {
         return area;
+    }
+
+    public double getForca() {
+        return forca;
     }
 
     public void setEcossistema(Ecossistema ecossistema) {
@@ -154,5 +154,19 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
                 ", NumReproducoes=" + NumReproducoes +
                 '}';
         return sb;
+    }
+
+    public int getNumReproducoes() {
+        return NumReproducoes;
+    }
+
+    public void setNumReproducoes(int NumReproducoes) {
+        this.NumReproducoes = NumReproducoes;
+    }
+
+    public void setArea(double xi, double yi, double xf, double yf) {
+        System.out.println("Flora.setArea" + xi + " " + yi + " " + xf + " " + yf);
+        this.area = new Area(xi, yi, xf, yf);
+        System.out.println("Flora.setArea" + area);
     }
 }
