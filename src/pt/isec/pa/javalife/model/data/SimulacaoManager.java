@@ -644,6 +644,7 @@ public class SimulacaoManager implements Serializable {
             gameEngine.unregisterClient(simulacao.getEcossistema());
             simulacao = (Simulacao) memento.getSnapshot();
             gameEngine.registerClient(simulacao.getEcossistema());
+            pcs.firePropertyChange(PROP_ADD_LIS, null, null);
         }
     }
 
