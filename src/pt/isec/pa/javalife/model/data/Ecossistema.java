@@ -282,26 +282,22 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
         tempo++;
-        Set<IElemento> copySet = new HashSet<>(elementos);
         System.out.println("Evolve");
 
-        for(IElemento elem : copySet){
-            if(elem.getType() == Elemento.FLORA){
-                ((Flora)elem).evolve(copySet);
-                if( ((Flora)elem).isDead() ){
+        elementos.parallelStream().forEach(elem -> { //precorrer em paralelo para aumentar a pefrormance
+            if (elem.getType() == Elemento.FLORA) {
+                ((Flora) elem).evolve(elementos);
+                if (((Flora) elem).isDead()) {
                     elementos.remove(elem);
                 }
-            }
-
-            if (elem.getType() == Elemento.FAUNA) {
+            } else if (elem.getType() == Elemento.FAUNA) {
                 assert elem instanceof Fauna;
-                ((Fauna)elem).act_context();
-                if (((Fauna)elem).isDead()) {
+                ((Fauna) elem).act_context();
+                if (((Fauna) elem).isDead()) {
                     elementos.remove(elem);
                 }
             }
-
-        }
+        });
         solTicks--;
         pcs.firePropertyChange(PROP_UPDATE_MAP, null, null);
     }
