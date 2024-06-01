@@ -2,20 +2,24 @@ package pt.isec.pa.javalife.ui.gui;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import pt.isec.pa.javalife.model.data.Simulacao;
 import pt.isec.pa.javalife.model.data.SimulacaoManager;
+import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
 
 public class ToolbarSimulacao extends ToolBar {
 
     private static final int BTN_SIZE = 40;
-    private static final int BTN_IMG_SIZE = BTN_SIZE -10;
+    private static final int BTN_IMG_SIZE = BTN_SIZE -5;
 
     Button btnEventoSol,btnUndo,btnRedo;
 
-    ToggleButton btnEventoHerbicida;
-    ToggleButton btnEventoForca;
+    ToggleButton btnEventoHerbicida,btnEventoForca;
+
+    ToggleButton btnAddFlora, btnAddFauna, btnAddInanimado, btnRemoveElemento;
 
     ToggleGroup tgEventos;
 
@@ -31,13 +35,17 @@ public class ToolbarSimulacao extends ToolBar {
 
     private void createViews() {
         Rectangle rectSol = new Rectangle(0,0, BTN_IMG_SIZE, BTN_IMG_SIZE);
-        rectSol.setFill(Color.YELLOW);
+        Image imageSun = MultitonImage.getModel("sun.png");
+        rectSol.setFill(new ImagePattern(imageSun));
 
         Rectangle rectHerbicida = new Rectangle(0,0, BTN_IMG_SIZE, BTN_IMG_SIZE);
-        rectHerbicida.setFill(Color.BLACK);
+        Image imageHerbicida = MultitonImage.getModel("herbicida.png");
+        rectHerbicida.setFill(new ImagePattern(imageHerbicida));
 
         Rectangle rectForca = new Rectangle(0,0, BTN_IMG_SIZE, BTN_IMG_SIZE);
-        rectForca.setFill(Color.RED.brighter());
+        Image imageInjetar = MultitonImage.getModel("injetar.png");
+        rectForca.setFill(new ImagePattern(imageInjetar));
+
 
 
         btnEventoSol = new Button(null,rectSol);
