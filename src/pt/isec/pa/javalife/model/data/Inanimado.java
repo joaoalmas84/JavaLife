@@ -1,5 +1,7 @@
 package pt.isec.pa.javalife.model.data;
 
+import java.util.Objects;
+
 public final class Inanimado extends ElementoBase {
     private static int nextId = 0;
     private final int id;
@@ -47,5 +49,18 @@ public final class Inanimado extends ElementoBase {
 
     public boolean podeRemove() {
         return podeRemove;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Inanimado inanimado = (Inanimado) o;
+        return id == inanimado.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

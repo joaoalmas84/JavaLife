@@ -1,6 +1,7 @@
 package pt.isec.pa.javalife.model.data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class FaunaData implements Serializable {
     private static int nextId = 0;
@@ -291,4 +292,5 @@ public class FaunaData implements Serializable {
     public FaunaData clone() throws CloneNotSupportedException{
         return (FaunaData) super.clone();
     }
+
 }

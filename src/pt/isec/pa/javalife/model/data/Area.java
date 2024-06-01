@@ -1,6 +1,7 @@
 package pt.isec.pa.javalife.model.data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public record Area(double xi, double yi, double xf, double yf) implements Serializable {
 
@@ -88,4 +89,17 @@ public record Area(double xi, double yi, double xf, double yf) implements Serial
     }
 
     public double Height() {return yf - yi;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Area area = (Area) o;
+        return Double.compare(xi, area.xi) == 0 && Double.compare(yi, area.yi) == 0 && Double.compare(xf, area.xf) == 0 && Double.compare(yf, area.yf) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xi, yi, xf, yf);
+    }
 }
