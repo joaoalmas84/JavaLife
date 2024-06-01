@@ -4,8 +4,6 @@ import pt.isec.pa.javalife.model.fsm.FaunaState;
 import pt.isec.pa.javalife.model.fsm.states.IFaunaState;
 import pt.isec.pa.javalife.model.fsm.states.MovingState;
 
-import java.util.Objects;
-
 public non-sealed class Fauna
         extends ElementoBase
         implements IElementoComImagem, IElementoComForca {
@@ -90,17 +88,4 @@ public non-sealed class Fauna
     // + Outros +-------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Fauna fauna = (Fauna) o;
-        return Objects.equals(atual, fauna.atual) && Objects.equals(data, fauna.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(atual, data);
-    }
 }

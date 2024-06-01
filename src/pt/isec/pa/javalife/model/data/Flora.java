@@ -1,6 +1,5 @@
 package pt.isec.pa.javalife.model.data;
 
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -169,18 +168,5 @@ public final class Flora extends ElementoBase implements IElementoComForca, IEle
         System.out.println("Flora.setArea" + xi + " " + yi + " " + xf + " " + yf);
         this.area = new Area(xi, yi, xf, yf);
         System.out.println("Flora.setArea" + area);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Flora flora = (Flora) o;
-        return id == flora.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }
