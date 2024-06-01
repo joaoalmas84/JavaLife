@@ -28,7 +28,7 @@ public class menuEditeElem  extends BorderPane {
         btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnEdit.setOnAction(e -> {
-            if(simulacaoManager.getState() == SimulacaoState.editfauna){
+            if(simulacaoManager.getState() == SimulacaoState.EDITFAUNA){
                 double xI, yI, forca, velocidade;
                 try{
                     String text = tfXI.getText();
@@ -49,7 +49,7 @@ public class menuEditeElem  extends BorderPane {
                     return;
                 }
                 simulacaoManager.editFauna(GuardarUltimo.getId(), xI, yI, forca, velocidade);
-            }else if(simulacaoManager.getState() == SimulacaoState.editFlora){
+            }else if(simulacaoManager.getState() == SimulacaoState.EDITFLORA){
                 double xI, yI, forca;
                 int numReproducoes;
                 try{
@@ -73,7 +73,7 @@ public class menuEditeElem  extends BorderPane {
                 }
                 System.out.println("forca " + forca + " numReproducoes " + numReproducoes + " id " + GuardarUltimo.getId());
                 simulacaoManager.editFlora(GuardarUltimo.getId(), xI, yI, forca, numReproducoes);
-            }else if(simulacaoManager.getState() == SimulacaoState.editInanimado){
+            }else if(simulacaoManager.getState() == SimulacaoState.EDITINANIMADO){
                 double xI, yI;
                 try{
                     String text = tfXI.getText();
@@ -133,16 +133,16 @@ public class menuEditeElem  extends BorderPane {
 
     private void update() {
 
-        if(!(simulacaoManager.getState() == SimulacaoState.editfauna
-                || simulacaoManager.getState() == SimulacaoState.editFlora
-                || simulacaoManager.getState() == SimulacaoState.editInanimado))
+        if(!(simulacaoManager.getState() == SimulacaoState.EDITFAUNA
+                || simulacaoManager.getState() == SimulacaoState.EDITFLORA
+                || simulacaoManager.getState() == SimulacaoState.EDITINANIMADO))
         {
             this.setVisible(false);
             return;
         }
         this.setVisible(true);
 
-        if(simulacaoManager.getState() == SimulacaoState.editfauna){
+        if(simulacaoManager.getState() == SimulacaoState.EDITFAUNA){
             for(IElemento e : simulacaoManager.getElementos()){
                 if(GuardarUltimo.getId() == e.getId()  && e.getType() == Elemento.FAUNA){
                     Fauna fauna = (Fauna) e;
@@ -156,7 +156,7 @@ public class menuEditeElem  extends BorderPane {
             hbVelocidade.setVisible(true);
             hbForca.setVisible(true);
             hbNumReproducoes.setVisible(false);
-        }else if(simulacaoManager.getState() == SimulacaoState.editFlora){
+        }else if(simulacaoManager.getState() == SimulacaoState.EDITFLORA){
             for(IElemento e : simulacaoManager.getElementos()){
                 if(GuardarUltimo.getId() == e.getId() && e.getType() == Elemento.FLORA){
                     Flora flora = (Flora) e;
@@ -170,7 +170,7 @@ public class menuEditeElem  extends BorderPane {
             hbVelocidade.setVisible(false);
             hbForca.setVisible(true);
             hbNumReproducoes.setVisible(true);
-        }else if(simulacaoManager.getState() == SimulacaoState.editInanimado){
+        }else if(simulacaoManager.getState() == SimulacaoState.EDITINANIMADO){
             for(IElemento e : simulacaoManager.getElementos()){
                 if(GuardarUltimo.getId() == e.getId()  && e.getType() == Elemento.INANIMADO){
                     Inanimado inanimado = (Inanimado) e;

@@ -2,4 +2,4 @@ package pt.isec.pa.javalife.model.data;
 
 import java.io.Serializable;
 
-public enum SimulacaoState implements Serializable {ADD, REMOVE, NULL, INTERVALO, Definicaos, editfauna, editFlora, editInanimado}
+public enum SimulacaoState implements Serializable {ADD, REMOVE, NULL, INTERVALO, DEFINICOES, EDITFAUNA, EDITFLORA, EDITINANIMADO}

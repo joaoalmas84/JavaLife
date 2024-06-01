@@ -84,7 +84,7 @@ public class MenuDefinicao extends BorderPane {
     }
 
     private void update() {
-        if(!(simulacaoManager.getState() == SimulacaoState.Definicaos && simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.READY)) {
+        if(!(simulacaoManager.getState() == SimulacaoState.DEFINICOES && simulacaoManager.getCurrentState_Of_GameEngine() == GameEngineState.READY)) {
             this.setVisible(false);
             return;
         }

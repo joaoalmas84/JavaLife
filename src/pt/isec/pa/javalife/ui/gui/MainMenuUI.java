@@ -1,6 +1,5 @@
 package pt.isec.pa.javalife.ui.gui;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -79,7 +78,7 @@ public class MainMenuUI extends BorderPane {
     private void registerHandlers() {
         setProp();
         btnSettings.setOnAction(event -> {
-            simulacaoManager.setState(SimulacaoState.Definicaos);
+            simulacaoManager.setState(SimulacaoState.DEFINICOES);
         });
 
 

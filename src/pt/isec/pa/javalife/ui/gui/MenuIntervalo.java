@@ -98,6 +98,7 @@ public class MenuIntervalo extends BorderPane {
             this.setVisible(false);
             return;
         }
+        txtIntervalo.setText(String.valueOf(simulacaoManager.getTempoDeInstante()));
         this.setVisible(true);
 
     }

@@ -79,11 +79,11 @@ public class SimulacaoArea extends Canvas {
                 GuardarUltimo.setTipo(elem.getType());
 
                 if(elem.getType() == Elemento.FAUNA)
-                    simulacaoManager.setState(SimulacaoState.editfauna);
+                    simulacaoManager.setState(SimulacaoState.EDITFAUNA);
                 else if(elem.getType() == Elemento.FLORA)
-                    simulacaoManager.setState(SimulacaoState.editFlora);
+                    simulacaoManager.setState(SimulacaoState.EDITFLORA);
                 else if(elem.getType() == Elemento.INANIMADO)
-                    simulacaoManager.setState(SimulacaoState.editInanimado);
+                    simulacaoManager.setState(SimulacaoState.EDITINANIMADO);
 
                 return ;
             }
