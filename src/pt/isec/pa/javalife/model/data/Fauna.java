@@ -18,7 +18,7 @@ public non-sealed class Fauna
     }
 
     // Dependency injection
-    public Fauna(double xi, double yi, double xf, double yf, Ecossistema e, FaunaData data) {
+    public Fauna(double xi, double yi, double xf, double yf,FaunaData data) {
         super(xi, yi, xf, yf);
 
         this.data = data;
