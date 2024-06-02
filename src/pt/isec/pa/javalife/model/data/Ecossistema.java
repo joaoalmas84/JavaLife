@@ -397,11 +397,11 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     }
 
     public IElemento getElementoById(int id, Elemento tipo) {
-        elementos.forEach(elemento -> {
-            if(elemento.getType()==tipo && elemento.getId()==id){
-                return elemento;
+        for(IElemento elem : elementos){
+            if(elem.getId() == id && elem.getType() == tipo){
+                return elem;
             }
-        });
+        }
         return null;
     }
 }
