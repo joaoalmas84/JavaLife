@@ -32,8 +32,8 @@ public class Simulacao implements Serializable {
         ecossistema.addPropertyChangeListener(property, listener);
     }
 
-    public boolean addElemento(IElemento fauna) {
-        return ecossistema.addElemento(fauna);
+    public boolean addElemento(IElemento elem) {
+        return ecossistema.addElemento(elem);
     }
 
     @Override
@@ -145,12 +145,12 @@ public class Simulacao implements Serializable {
         ecossistema.evAddForcaFauna(elemento);
     }
 
-    public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes) {
-        return ecossistema.editFlora(id, xi, yi, forca, numReproducoes);
+    public boolean editFlora(int id, double forca, int numReproducoes) {
+        return ecossistema.editFlora(id, forca, numReproducoes);
     }
 
-    public boolean editFauna(int id, double xi, double yi, double forca, double velocidade) {
-        return ecossistema.editFauna(id, xi, yi, forca, velocidade);
+    public boolean editFauna(int id, double forca, double velocidade) {
+        return ecossistema.editFauna(id, forca, velocidade);
     }
 
     public boolean editInanimado(int id, double xi, double yi) {

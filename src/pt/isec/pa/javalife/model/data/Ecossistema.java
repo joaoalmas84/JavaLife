@@ -133,9 +133,12 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             return false;
 
         for (IElemento elem :  elementos){
-            if(elemento.getType() == Elemento.FLORA || elemento.getType() == Elemento.INANIMADO)
-                if (elem.getArea().isOverlapping(area) && elem.getType() == Elemento.FLORA)
+            if(elemento.getType() == Elemento.FLORA)
+                if (elem.getArea().isOverlapping(area) && elem.getType() != Elemento.FAUNA)
                     return false;
+            if (elemento.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)) {
+                return false;
+            }
             if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)) {
                 return false;
             }
@@ -305,35 +308,18 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         elemento.addForca(forcaInjetar);
     }
 
-    public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes) {
-        for(IElemento elem : elementos){
-            if(elem.getId() == id && elem.getType() == Elemento.FLORA){
-                Flora f = (Flora) elem;
-                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
-                if(areaVarificarSePode(getElementos(), novaAria))
-                    f.setArea(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
-
-                f.addForca(forca - f.getForca());
-                f.setNumReproducoes(numReproducoes);
-                return true;
-            }
-        }
-    return false;
+    public boolean editFlora(int id, double forca, int numReproducoes) {
+        Flora f =(Flora) getElementoById(id,Elemento.FLORA);
+        f.addForca(forca - f.getForca());
+        f.setNumReproducoes(numReproducoes);
+        return true;
     }
 
-    public boolean editFauna(int id, double xi, double yi, double forca, double velocidade) {
-        for(IElemento elem : elementos){
-            if(elem.getId() == id && elem.getType() == Elemento.FAUNA){
-                Fauna f = (Fauna) elem;
-                Area novaArea = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
-                if(areaVarificarSePodeBase(getElementos(), novaArea))
-                    f.setArea(novaArea);
-                f.addForca(forca - f.getForca());
-                f.setVelocidade(velocidade);
-                return true;
-            }
-        }
-        return false;
+    public boolean editFauna(int id, double forca, double velocidade) {
+        Fauna f=(Fauna) getElementoById(id,Elemento.FAUNA);
+        f.addForca(forca - f.getForca());
+        f.setVelocidade(velocidade);
+        return true;
     }
 
     public boolean editInanimado(int id, double xi, double yi) {
@@ -384,7 +370,13 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     public boolean setAreaElem(ElementoBase elem, Area valorNovo) {
         boolean pode=true;
         for(IElemento elemento:elementos) {
-            if ((valorNovo.isOverlapping(elemento.getArea()) && elemento.getType() == Elemento.INANIMADO) || (elem.getType() == Elemento.FLORA && elemento.getType() == Elemento.FLORA)) {
+            if(elemento.getId()==elem.getId())
+                continue;
+            if ((valorNovo.isOverlapping(elemento.getArea()) && ((elemento.getType() == Elemento.INANIMADO) || (elem.getType() == Elemento.FLORA && elemento.getType() == Elemento.FLORA)))) {
+                pode = false;
+                break;
+            }
+            if(elem.getType()==Elemento.INANIMADO && !((Inanimado)elem).podeRemove()){
                 pode = false;
                 break;
             }

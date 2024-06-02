@@ -51,10 +51,15 @@ public class menuEditeElem  extends BorderPane {
                 } catch (NumberFormatException ex) {
                     return ;
                 }
-                if(xI != -1.0 || yI != -1.0 || forca != -1.0 || velocidade != -1.0){
-                    simulacaoManager.editFauna(GuardarUltimo.getId(), xI, yI, forca, velocidade);
+                Fauna ultimo = (Fauna) simulacaoManager.getElementoById(GuardarUltimo.getId(),GuardarUltimo.getTipo());
+
+                if((forca != -1.0 && ultimo.getForca()!=forca)|| (velocidade != -1.0 && ultimo.getVelocidade()!=velocidade)){
+                    simulacaoManager.editFauna(GuardarUltimo.getId(), forca, velocidade);
                 }
-                setTamalho(largura, altura, Elemento.FLORA, GuardarUltimo.getId());
+                if((xI != -1.0 && ultimo.getArea().xi()!=xI) || (yI != -1.0 && ultimo.getArea().yi()!=yI)){
+                    simulacaoManager.mudarPosicaoElem(GuardarUltimo.getId(),GuardarUltimo.getTipo(),xI,yI);
+                }
+                setTamalho(largura, altura, Elemento.FAUNA, GuardarUltimo.getId());
 
             }else if(simulacaoManager.getState() == SimulacaoState.EDITFLORA){
                 double xI, yI, forca, largura, altura;
@@ -80,8 +85,12 @@ public class menuEditeElem  extends BorderPane {
                 } catch (NumberFormatException ex) {
                     return ;
                 }
-                if(xI != -1.0 || yI != -1.0 || forca != -1.0 || numReproducoes != -1){
-                   simulacaoManager.editFlora(GuardarUltimo.getId(), xI, yI, forca, numReproducoes);
+                Flora ultimo = (Flora)simulacaoManager.getElementoById(GuardarUltimo.getId(),GuardarUltimo.getTipo());
+                if((forca != -1.0 && ultimo.getForca()!=forca)  || (numReproducoes != -1 && ultimo.getNumReproducoes()!=numReproducoes)){
+                   simulacaoManager.editFlora(GuardarUltimo.getId(), forca, numReproducoes);
+                }
+                if((xI != -1.0 && ultimo.getArea().xi()!=xI) || (yI != -1.0 && ultimo.getArea().yi()!=yI)){
+                    simulacaoManager.mudarPosicaoElem(GuardarUltimo.getId(),GuardarUltimo.getTipo(),xI,yI);
                 }
                 setTamalho(largura, altura, Elemento.FLORA, GuardarUltimo.getId());
             }else if(simulacaoManager.getState() == SimulacaoState.EDITINANIMADO){
@@ -102,7 +111,7 @@ public class menuEditeElem  extends BorderPane {
                     return ;
                 }
                 if(xI != -1.0 || yI != -1.0){
-                    simulacaoManager.editInanimado(GuardarUltimo.getId(), xI, yI);
+                    simulacaoManager.mudarPosicaoElem(GuardarUltimo.getId(),GuardarUltimo.getTipo(),xI,yI);
                 }
                 setTamalho(largura, altura, Elemento.INANIMADO, GuardarUltimo.getId());
             }
@@ -110,11 +119,11 @@ public class menuEditeElem  extends BorderPane {
         });
     }
 
-    private void setTamalho(double largura, double altura, Elemento elemento, int id) {
-        if(largura != -1.0)
-            simulacaoManager.mudarAlturaElem(id, elemento, altura);
-        if(altura != -1.0)
-            simulacaoManager.mudarLarguraElem(id, elemento, largura);
+    private void setTamalho(double largura, double altura, Elemento tipo, int id) {
+        if(largura != -1.0 && simulacaoManager.getElementoById(id, tipo).getArea().width()!=largura)
+            simulacaoManager.mudarLarguraElem(id, tipo, largura);
+        if(altura != -1.0 && simulacaoManager.getElementoById(id, tipo).getArea().height()!=altura)
+            simulacaoManager.mudarAlturaElem(id, tipo, altura);
     }
 
     private void setProp() {

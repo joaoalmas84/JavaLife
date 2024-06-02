@@ -18,8 +18,8 @@ public class MudaAlturaElem extends AbstractCommand {
 
     @Override
     public boolean execute() {
-        valor_velho = elementoBase.getArea().width();
-        Area areaNova= new Area(elementoBase.getArea().xi(),elementoBase.getArea().yi(), elementoBase.getArea().xi()+valor_novo,elementoBase.getArea().yf());
+        valor_velho = elementoBase.getArea().height();
+        Area areaNova= new Area(elementoBase.getArea().xi(),elementoBase.getArea().yi(), elementoBase.getArea().xf(),elementoBase.getArea().yi()+valor_novo);
         success= receiver.setAreaElem(elementoBase,areaNova);
         return true;
     }
@@ -31,7 +31,7 @@ public class MudaAlturaElem extends AbstractCommand {
 
     @Override
     public boolean undo() {
-        Area areaNova= new Area(elementoBase.getArea().xi(),elementoBase.getArea().yi(), elementoBase.getArea().xi()+valor_velho,elementoBase.getArea().yf());
+        Area areaNova= new Area(elementoBase.getArea().xi(),elementoBase.getArea().yi(), elementoBase.getArea().xf(),elementoBase.getArea().yi()+valor_velho);
         return receiver.setAreaElem(elementoBase, areaNova);
     }
 }

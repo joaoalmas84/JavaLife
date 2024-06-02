@@ -37,10 +37,10 @@ public class MenuDefinicao extends BorderPane {
                 simulacaoManager.setLargura(getTextFieldData(tfLargura));
             }
             if(!tfDano.getText().isEmpty()){
-                simulacaoManager.setDanoFauna(getTextFieldData(tfDano));
+                simulacaoManager.mudarDanoFauna(getTextFieldData(tfDano));
             }
             if(!tfRegen.getText().isEmpty()){
-                simulacaoManager.setRegenFlora(getTextFieldData(tfRegen));
+                simulacaoManager.mudarRegenFlora(getTextFieldData(tfRegen));
             }
         });
 
