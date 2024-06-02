@@ -41,18 +41,20 @@ public class MenuAddElemento extends BorderPane {
         btnGoBack.setOnAction(e -> simulacaoManager.setState(SimulacaoState.NULL));
 
         btnAddElemento.setOnAction(e -> {
-            if (tipo == null || new Area(xI, yI, xF, yF).isInvalid()) {
-                lblErro.setText("Por favor introduza uma area válida (xi<xf,yi<yf)");
-                return;
-            }
+            if(tipo!=null){
+                if (new Area(xI, yI, xF, yF).isInvalid()) {
+                    lblErro.setText("Por favor introduza uma area válida (xi<xf,yi<yf)");
+                    return;
+                }
 
-            if(tipo.makeElemento(xI,yI,xF,yF,simulacaoManager)){
-                lblErro.setText("");
-                simulacaoManager.setState(SimulacaoState.NULL);
-            }
-            else{
-                lblErro.setText("Por favor introduza uma area dentro do ecossistema");
-            }
+                if (tipo.makeElemento(xI, yI, xF, yF, simulacaoManager)) {
+                    lblErro.setText("");
+                    simulacaoManager.setState(SimulacaoState.NULL);
+                } else {
+                    lblErro.setText("Por favor introduza o elemento numa area válida dentro do ecossistema");
+                }
+            }else
+                lblErro.setText("Por favor selecione um tipo");
         });
 
         tfXI.setOnKeyReleased(e -> {

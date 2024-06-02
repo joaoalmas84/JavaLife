@@ -180,32 +180,44 @@ public class SimulacaoManager implements Serializable {
         return res;
     }
     /**
-     * Muda a altura da simulação.
+     * Muda a altura do elemento.
      *
-     * @param altura A nova altura.
+     * @param id o id do elemento.
+     * @param tipo tipo do elemento.
+     * @param altura altura nova do elemento
      * @return true se a operação de mudar altura foi bem-sucedida, caso contrário false.
      * @since 1.0
      */
-    public boolean mudarAltura(double altura){
-        boolean res= commandManager.invokeCommand(new MudaAltura(this, altura));
-        if (res){
-            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+    public boolean mudarAlturaElem(int id,Elemento tipo,double altura){
+        ElementoBase elemento=(ElementoBase) getElementoById(id,tipo);
+        if(elemento!=null){
+            boolean res = commandManager.invokeCommand(new MudaAlturaElem(this, elemento, altura));
+            if (res) {
+                pcs.firePropertyChange(PROP_UPDATE_COMMAND, null, null);
+            }
+            return res;
         }
-        return res;
+        return false;
     }
     /**
-     * Muda a largura da simulação.
+     * Muda a largura do elemento.
      *
-     * @param largura A nova largura.
+     * @param id o id do elemento.
+     * @param tipo tipo do elemento.
+     * @param largura largura nova do elemento
      * @return true se a operação de mudar largura foi bem-sucedida, caso contrário false.
      * @since 1.0
      */
-    public boolean mudarLargura(double largura){
-        boolean res= commandManager.invokeCommand(new MudaLargura(this, largura));
-        if (res){
-            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+    public boolean mudarLarguraElem(int id,Elemento tipo,double largura){
+        ElementoBase elemento=(ElementoBase) getElementoById(id,tipo);
+        if(elemento!=null){
+            boolean res = commandManager.invokeCommand(new MudaLarguraElem(this, elemento, largura));
+            if (res) {
+                pcs.firePropertyChange(PROP_UPDATE_COMMAND, null, null);
+            }
+            return res;
         }
-        return res;
+        return false;
     }
     /**
      * Muda o intervalo de tempo entre os ticks da simulação.
@@ -328,6 +340,18 @@ public class SimulacaoManager implements Serializable {
         return simulacao.getElementos();
     }
     /**
+     * Obtém o elemento descrito pelo id e tipo fornecidos.
+     *
+     * @param id O id do elemento.
+     * @param tipo O tipo do elemento.
+     * @return O elemento.
+     * @since 1.0
+     */
+    public IElemento getElementoById(int id,Elemento tipo){
+        return simulacao.getElementoById(id,tipo);
+    }
+
+    /**
      * Obtém o estado atual da simulação.
      *
      * @return O estado atual da simulação.
@@ -354,6 +378,12 @@ public class SimulacaoManager implements Serializable {
      * @return O dano da fauna.
      */
     public double getDanoFauna() { return simulacao.getDanoFauna(); }
+    /**
+     * Obtém a regeneração da flora.
+     * @since 1.0
+     * @return A regeneração da flora.
+     */
+    public double getRegenFlora() { return simulacao.getRegenFlora(); }
     /**
      * Define o estado da simulação.
      *
@@ -411,6 +441,13 @@ public class SimulacaoManager implements Serializable {
      * @return true se a operação de mudar o dano da fauna foi bem-sucedida, caso contrário false.
      */
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
+    /**
+     * Define a regenseração da flora.
+     *
+     * @param regen A nova taxa de regeneração da flora.
+     * @return true se a operação de mudar a regeneração da flora foi bem-sucedida, caso contrário false.
+     */
+    public boolean setRegenFlora(double regen) {return simulacao.setRegenFlora(regen);}
     /**
      * Define o evento de sol.
      * @since 1.0
@@ -674,4 +711,16 @@ public class SimulacaoManager implements Serializable {
         return simulacao.editInanimado(id, xi, yi);
     }
 
+
+    /**
+     * Edita a area do elemento.
+     *
+     * @param elem O elemento que se pretende editar.
+     * @param valorNovo A nova area do elemento.
+     * @return true se a operação de editar foi bem-sucedida, caso contrário false.
+     * @since 1.0
+     */
+    public boolean setAreaElem(ElementoBase elem, Area valorNovo) {
+        return simulacao.setAreaElem(elem,valorNovo);
+    }
 }

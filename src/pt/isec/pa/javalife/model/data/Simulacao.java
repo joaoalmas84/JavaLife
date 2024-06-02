@@ -73,6 +73,10 @@ public class Simulacao implements Serializable {
         return Ecossistema.danoFauna;
     }
 
+    public double getRegenFlora() {
+        return Ecossistema.regenFlora;
+    }
+
     public int getTempo() {
         return ecossistema.getTempo();
     }
@@ -88,6 +92,9 @@ public class Simulacao implements Serializable {
 
     public boolean setDanoFauna(double valorNovo) {
         return ecossistema.setDanoFauna(valorNovo);
+    }
+    public boolean setRegenFlora(double regen) {
+        return ecossistema.setRegenFlora(regen);
     }
 
     public boolean setAltura(double altura) {
@@ -164,6 +171,14 @@ public class Simulacao implements Serializable {
 
     public void setEcossistemaPcs(PropertyChangeSupport pcsEcossistema) {
         ecossistema.setPcs(pcsEcossistema);
+    }
+
+    public boolean setAreaElem(ElementoBase elem, Area valorNovo) {
+        return ecossistema.setAreaElem(elem,valorNovo);
+    }
+
+    public IElemento getElementoById(int id, Elemento tipo) {
+        return ecossistema.getElementoById(id,tipo);
     }
 
 

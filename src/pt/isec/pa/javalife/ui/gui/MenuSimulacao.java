@@ -18,7 +18,7 @@ public class MenuSimulacao extends MenuBar {
     SimulacaoManager simulacaoManager;
     Menu mnFile, mnEdit;
     MenuItem mnUndo, mnRedo, mnSave, mnAddElemento, mnPause, mnRemove, mnExit, mnIntervalo, mnOpen,
-            mnSaveElemento, mnLoadElemento, mnstop, mnNewSnapshot, mnGetSnapshot;
+            mnSaveElemento, mnLoadElemento, mnstop, mnNewSnapshot, mnGetSnapshot, mnDefEcoss;
 
     public MenuSimulacao(SimulacaoManager simulacaoManager) {
         this.simulacaoManager = simulacaoManager;
@@ -45,6 +45,7 @@ public class MenuSimulacao extends MenuBar {
         mnstop = new MenuItem("_stop");
         mnNewSnapshot = new MenuItem("_NewSnapshot");
         mnGetSnapshot = new MenuItem("_GetSnapshot");
+        mnDefEcoss = new MenuItem("_Definições do ecossistema");
 
         mnUndo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         mnRedo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
@@ -56,7 +57,7 @@ public class MenuSimulacao extends MenuBar {
         mnstop.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
 
-        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo, mnGetSnapshot, mnNewSnapshot);
+        mnEdit.getItems().addAll( mnAddElemento, mnRemove, mnPause, mnstop, mnIntervalo, mnGetSnapshot, mnNewSnapshot,mnDefEcoss);
         mnFile.getItems().addAll(mnUndo, mnRedo, mnOpen, mnSave, mnLoadElemento, mnSaveElemento, mnExit);
 
         this.getMenus().addAll(mnFile, mnEdit);
@@ -173,6 +174,11 @@ public class MenuSimulacao extends MenuBar {
         mnRemove.setOnAction(e -> {
             simulacaoManager.setState(SimulacaoState.REMOVE);
             simulacaoManager.pause();
+        });
+
+        mnDefEcoss.setOnAction(e -> {
+            simulacaoManager.pause();
+            simulacaoManager.setState(SimulacaoState.DEFINICOES);
         });
 
         mnExit.setOnAction(e -> Platform.exit());

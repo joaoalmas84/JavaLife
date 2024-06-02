@@ -13,4 +13,8 @@ public abstract sealed class ElementoBase
     @Override
     public Area getArea() { return area;}
 
+    public void setArea(Area area){
+        this.area=area;
+    }
+
 }

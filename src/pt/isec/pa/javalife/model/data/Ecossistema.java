@@ -110,6 +110,13 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         }
         return false;
     }
+    public boolean setRegenFlora(double valorNovo) {
+        if(valorNovo>0){
+            regenFlora = valorNovo;
+            return true;
+        }
+        return false;
+    }
 
     // +----------------------------------------------------------------------------------------------------------------
     // + Add +----------------------------------------------------------------------------------------------------------
@@ -302,9 +309,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         for(IElemento elem : elementos){
             if(elem.getId() == id && elem.getType() == Elemento.FLORA){
                 Flora f = (Flora) elem;
-                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
-                if(arieaVarificarSePode(getElementos(), novaAria))
-                    f.setArea(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
+                if(areaVarificarSePode(getElementos(), novaAria))
+                    f.setArea(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
 
                 f.addForca(forca - f.getForca());
                 f.setNumReproducoes(numReproducoes);
@@ -318,9 +325,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         for(IElemento elem : elementos){
             if(elem.getId() == id && elem.getType() == Elemento.FAUNA){
                 Fauna f = (Fauna) elem;
-                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
-                if(areaVarificarSePodeBase(getElementos(), novaAria))
-                    f.setArea(novaAria);
+                Area novaArea = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
+                if(areaVarificarSePodeBase(getElementos(), novaArea))
+                    f.setArea(novaArea);
                 f.addForca(forca - f.getForca());
                 f.setVelocidade(velocidade);
                 return true;
@@ -333,10 +340,10 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         for(IElemento elem : elementos){
             if(elem.getId() == id && elem.getType() == Elemento.INANIMADO){
                 Inanimado f = (Inanimado) elem;
-                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().Height());
+                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
                 if(!f.podeRemove())
                     return false;
-                if(arieaVarificarSePode(getElementos(), novaAria))
+                if(areaVarificarSePode(getElementos(), novaAria))
                     f.setArea(novaAria);
                 return true;
             }
@@ -344,7 +351,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         return false;
     }
 
-    private boolean arieaVarificarSePode(Set<IElemento> elementos, Area area) {
+    private boolean areaVarificarSePode(Set<IElemento> elementos, Area area) {
         for (IElemento elem : elementos) {
             if (area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.INANIMADO)
                 return false;
@@ -374,4 +381,27 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         pcs=pcs1;
     }
 
+    public boolean setAreaElem(ElementoBase elem, Area valorNovo) {
+        boolean pode=true;
+        for(IElemento elemento:elementos) {
+            if ((valorNovo.isOverlapping(elemento.getArea()) && elemento.getType() == Elemento.INANIMADO) || (elem.getType() == Elemento.FLORA && elemento.getType() == Elemento.FLORA)) {
+                pode = false;
+                break;
+            }
+        }
+        if(pode){
+            elem.setArea(valorNovo);
+            return true;
+        }
+        return false;
+    }
+
+    public IElemento getElementoById(int id, Elemento tipo) {
+        elementos.forEach(elemento -> {
+            if(elemento.getType()==tipo && elemento.getId()==id){
+                return elemento;
+            }
+        });
+        return null;
+    }
 }
