@@ -13,7 +13,7 @@ public class menuEditeElem  extends BorderPane {
     SimulacaoManager simulacaoManager;
     Button btnGoBack, btnEdit;
     TextField tfXI, tfYI, tfForca, tfvelocidade, tfNumReproducoes, tfElemLargura, tfElemAltura;
-    HBox hbForca, hbaria, hbVelocidade, hbNumReproducoes;
+    HBox hbForca, hbarea, hbVelocidade, hbNumReproducoes;
 
 
     public menuEditeElem(SimulacaoManager simulacaoManager) {
@@ -145,9 +145,9 @@ public class menuEditeElem  extends BorderPane {
         hbForca = new HBox(new Label("Forca: "), tfForca);
         hbForca.setAlignment(Pos.CENTER);
         hbForca.setSpacing(10);
-        hbaria = new HBox(new Label("X: "), tfXI, new Label("Y: "), tfYI, new Label("Largura: "), tfElemLargura, new Label("Altura: "), tfElemAltura);
-        hbaria.setAlignment(Pos.CENTER);
-        hbaria.setSpacing(10);
+        hbarea = new HBox(new Label("X: "), tfXI, new Label("Y: "), tfYI, new Label("Largura: "), tfElemLargura, new Label("Altura: "), tfElemAltura);
+        hbarea.setAlignment(Pos.CENTER);
+        hbarea.setSpacing(10);
         hbVelocidade = new HBox(new Label("Velocidade: "), tfvelocidade);
         hbVelocidade.setAlignment(Pos.CENTER);
         hbVelocidade.setSpacing(10);
@@ -157,7 +157,7 @@ public class menuEditeElem  extends BorderPane {
         hbNumReproducoes = new HBox(new Label("Numero de Reproducoes: "), tfNumReproducoes);
         hbNumReproducoes.setAlignment(Pos.CENTER);
         hbNumReproducoes.setSpacing(10);
-        VBox vb = new VBox(hbNumReproducoes, hbForca, hbaria, hbVelocidade, hbB);
+        VBox vb = new VBox(hbNumReproducoes, hbForca, hbarea, hbVelocidade, hbB);
         vb.setAlignment(Pos.CENTER);
         vb.setSpacing(10);
         this.setCenter(vb);

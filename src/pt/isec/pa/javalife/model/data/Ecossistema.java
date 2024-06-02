@@ -123,7 +123,7 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // +----------------------------------------------------------------------------------------------------------------
 
     public void addPropertyChangeListener(String property, PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(listener);
+        pcs.addPropertyChangeListener(property,listener);
     }
 
     public boolean addElemento(IElemento elemento) {
@@ -195,16 +195,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             case Elemento.INANIMADO -> removeInanimado(id);
         };
     }
-
-    public IElemento removeElemento(IElemento elemento) {
-        if(elemento == null) return null;
-        return switch (elemento.getType()) {
-            case Elemento.FAUNA -> removeFauna(elemento.getId());
-            case Elemento.FLORA -> removeFlora(elemento.getId());
-            case Elemento.INANIMADO -> removeInanimado(elemento.getId());
-        };
-    }
-
     // +----------------------------------------------------------------------------------------------------------------
     // + Evento +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
@@ -220,13 +210,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // +----------------------------------------------------------------------------------------------------------------
     // + Verificacoes +-------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
-
-    private boolean ArrayContains(int[] array, int id) {
-        for (int i : array) {
-            if(i == id) return true;
-        }
-        return false;
-    }
 
     public boolean existemArvores(){
         for(IElemento elem : elementos){
@@ -319,43 +302,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         Fauna f=(Fauna) getElementoById(id,Elemento.FAUNA);
         f.addForca(forca - f.getForca());
         f.setVelocidade(velocidade);
-        return true;
-    }
-
-    public boolean editInanimado(int id, double xi, double yi) {
-        for(IElemento elem : elementos){
-            if(elem.getId() == id && elem.getType() == Elemento.INANIMADO){
-                Inanimado f = (Inanimado) elem;
-                Area novaAria = new Area(xi, yi, xi + f.getArea().width(), yi + f.getArea().height());
-                if(!f.podeRemove())
-                    return false;
-                if(areaVarificarSePode(getElementos(), novaAria))
-                    f.setArea(novaAria);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean areaVarificarSePode(Set<IElemento> elementos, Area area) {
-        for (IElemento elem : elementos) {
-            if (area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.INANIMADO)
-                return false;
-            if(area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.FLORA)
-                return false;
-            if(!area.isOverlapping(new Area(0,0,largura,altura)))
-                return false;
-        }
-        return true;
-    }
-
-    private boolean areaVarificarSePodeBase(Set<IElemento> elementos, Area area) {
-        for (IElemento elem : elementos) {
-            if (area.isOverlapping(elem.getArea()) && elem.getType() == Elemento.INANIMADO)
-                return false;
-            if(!area.isOverlapping(new Area(0,0,largura,altura)))
-                return false;
-        }
         return true;
     }
 

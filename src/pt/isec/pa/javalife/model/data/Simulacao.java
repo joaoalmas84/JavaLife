@@ -45,10 +45,6 @@ public class Simulacao implements Serializable {
         return ecossistema.removeElemento(id, tipo);
     }
 
-    public IElemento removeElemento(IElemento elem) {
-        return ecossistema.removeElemento(elem);
-    }
-
     // +----------------------------------------------------------------------------------------------------------------
     // + Getters & Setters +--------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
@@ -153,10 +149,6 @@ public class Simulacao implements Serializable {
         return ecossistema.editFauna(id, forca, velocidade);
     }
 
-    public boolean editInanimado(int id, double xi, double yi) {
-        return ecossistema.editInanimado(id, xi, yi);
-    }
-
     public PropertyChangeSupport getPcs() {
         return pcs;
     }
@@ -180,34 +172,4 @@ public class Simulacao implements Serializable {
     public IElemento getElementoById(int id, Elemento tipo) {
         return ecossistema.getElementoById(id,tipo);
     }
-
-
-
-    /*
-    public boolean adicionaFauna(double xi, double yi, double xf, double yf){
-        //return commandManager.invokeCommand(new AdicionaElemento(ecossistema ,new Fauna(xi, yi, xf, yf)));
-        return false;
-    }
-
-    public boolean adicionaFlora(double xi, double yi, double xf, double yf){
-        return ecossistema.addElemento(new Flora(xi, yi, xf, yf));
-    }
-
-    public boolean adicionaInanimado(double xi, double yi, double xf, double yf){
-        return ecossistema.addElemento(new Inanimado(xi, yi, xf, yf, true));
-    }
-
-    public boolean removeFauna(int id){
-        return removeFauna(id);
-    }
-
-    public boolean removeFlora(int id){
-        return removeFlora(id);
-    }
-
-    public boolean removeInanimado(int id){
-        return removeInanimado(id);
-    }
-
-*/
 }
