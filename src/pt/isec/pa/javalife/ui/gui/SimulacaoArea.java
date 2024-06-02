@@ -14,6 +14,7 @@ import pt.isec.pa.javalife.model.data.*;
 import pt.isec.pa.javalife.model.gameengine.GameEngineState;
 import pt.isec.pa.javalife.ui.gui.res.MultitonImage;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,9 +22,14 @@ public class SimulacaoArea extends Canvas {
     private final SimulacaoManager simulacaoManager;
     private double x, y;
     double altura, largura;
-    public SimulacaoArea(SimulacaoManager simulacaoManager) {
+
+    ToolbarSimulacao toolbarSimulacao;
+    ToolbarToggles toggled;
+
+    public SimulacaoArea(SimulacaoManager simulacaoManager,ToolbarSimulacao tbs) {
         super(500,500);
         this.simulacaoManager = simulacaoManager;
+        toolbarSimulacao=tbs;
         createViews();
         registerHandlers();
         update();
@@ -57,16 +63,25 @@ public class SimulacaoArea extends Canvas {
         for (IElemento elem : simulacaoManager.getElementos()) {
             if(elem.getArea().isPointOverlapping(x_,y_)){
                 System.out.println(elem);
-                if(simulacaoManager.isHerbicida() && elem.getType()== Elemento.FLORA){
-                    simulacaoManager.removeElemento(elem.getId(),elem.getType());
+                if(toggled==ToolbarToggles.HERBICIDA && elem.getType()== Elemento.FLORA || toggled==ToolbarToggles.REMOVE_ELEMENTO){
+                    simulacaoManager.removerElemento(elem.getId(),elem.getType());
                 }
-                else if(simulacaoManager.isEventoForca() && elem.getType()==Elemento.FAUNA){
+                else if(toggled==ToolbarToggles.FORCA && elem.getType()==Elemento.FAUNA){
                     simulacaoManager.evAddForca((Fauna)elem);
+                }else if(elem.getType()!=Elemento.INANIMADO){
+                    break;
                 }
                 update();
-                return ;
+                return;
             }
         }
+        if(toggled==ToolbarToggles.ADD_FAUNA){
+            simulacaoManager.adicionarFauna(x_,y_,x_+30,y_+30);
+        }else if(toggled == ToolbarToggles.ADD_FLORA)
+            simulacaoManager.adicionarFlora(x_,y_,x_+30,y_+30);
+        else if(toggled== ToolbarToggles.ADD_INANIMADO)
+            simulacaoManager.adicionarInanimado(x_,y_,x_+30,y_+30);
+        update();
     }
 
     private void handleMouseClikdEdit(MouseEvent evt){
@@ -94,6 +109,11 @@ public class SimulacaoArea extends Canvas {
         simulacaoManager.addPropertyChangeListenerSimulacao(Simulacao.PROP_UPDATE_SIMULACAO, (evt) -> Platform.runLater(this::update));
         simulacaoManager.addPropertyChangeListenerEcossistema(Ecossistema.PROP_UPDATE_MAP , (evt) -> Platform.runLater(this::update));
         simulacaoManager.addPropertyChangeListener(SimulacaoManager.PROP_UPDATE_COMMAND, (evt) -> Platform.runLater(this::update));
+        toolbarSimulacao.addPropertyChangeListener(ToolbarSimulacao.PROP_TOGGLES,(evt) -> Platform.runLater(()-> updateToggles(evt)));
+    }
+
+    private void updateToggles(PropertyChangeEvent evt){
+        toggled= (ToolbarToggles) evt.getNewValue();
     }
 
     private void update() {

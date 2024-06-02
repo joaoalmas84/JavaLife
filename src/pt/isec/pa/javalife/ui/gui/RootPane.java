@@ -24,11 +24,12 @@ public class RootPane extends BorderPane {
     private void createViews() {
         CSSManager.applyCSS(this,"styles.css");
 
+        ToolbarSimulacao tbs=new ToolbarSimulacao(simulacaoManager);
 
-        simulacaoArea = new SimulacaoArea(simulacaoManager);
+        simulacaoArea = new SimulacaoArea(simulacaoManager,tbs);
         areaPane = new Pane(simulacaoArea);
 
-        vb=new VBox(new ToolbarSimulacao(simulacaoManager),areaPane);
+        vb=new VBox(tbs,areaPane);
         VBox.setVgrow(areaPane, Priority.ALWAYS);
 
         setTop( new MenuSimulacao(simulacaoManager));

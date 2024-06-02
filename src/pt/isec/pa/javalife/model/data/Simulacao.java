@@ -116,22 +116,6 @@ public class Simulacao implements Serializable {
 
     }
 
-    public boolean isEventoHerbicida() {
-        return ecossistema.isEventoHerbicida();
-    }
-
-    public boolean isEvForca(){
-        return ecossistema.isEvForca();
-    }
-
-    public void setEventoHerbicida(boolean herbicida) {
-        ecossistema.setEventoHerbicida(herbicida);
-    }
-
-    public void setEventoForca(boolean evForca) {
-        ecossistema.setEventoForca(evForca);
-    }
-
     public void setEventoSol() {
         ecossistema.setEventoSol();
     }
@@ -175,13 +159,23 @@ public class Simulacao implements Serializable {
         return ecossistema.editInanimado(id, xi, yi);
     }
 
-    public PropertyChangeSupport getPCS() {
+    public PropertyChangeSupport getPcs() {
         return pcs;
     }
 
-    public void setPCS(PropertyChangeSupport pcs) {
+    public void setPcs(PropertyChangeSupport pcs) {
         this.pcs = pcs;
     }
+
+    public PropertyChangeSupport getEcossistemaPcs() {
+        return ecossistema.getPcs();
+    }
+
+    public void setEcossistemaPcs(PropertyChangeSupport pcsEcossistema) {
+        ecossistema.setPcs(pcsEcossistema);
+    }
+
+
 
     /*
     public boolean adicionaFauna(double xi, double yi, double xf, double yf){

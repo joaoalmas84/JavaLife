@@ -12,8 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Ecossistema implements Serializable, IGameEngineEvolve {
 
-    private boolean eventoHerbicida;
-    private boolean evForca;
     private int solTicks;
 
     static double danoFauna = 1;
@@ -198,22 +196,6 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
     // + Evento +------------------------------------------------------------------------------------------------------
     // +----------------------------------------------------------------------------------------------------------------
 
-    public boolean isEventoHerbicida() {
-        return eventoHerbicida;
-    }
-
-    public boolean isEvForca(){
-        return evForca;
-    }
-
-    public void setEventoHerbicida(boolean herbicida) {
-        this.eventoHerbicida = herbicida;
-    }
-
-    public void setEventoForca(boolean evForca_) {
-        evForca=evForca_;
-    }
-
     public void setEventoSol() {
         this.solTicks=10;
     }
@@ -380,4 +362,13 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
         }
         return true;
     }
+
+    public PropertyChangeSupport getPcs(){
+        return pcs;
+    }
+
+    public void setPcs(PropertyChangeSupport pcs1){
+        pcs=pcs1;
+    }
+
 }

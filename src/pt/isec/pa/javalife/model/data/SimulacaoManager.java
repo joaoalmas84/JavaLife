@@ -124,7 +124,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean adicionarFauna(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(this, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
+        boolean res= commandManager.invokeCommand(new AdicionaElemento(this, new Fauna(XI, YI, XF, YF, simulacao.getEcossistema())));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Adiciona um elemento de flora na simulação.
@@ -137,7 +141,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean adicionarFlora(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(this, new Flora( XI, YI, XF, YF)));
+        boolean res= commandManager.invokeCommand(new AdicionaElemento(this, new Flora( XI, YI, XF, YF)));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Adiciona um elemento inanimado na simulação.
@@ -150,7 +158,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean adicionarInanimado(double XI, double YI, double XF, double YF){
-        return commandManager.invokeCommand(new AdicionaElemento(this, new Inanimado(XI, YI, XF, YF, true)));
+        boolean res= commandManager.invokeCommand(new AdicionaElemento(this, new Inanimado(XI, YI, XF, YF, true)));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Remove um elemento da simulação pelo seu ID e tipo.
@@ -161,7 +173,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean removerElemento(int id, Elemento tipo){
-        return commandManager.invokeCommand(new RemoveElemento(this, id, tipo));
+        boolean res= commandManager.invokeCommand(new RemoveElemento(this, id, tipo));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Muda a altura da simulação.
@@ -171,7 +187,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean mudarAltura(double altura){
-        return commandManager.invokeCommand(new MudaAltura(this, altura));
+        boolean res= commandManager.invokeCommand(new MudaAltura(this, altura));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Muda a largura da simulação.
@@ -181,7 +201,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean mudarLargura(double largura){
-        return commandManager.invokeCommand(new MudaLargura(this, largura));
+        boolean res= commandManager.invokeCommand(new MudaLargura(this, largura));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
     /**
      * Muda o intervalo de tempo entre os ticks da simulação.
@@ -191,7 +215,11 @@ public class SimulacaoManager implements Serializable {
      * @since 1.0
      */
     public boolean mudarTempo(long tempo) {
-        return commandManager.invokeCommand(new MudaTempo(this, tempo));
+        boolean res= commandManager.invokeCommand(new MudaTempo(this, tempo));
+        if (res){
+            pcs.firePropertyChange(PROP_UPDATE_COMMAND,null,null);
+        }
+        return res;
     }
 
     // +----------------------------------------------------------------------------------------------------------------
@@ -384,41 +412,6 @@ public class SimulacaoManager implements Serializable {
      */
     public boolean setDanoFauna(double dano) {return simulacao.setDanoFauna(dano);}
     /**
-     * Verifica se o evento de herbicida está ativo.
-     *
-     * @return true se o evento de herbicida está ativo, caso contrário false.
-     */
-    public boolean isHerbicida() {
-        return simulacao.isEventoHerbicida();
-    }
-    /**
-     * Define o evento de herbicida.
-     *
-     * @param herbicida O novo estado do evento de herbicida.
-     *                  @since 1.0
-     */
-    public void setEventoHerbicida(boolean herbicida) {
-        simulacao.setEventoHerbicida(herbicida);
-    }
-    /**
-     * Verifica se o evento de força está ativo.
-     *
-     * @return true se o evento de força está ativo, caso contrário false.
-     * @since 1.0
-     */
-    public boolean isEventoForca(){
-        return simulacao.isEvForca();
-    }
-    /**
-     * Define o evento de força.
-     *
-     * @param evForca O novo estado do evento de força.
-     *                @since 1.0
-     */
-    public void setEventoForca(boolean evForca){
-        simulacao.setEventoForca(evForca);
-    }
-    /**
      * Define o evento de sol.
      * @since 1.0
      */
@@ -505,9 +498,14 @@ public class SimulacaoManager implements Serializable {
         }
         if(gameEngine.getCurrentState()==GameEngineState.READY || gameEngine.getCurrentState()==GameEngineState.RUNNING || gameEngine.getCurrentState()==GameEngineState.PAUSED){
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                Simulacao temp=simulacao;
+                gameEngine.unregisterClient(simulacao.getEcossistema());
+
+                PropertyChangeSupport pcsSimulacao = simulacao.getPcs();
+                PropertyChangeSupport pcsEcossistema = simulacao.getEcossistemaPcs();
                 simulacao = (Simulacao) ois.readObject();
-                simulacao.setPCS(temp.getPCS());
+                simulacao.setPcs(pcsSimulacao);
+                simulacao.setEcossistemaPcs(pcsEcossistema);
+
                 gameEngine.registerClient(simulacao.getEcossistema());
                 commandManager = (CommandManager) ois.readObject();
                 Flora.setNextId((int) ois.readObject());
@@ -625,9 +623,11 @@ public class SimulacaoManager implements Serializable {
     public void getSnapshot() {
         if(gameEngine.getCurrentState() != GameEngineState.READY && memento!=null) {
             gameEngine.unregisterClient(simulacao.getEcossistema());
-            Simulacao temp=simulacao;
+            PropertyChangeSupport pcsSimulacao = simulacao.getPcs();
+            PropertyChangeSupport pcsEcossistema = simulacao.getEcossistemaPcs();
             simulacao = (Simulacao) memento.getSnapshot();
-            simulacao.setPCS(temp.getPCS());
+            simulacao.setPcs(pcsSimulacao);
+            simulacao.setEcossistemaPcs(pcsEcossistema);
             gameEngine.registerClient(simulacao.getEcossistema());
             commandManager.clear();
         }
