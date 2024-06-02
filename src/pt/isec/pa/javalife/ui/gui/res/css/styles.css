@@ -37,17 +37,3 @@
 #fullscreenButton{
     -fx-font-size: 20px;
 }
-
-#top5{
-    -fx-font-weight: bold;
-    -fx-text-fill: yellow;
-}
-#credits{
-    -fx-font-weight: bold;
-    -fx-text-fill: yellow;
-}
-
-#gameWonText{
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-}

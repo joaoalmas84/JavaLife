@@ -126,6 +126,9 @@ public class Ecossistema implements Serializable, IGameEngineEvolve {
             return false;
 
         for (IElemento elem :  elementos){
+            if(elemento.getType() == Elemento.FLORA || elemento.getType() == Elemento.INANIMADO)
+                if (elem.getArea().isOverlapping(area) && elem.getType() == Elemento.FLORA)
+                    return false;
             if (elem.getType() == Elemento.INANIMADO && elem.getArea().isOverlapping(area)) {
                 return false;
             }

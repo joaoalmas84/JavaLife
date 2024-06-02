@@ -633,14 +633,43 @@ public class SimulacaoManager implements Serializable {
         }
     }
 
+    /**
+     * Edita um elemento de flora.
+     *
+     * @param id O ID do elemento.
+     * @param xi Coordenada X inicial.
+     * @param yi Coordenada Y inicial.
+     * @param forca A força do elemento.
+     * @param numReproducoes O número de reproduções do elemento.
+     * @return true se a operação de editar foi bem-sucedida, caso contrário false.
+     * @since 1.0
+     */
     public boolean editFlora(int id, double xi, double yi, double forca, int numReproducoes){
         return simulacao.editFlora(id, xi, yi, forca, numReproducoes);
     }
-
+    /**
+     * Edita um elemento de fauna.
+     *
+     * @param id O ID do elemento.
+     * @param xi Coordenada X inicial.
+     * @param yi Coordenada Y inicial.
+     * @param forca A força do elemento.
+     * @param velocidade A velocidade do elemento.
+     * @return true se a operação de editar foi bem-sucedida, caso contrário false.
+     * @since 1.0
+     */
     public boolean editFauna(int id, double xi, double yi, double forca, double velocidade){
         return simulacao.editFauna(id, xi, yi, forca, velocidade);
     }
-
+    /**
+     * Edita um elemento inanimado.
+     *
+     * @param id O ID do elemento.
+     * @param xi Coordenada X inicial.
+     * @param yi Coordenada Y inicial.
+     * @return true se a operação de editar foi bem-sucedida, caso contrário false.
+     * @since 1.0
+     */
     public boolean editInanimado(int id, double xi, double yi){
         return simulacao.editInanimado(id, xi, yi);
     }
