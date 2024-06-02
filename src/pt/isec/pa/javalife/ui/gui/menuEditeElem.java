@@ -12,7 +12,7 @@ import pt.isec.pa.javalife.model.data.*;
 public class menuEditeElem  extends BorderPane {
     SimulacaoManager simulacaoManager;
     Button btnGoBack, btnEdit;
-    TextField tfXI, tfYI, tfForca, tfvelocidade, tfNumReproducoes;
+    TextField tfXI, tfYI, tfForca, tfvelocidade, tfNumReproducoes, tfElemLargura, tfElemAltura;
     HBox hbForca, hbaria, hbVelocidade, hbNumReproducoes;
 
 
@@ -29,7 +29,7 @@ public class menuEditeElem  extends BorderPane {
 
         btnEdit.setOnAction(e -> {
             if(simulacaoManager.getState() == SimulacaoState.EDITFAUNA){
-                double xI, yI, forca, velocidade;
+                double xI, yI, forca, velocidade, largura, altura;
                 try{
                     String text = tfXI.getText();
                     xI = text.isEmpty() ? -1.0 : Double.parseDouble(text);
@@ -42,15 +42,22 @@ public class menuEditeElem  extends BorderPane {
 
                     text = tfvelocidade.getText();
                     velocidade = text.isEmpty() ? -1.0 : Double.parseDouble(text);
+
+                    text = tfElemLargura.getText();
+                    largura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
+
+                    text = tfElemAltura.getText();
+                    altura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
                 } catch (NumberFormatException ex) {
                     return ;
                 }
-                if(xI == -1.0 || yI == -1.0 || forca == -1.0 || velocidade == -1.0){
-                    return;
+                if(xI != -1.0 || yI != -1.0 || forca != -1.0 || velocidade != -1.0){
+                    simulacaoManager.editFauna(GuardarUltimo.getId(), xI, yI, forca, velocidade);
                 }
-                simulacaoManager.editFauna(GuardarUltimo.getId(), xI, yI, forca, velocidade);
+                setTamalho(largura, altura, Elemento.FLORA, GuardarUltimo.getId());
+
             }else if(simulacaoManager.getState() == SimulacaoState.EDITFLORA){
-                double xI, yI, forca;
+                double xI, yI, forca, largura, altura;
                 int numReproducoes;
                 try{
                     String text = tfXI.getText();
@@ -64,34 +71,50 @@ public class menuEditeElem  extends BorderPane {
 
                     text = tfNumReproducoes.getText();
                     numReproducoes = text.isEmpty() ? -1 : Integer.parseInt(text);
+
+                    text = tfElemLargura.getText();
+                    largura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
+
+                    text = tfElemAltura.getText();
+                    altura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
                 } catch (NumberFormatException ex) {
                     return ;
                 }
-                System.out.println("forca " + forca + " numReproducoes " + numReproducoes + " id " + GuardarUltimo.getId() + " xI " + xI + " yI " + yI);
-                if(xI == -1.0 || yI == -1.0 || forca == -1.0 || numReproducoes == -1){
-                    return;
+                if(xI != -1.0 || yI != -1.0 || forca != -1.0 || numReproducoes != -1){
+                   simulacaoManager.editFlora(GuardarUltimo.getId(), xI, yI, forca, numReproducoes);
                 }
-                System.out.println("forca " + forca + " numReproducoes " + numReproducoes + " id " + GuardarUltimo.getId());
-                simulacaoManager.editFlora(GuardarUltimo.getId(), xI, yI, forca, numReproducoes);
+                setTamalho(largura, altura, Elemento.FLORA, GuardarUltimo.getId());
             }else if(simulacaoManager.getState() == SimulacaoState.EDITINANIMADO){
-                double xI, yI;
+                double xI, yI, largura, altura;
                 try{
                     String text = tfXI.getText();
                     xI = text.isEmpty() ? -1.0 : Double.parseDouble(text);
 
                     text = tfYI.getText();
                     yI = text.isEmpty() ? -1.0 : Double.parseDouble(text);
+
+                    text = tfElemLargura.getText();
+                    largura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
+
+                    text = tfElemAltura.getText();
+                    altura = text.isEmpty() ? -1.0 : Double.parseDouble(text);
                 } catch (NumberFormatException ex) {
                     return ;
                 }
-                if(xI == -1.0 || yI == -1.0){
-                    return;
+                if(xI != -1.0 || yI != -1.0){
+                    simulacaoManager.editInanimado(GuardarUltimo.getId(), xI, yI);
                 }
-                System.out.println("id " + GuardarUltimo.getId() + " xI " + xI + " yI " + yI);
-                simulacaoManager.editInanimado(GuardarUltimo.getId(), xI, yI);
+                setTamalho(largura, altura, Elemento.INANIMADO, GuardarUltimo.getId());
             }
             simulacaoManager.setState(SimulacaoState.NULL);
         });
+    }
+
+    private void setTamalho(double largura, double altura, Elemento elemento, int id) {
+        if(largura != -1.0)
+            simulacaoManager.mudarAlturaElem(id, elemento, altura);
+        if(altura != -1.0)
+            simulacaoManager.mudarLarguraElem(id, elemento, largura);
     }
 
     private void setProp() {
@@ -107,10 +130,13 @@ public class menuEditeElem  extends BorderPane {
         tfForca = new TextField();
         tfNumReproducoes = new TextField();
         tfvelocidade = new TextField();
+        tfElemLargura = new TextField();
+        tfElemAltura = new TextField();
+
         hbForca = new HBox(new Label("Forca: "), tfForca);
         hbForca.setAlignment(Pos.CENTER);
         hbForca.setSpacing(10);
-        hbaria = new HBox(new Label("X: "), tfXI, new Label("Y: "), tfYI);
+        hbaria = new HBox(new Label("X: "), tfXI, new Label("Y: "), tfYI, new Label("Largura: "), tfElemLargura, new Label("Altura: "), tfElemAltura);
         hbaria.setAlignment(Pos.CENTER);
         hbaria.setSpacing(10);
         hbVelocidade = new HBox(new Label("Velocidade: "), tfvelocidade);
@@ -148,6 +174,8 @@ public class menuEditeElem  extends BorderPane {
                     Fauna fauna = (Fauna) e;
                     tfXI.setText(String.valueOf(fauna.getArea().xi()));
                     tfYI.setText(String.valueOf(fauna.getArea().yi()));
+                    tfElemLargura.setText(String.valueOf(fauna.getArea().width()));
+                    tfElemAltura.setText(String.valueOf(fauna.getArea().height()));
                     tfForca.setText(String.valueOf(fauna.getForca()));
                     tfvelocidade.setText(String.valueOf(fauna.getVelocidade()));
                     break;
@@ -162,6 +190,8 @@ public class menuEditeElem  extends BorderPane {
                     Flora flora = (Flora) e;
                     tfXI.setText(String.valueOf(flora.getArea().xi()));
                     tfYI.setText(String.valueOf(flora.getArea().yi()));
+                    tfElemLargura.setText(String.valueOf(flora.getArea().width()));
+                    tfElemAltura.setText(String.valueOf(flora.getArea().height()));
                     tfForca.setText(String.valueOf(flora.getForca()));
                     tfNumReproducoes.setText(String.valueOf(flora.getNumReproducoes()));
                     break;
@@ -176,6 +206,8 @@ public class menuEditeElem  extends BorderPane {
                     Inanimado inanimado = (Inanimado) e;
                     tfXI.setText(String.valueOf(inanimado.getArea().xi()));
                     tfYI.setText(String.valueOf(inanimado.getArea().yi()));
+                    tfElemLargura.setText(String.valueOf(inanimado.getArea().width()));
+                    tfElemAltura.setText(String.valueOf(inanimado.getArea().height()));
                     break;
                 }
             }
